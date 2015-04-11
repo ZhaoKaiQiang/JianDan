@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,9 +26,11 @@ import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Joke;
 import com.socks.jiandan.net.Request4Vote;
+import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
+import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,9 @@ public class JokeFragment extends BaseFragment {
 	AutoLoadRecyclerView mRecyclerView;
 	@InjectView(R.id.swipeRefreshLayout)
 	SwipeRefreshLayout mSwipeRefreshLayout;
+	@InjectView(R.id.google_progress)
+	GoogleProgressBar google_progress;
+
 
 	private JokeAdapter mAdapter;
 	private RecyclerView.LayoutManager mLayoutManager;
@@ -96,6 +102,7 @@ public class JokeFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		mAdapter = new JokeAdapter();
+		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.loadFirst();
 
 	}
@@ -109,8 +116,8 @@ public class JokeFragment extends BaseFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		if (item.getItemId() == R.id.action_refresh) {
-			mAdapter.loadFirst();
 			mSwipeRefreshLayout.setRefreshing(true);
+			mAdapter.loadFirst();
 			return true;
 		}
 
@@ -170,6 +177,17 @@ public class JokeFragment extends BaseFragment {
 
 			holder.ll_unsupport.setOnClickListener(new onVoteClickListener(joke.getComment_ID(),
 					Vote.XX, holder, joke));
+
+			holder.ll_comment.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+					Intent intent = new Intent(getActivity(), CommentListActivity.class);
+					intent.putExtra("thread_key", "comment-" + joke.getComment_ID());
+					startActivity(intent);
+				}
+			});
+
 		}
 
 		/**
@@ -313,6 +331,9 @@ public class JokeFragment extends BaseFragment {
 
 				@Override
 				public void onResponse(ArrayList<Comment> response) {
+
+					google_progress.setVisibility(View.GONE);
+
 					for (int i = 0; i < jokes.size(); i++) {
 						jokes.get(i).setComment_counts(response.get(i).getComments() + "");
 					}
@@ -320,11 +341,11 @@ public class JokeFragment extends BaseFragment {
 					if (page == 1) {
 						mJokes.clear();
 						mJokes.addAll(jokes);
-						mRecyclerView.setAdapter(mAdapter);
 					} else {
 						mJokes.addAll(jokes);
-						notifyDataSetChanged();
 					}
+
+					notifyDataSetChanged();
 
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);

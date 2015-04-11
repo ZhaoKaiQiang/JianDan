@@ -44,7 +44,7 @@ public class Request4CommentCounts extends Request<ArrayList<Comment>> {
 					comment.setComments(jsonObject.getJSONObject(comment_ID).getInt(Comment.COMMENTS));
 					comments.add(comment);
 				} else {
-					//可能会出现没有对应id的数据的情况
+					//可能会出现没有对应id的数据的情况，为了保证条数一致，添加默认数据
 					comments.add(new Comment("0", "0", 0));
 				}
 			}

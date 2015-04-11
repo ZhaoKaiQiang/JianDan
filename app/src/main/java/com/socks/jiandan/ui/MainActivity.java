@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -14,14 +15,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.socks.jiandan.R;
-import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.ui.fragment.JokeFragment;
 import com.socks.jiandan.ui.fragment.MainMenuFragment;
 import com.socks.jiandan.utils.AppManager;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShowToast;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends ActionBarActivity {
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -33,10 +33,9 @@ public class MainActivity extends BaseActivity {
 		initView();
 	}
 
-	@Override
 	public void initView() {
 		//为ActionBar添加点击事件
-		LinearLayout linearLayout = new LinearLayout(context);
+		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
 				(this) * 4 / 7,
 				LinearLayout.LayoutParams.MATCH_PARENT));
@@ -114,7 +113,7 @@ public class MainActivity extends BaseActivity {
 				exitTime = System.currentTimeMillis();
 			} else {
 				// 彻底退出程序
-				AppManager.getAppManager().finishAllActivityAndExit(context);
+				AppManager.getAppManager().finishAllActivityAndExit(this);
 				finish();
 			}
 			return true;

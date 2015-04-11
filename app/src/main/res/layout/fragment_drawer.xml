@@ -10,14 +10,30 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/settings"
-            layout="@layout/drawer_item"/>
+        <RelativeLayout
+            android:id="@+id/rl_container"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
 
-        <include
-            android:id="@+id/theme"
-            layout="@layout/drawer_item"
-            android:visibility="gone"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings_white_24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="72dp"
+                android:text="设置"
+                android:textColor="#FFF"
+                android:textSize="15sp"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/MyActionBarStyle</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
     <!-- 设置标题栏样式 -->
@@ -12,7 +14,7 @@
 
     <!-- 标题栏文字样式 -->
     <style name="ActionBarTitleStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

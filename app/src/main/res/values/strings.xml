@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">煎蛋</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_comment_list">吐槽</string>
+
 
 </resources>

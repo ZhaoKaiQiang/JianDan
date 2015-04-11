@@ -12,7 +12,7 @@ public class String2TimeUtil {
 
 	/**
 	 * 转换日期格式到用户体验好的时间格式
-	 * @param time
+	 * @param time 2015-04-11 12:45:06
 	 * @return
 	 */
 	public static String dateString2GoodExperienceFormat(String time) {

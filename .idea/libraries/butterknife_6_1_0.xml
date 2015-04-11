@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="butterknife-6.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/butterknife-6.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

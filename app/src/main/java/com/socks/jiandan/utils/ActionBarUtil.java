@@ -7,7 +7,7 @@ import android.view.Window;
 /**
  * Created by storm on 14-4-14.
  */
-public class ActionBarUtils {
+public class ActionBarUtil {
 
 	public static View getActionBarView(Activity activity) {
 		Window window = activity.getWindow();

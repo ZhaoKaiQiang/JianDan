@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16.0dip">
+
+    <LinearLayout
+        android:id="@+id/left"
+        android:layout_width="56.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16.0dip"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/ic_launcher"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/right"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/left"
+        android:layout_toRightOf="@id/left"
+        android:paddingEnd="16.0dip"
+        android:paddingLeft="0.0dip"
+        android:paddingRight="16.0dip"
+        android:paddingStart="0.0dip">
+
+        <View
+            android:id="@+id/left_placeholder"
+            android:layout_width="16.0dip"
+            android:layout_height="1.0dip"
+            android:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/left_placeholder"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="AAA"
+            android:textColor="@color/primary_text_default_material_light"
+            android:textSize="15.0sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tv_name"
+            android:layout_marginLeft="8.0dip"
+            android:layout_toRightOf="@id/tv_name"
+            android:text="2 mins ago"
+            android:textColor="@color/secondary_text_default_material_light"
+            android:textSize="13.0sp"
+            android:visibility="visible"/>
+
+        <LinearLayout
+            android:id="@+id/parent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/left_placeholder"
+            android:orientation="vertical"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/parent"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/left_placeholder"
+            android:lineSpacingExtra="4dp"
+            android:text="aaa"
+            android:textColor="@color/primary_text_default_material_light"
+            android:textSize="15.0sp"/>
+
+        <LinearLayout
+            android:id="@+id/ll_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_name"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/support"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/like_descr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="OO "
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="13.0sp"/>
+
+                <TextView
+                    android:id="@+id/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="13.0sp"
+                    android:textStyle="normal"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/unsupport"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/unlike_descr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="   XX "
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="13.0sp"/>
+
+                <TextView
+                    android:id="@+id/unlike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:textColor="@color/secondary_text_default_material_light"
+                    android:textSize="13.0sp"
+                    android:textStyle="normal"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:layout_below="@id/right"
+        android:layout_marginTop="16.0dip"
+        android:layout_toEndOf="@id/left"
+        android:layout_toRightOf="@id/left"
+        android:background="#ffd9d9d9"/>
+
+</RelativeLayout>

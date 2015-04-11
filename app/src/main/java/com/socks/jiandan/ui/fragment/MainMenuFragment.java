@@ -17,6 +17,7 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.model.MenuItem;
 import com.socks.jiandan.ui.MainActivity;
+import com.socks.jiandan.utils.ShowToast;
 
 import java.util.ArrayList;
 
@@ -30,11 +31,11 @@ public class MainMenuFragment extends BaseFragment {
 
 	@InjectView(R.id.recycler_view)
 	RecyclerView mRecyclerView;
+	@InjectView(R.id.rl_container)
+	RelativeLayout rl_container;
 
 	private LinearLayoutManager mLayoutManager;
-
 	private MainActivity mainActivity;
-
 	private MenuAdapter mAdapter;
 
 	@Override
@@ -58,6 +59,13 @@ public class MainMenuFragment extends BaseFragment {
 		mLayoutManager = new LinearLayoutManager(getActivity());
 		mRecyclerView.setLayoutManager(mLayoutManager);
 
+		rl_container.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ShowToast.Short("设置");
+			}
+		});
+
 		return view;
 	}
 
@@ -68,10 +76,13 @@ public class MainMenuFragment extends BaseFragment {
 		mAdapter = new MenuAdapter();
 		mAdapter.menuItems.add(new MenuItem("新鲜事", R.drawable.ic_explore_white_24dp, JokeFragment.class));
 		mAdapter.menuItems.add(new MenuItem("无聊图", R.drawable.ic_mood_white_24dp, JokeFragment.class));
+		mAdapter.menuItems.add(new MenuItem("妹子图", R.drawable.ic_local_florist_white_24dp, JokeFragment
+				.class));
 		mAdapter.menuItems.add(new MenuItem("段子", R.drawable.ic_chat_white_24dp, JokeFragment.class));
 		mAdapter.menuItems.add(new MenuItem("小电影", R.drawable.ic_movie_white_24dp, JokeFragment.class));
 
 		mRecyclerView.setAdapter(mAdapter);
+
 
 	}
 

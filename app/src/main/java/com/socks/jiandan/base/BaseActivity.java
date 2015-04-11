@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.socks.jiandan.R;
 import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.utils.AppManager;
 import com.socks.jiandan.utils.ShowToast;
@@ -27,6 +28,7 @@ import com.socks.jiandan.utils.ShowToast;
 public class BaseActivity extends ActionBarActivity implements Initialable {
 
 	protected Context context;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,5 +63,14 @@ public class BaseActivity extends ActionBarActivity implements Initialable {
 				ShowToast.Short(error.getMessage());
 			}
 		};
+	}
+
+	/**
+	 * 设置默认的退出效果
+	 */
+	@Override
+	public void finish() {
+		super.finish();
+		overridePendingTransition(R.anim.anim_none, R.anim.trans_center_2_right);
 	}
 }
