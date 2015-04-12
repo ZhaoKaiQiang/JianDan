@@ -27,6 +27,7 @@ import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -82,7 +83,6 @@ public class CommentListActivity extends BaseActivity {
 			}
 		});
 
-
 	}
 
 	@Override
@@ -109,24 +109,44 @@ public class CommentListActivity extends BaseActivity {
 			commentators = new ArrayList<>();
 		}
 
-
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-			View view = getLayoutInflater().inflate(R.layout.item_comment, parent,
-					false);
-			return new ViewHolder(view);
+
+			switch (viewType) {
+				case Commentator.TYPE_HOT:
+				case Commentator.TYPE_NEW:
+					return new ViewHolder(getLayoutInflater().inflate(R.layout
+									.item_comment_flag, parent,
+							false));
+				case Commentator.TYPE_NORMAL:
+					return new ViewHolder(getLayoutInflater().inflate(R.layout.item_comment, parent,
+							false));
+				default:
+					return null;
+			}
 		}
 
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 
 			Commentator commentator = commentators.get(position);
-			holder.tv_name.setText(commentator.getName());
-			holder.tv_content.setText(commentator.getMessage());
-			String timeString = commentator.getCreated_at().replace("T", " ");
-			timeString = timeString.substring(0, timeString.indexOf("+"));
-			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
-			holder.ll_vote.setVisibility(View.GONE);
+
+			switch (commentator.getType()) {
+				case Commentator.TYPE_HOT:
+					holder.tv_flag.setText("热门评论");
+					break;
+				case Commentator.TYPE_NEW:
+					holder.tv_flag.setText("最新评论");
+					break;
+				case Commentator.TYPE_NORMAL:
+					holder.tv_name.setText(commentator.getName());
+					holder.tv_content.setText(commentator.getMessage());
+					String timeString = commentator.getCreated_at().replace("T", " ");
+					timeString = timeString.substring(0, timeString.indexOf("+"));
+					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
+					holder.ll_vote.setVisibility(View.GONE);
+					break;
+			}
 
 		}
 
@@ -138,7 +158,7 @@ public class CommentListActivity extends BaseActivity {
 
 		@Override
 		public int getItemViewType(int position) {
-			return super.getItemViewType(position);
+			return commentators.get(position).getType();
 		}
 
 		public void loadData() {
@@ -152,7 +172,36 @@ public class CommentListActivity extends BaseActivity {
 						tv_no_thing.setVisibility(View.VISIBLE);
 					} else {
 						commentators.clear();
-						commentators.addAll(response);
+
+						ArrayList<Commentator> hotCommentator = new ArrayList<>();
+						ArrayList<Commentator> normalComment = new ArrayList<>();
+
+						//添加热门评论
+						for (Commentator commentator : response) {
+							if (commentator.getTag().equals(Commentator.TAG_HOT)) {
+								hotCommentator.add(commentator);
+							}else{
+								normalComment.add(commentator);
+							}
+
+						}
+
+						//添加热门评论标签
+						if (hotCommentator.size() != 0) {
+							Collections.sort(hotCommentator);
+							Commentator hotCommentFlag = new Commentator();
+							hotCommentFlag.setType(Commentator.TYPE_HOT);
+							hotCommentator.add(0, hotCommentFlag);
+							commentators.addAll(hotCommentator);
+						}
+
+						Commentator newCommentFlag = new Commentator();
+						newCommentFlag.setType(Commentator.TYPE_NEW);
+						commentators.add(newCommentFlag);
+
+						Collections.sort(normalComment);
+						commentators.addAll(normalComment);
+
 						mAdapter.notifyDataSetChanged();
 					}
 					mSwipeRefreshLayout.setRefreshing(false);
@@ -171,6 +220,9 @@ public class CommentListActivity extends BaseActivity {
 		private TextView tv_time;
 		private LinearLayout ll_vote;
 
+		private TextView tv_flag;
+
+
 		public ViewHolder(View itemView) {
 			super(itemView);
 			tv_name = (TextView) itemView.findViewById(R.id.tv_name);
@@ -178,9 +230,10 @@ public class CommentListActivity extends BaseActivity {
 			tv_time = (TextView) itemView.findViewById(R.id.tv_time);
 			ll_vote = (LinearLayout) itemView.findViewById(R.id.ll_vote);
 
+			tv_flag = (TextView) itemView.findViewById(R.id.tv_flag);
+
 		}
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

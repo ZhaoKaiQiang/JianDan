@@ -12,6 +12,8 @@ import com.socks.jiandan.model.Commentator;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by zhaokaiqiang on 15/4/10.
@@ -45,24 +47,36 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
 
 				//然后根据thread_id再去获得对应的评论和作者信息
 				JSONObject parentPostsJson = resultJson.getJSONObject("parentPosts");
+				//找出热门评论
+				String hotPosts = resultJson.getString("hotPosts").replace("[", "").replace
+						("]", "").replace("\"", "");
+				String[] allHotPosts = hotPosts.split("\\,");
 
 				ArrayList<Commentator> commentators = new ArrayList<>();
+				List<String> allHotPostsArray = Arrays.asList(allHotPosts);
 
 				for (String threadId : threadIds) {
 					Commentator commentator = new Commentator();
 					JSONObject threadObject = parentPostsJson.getJSONObject(threadId);
+
+					//解析评论，打上TAG
+					if (allHotPostsArray.contains(threadId)) {
+						commentator.setTag(Commentator.TAG_HOT);
+					} else {
+						commentator.setTag(Commentator.TAG_NORMAL);
+					}
+
 					commentator.setMessage(threadObject.getString("message"));
 					commentator.setCreated_at(threadObject.getString("created_at"));
 					JSONObject authorObject = threadObject.getJSONObject("author");
 					commentator.setName(authorObject.getString("name"));
 					commentator.setAvatar_url(authorObject.getString("avatar_url"));
+					commentator.setType(Commentator.TYPE_NORMAL);
 					commentators.add(commentator);
 				}
-				//解析评论，打上TAG
+
 				return Response.success(commentators, HttpHeaderParser.parseCacheHeaders(response));
 			}
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.error(new ParseError(e));
