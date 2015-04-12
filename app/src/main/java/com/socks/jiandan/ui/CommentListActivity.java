@@ -54,6 +54,7 @@ public class CommentListActivity extends BaseActivity {
 		setContentView(R.layout.activity_comment_list);
 		initView();
 		initData();
+
 	}
 
 	@Override
@@ -180,7 +181,7 @@ public class CommentListActivity extends BaseActivity {
 						for (Commentator commentator : response) {
 							if (commentator.getTag().equals(Commentator.TAG_HOT)) {
 								hotCommentator.add(commentator);
-							}else{
+							} else {
 								normalComment.add(commentator);
 							}
 
@@ -195,12 +196,14 @@ public class CommentListActivity extends BaseActivity {
 							commentators.addAll(hotCommentator);
 						}
 
-						Commentator newCommentFlag = new Commentator();
-						newCommentFlag.setType(Commentator.TYPE_NEW);
-						commentators.add(newCommentFlag);
-
-						Collections.sort(normalComment);
-						commentators.addAll(normalComment);
+						//添加最新评论及标签
+						if (normalComment.size() != 0) {
+							Commentator newCommentFlag = new Commentator();
+							newCommentFlag.setType(Commentator.TYPE_NEW);
+							commentators.add(newCommentFlag);
+							Collections.sort(normalComment);
+							commentators.addAll(normalComment);
+						}
 
 						mAdapter.notifyDataSetChanged();
 					}
