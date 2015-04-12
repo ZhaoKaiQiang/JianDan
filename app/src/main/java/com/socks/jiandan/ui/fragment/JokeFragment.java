@@ -29,6 +29,7 @@ import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
@@ -357,9 +358,14 @@ public class JokeFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					mLoadFinisCallBack.loadFinish();
+					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
+					ShowToast.Short(error.getMessage());
+
+					Logger.d(error.getMessage());
+
 				}
 			}
 			));

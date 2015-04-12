@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.model.Commentator;
@@ -23,6 +25,8 @@ import com.socks.jiandan.net.Request4CommentList;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
+import com.socks.jiandan.utils.TextUtil;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
@@ -146,6 +150,23 @@ public class CommentListActivity extends BaseActivity {
 					timeString = timeString.substring(0, timeString.indexOf("+"));
 					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
 					holder.ll_vote.setVisibility(View.GONE);
+
+					if (!TextUtil.isNull(commentator.getAvatar_url())) {
+
+						String headerUrl = commentator.getAvatar_url();
+						Logger.d("headerUrl = " + headerUrl);
+						if (headerUrl.contains(".jpg") || headerUrl.contains(".jpeg") || headerUrl
+								.contains(".bmp")) {
+							holder.img_header.setImageURI(Uri.parse(headerUrl));
+						} else {
+							//由于可能会出现304缓存Url的地址格式，所以添加时间戳，避免缓存
+							holder.img_header.setImageURI(Uri.parse(commentator.getAvatar_url()
+									+ "/" + System.currentTimeMillis()));
+						}
+					} else {
+						holder.img_header.setImageURI(null);
+					}
+
 					break;
 			}
 
@@ -222,6 +243,7 @@ public class CommentListActivity extends BaseActivity {
 		private TextView tv_content;
 		private TextView tv_time;
 		private LinearLayout ll_vote;
+		private SimpleDraweeView img_header;
 
 		private TextView tv_flag;
 
@@ -232,6 +254,7 @@ public class CommentListActivity extends BaseActivity {
 			tv_content = (TextView) itemView.findViewById(R.id.tv_content);
 			tv_time = (TextView) itemView.findViewById(R.id.tv_time);
 			ll_vote = (LinearLayout) itemView.findViewById(R.id.ll_vote);
+			img_header = (SimpleDraweeView) itemView.findViewById(R.id.img_header);
 
 			tv_flag = (TextView) itemView.findViewById(R.id.tv_flag);
 
