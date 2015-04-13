@@ -152,17 +152,9 @@ public class CommentListActivity extends BaseActivity {
 					holder.ll_vote.setVisibility(View.GONE);
 
 					if (!TextUtil.isNull(commentator.getAvatar_url())) {
-
 						String headerUrl = commentator.getAvatar_url();
 						Logger.d("headerUrl = " + headerUrl);
-						if (headerUrl.contains(".jpg") || headerUrl.contains(".jpeg") || headerUrl
-								.contains(".bmp")) {
-							holder.img_header.setImageURI(Uri.parse(headerUrl));
-						} else {
-							//由于可能会出现304缓存Url的地址格式，所以添加时间戳，避免缓存
-							holder.img_header.setImageURI(Uri.parse(commentator.getAvatar_url()
-									+ "/" + System.currentTimeMillis()));
-						}
+						holder.img_header.setImageURI(Uri.parse(headerUrl));
 					} else {
 						holder.img_header.setImageURI(null);
 					}
