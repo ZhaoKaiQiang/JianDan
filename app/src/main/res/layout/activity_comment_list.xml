@@ -21,7 +21,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
-        layout="@layout/commont_nothing"
+        layout="@layout/commont_nothing_error"
         />
 
     <com.socks.jiandan.view.googleprogressbar.GoogleProgressBar

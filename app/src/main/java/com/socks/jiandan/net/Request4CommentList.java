@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.socks.jiandan.model.Commentator;
+import com.socks.jiandan.utils.TextUtil;
 
 import org.json.JSONObject;
 
@@ -66,11 +67,27 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
 						commentator.setTag(Commentator.TAG_NORMAL);
 					}
 
-					commentator.setMessage(threadObject.getString("message"));
-					commentator.setCreated_at(threadObject.getString("created_at"));
-					JSONObject authorObject = threadObject.getJSONObject("author");
-					commentator.setName(authorObject.getString("name"));
-					commentator.setAvatar_url(authorObject.getString("avatar_url"));
+					commentator.setPost_id(threadObject.optString("post_id"));
+					commentator.setParent_id(threadObject.optString("parent_id"));
+
+					String parentsString = threadObject.optString("parents").replace("[", "").replace
+							("]", "").replace("\"", "");
+
+					String[] parents = parentsString.split("\\,");
+					commentator.setParents(parents);
+
+					//如果第一个数据为空，则只有一层
+					if (TextUtil.isNull(parents[0])) {
+						commentator.setFloorNum(1);
+					} else {
+						commentator.setFloorNum(parents.length + 1);
+					}
+
+					commentator.setMessage(threadObject.optString("message"));
+					commentator.setCreated_at(threadObject.optString("created_at"));
+					JSONObject authorObject = threadObject.optJSONObject("author");
+					commentator.setName(authorObject.optString("name"));
+					commentator.setAvatar_url(authorObject.optString("avatar_url"));
 					commentator.setType(Commentator.TYPE_NORMAL);
 					commentators.add(commentator);
 				}

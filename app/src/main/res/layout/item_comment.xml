@@ -14,11 +14,11 @@
         >
 
         <!--<ImageView-->
-            <!--android:id="@+id/head"-->
-            <!--android:layout_width="40dp"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:src="@mipmap/ic_launcher"-->
-            <!--/>-->
+        <!--android:id="@+id/head"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:src="@mipmap/ic_launcher"-->
+        <!--/>-->
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/img_header"
@@ -71,27 +71,27 @@
             android:textSize="13.0sp"
             android:visibility="visible"/>
 
-        <LinearLayout
-            android:id="@+id/parent"
-            android:layout_width="fill_parent"
+        <com.socks.jiandan.view.floorview.FloorView
+            android:id="@+id/floors_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_name"
-            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/left_placeholder"
-            android:orientation="vertical"
-            android:visibility="gone"/>
+            android:layout_marginTop="8dp"
+            android:layout_below="@id/tv_name"
+            android:background="@drawable/bg_floor"
+            />
 
         <TextView
             android:id="@+id/tv_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/parent"
+            android:layout_below="@id/floors_parent"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/left_placeholder"
             android:lineSpacingExtra="4dp"
             android:text="aaa"
             android:textColor="@color/primary_text_default_material_light"
-            android:textSize="15.0sp"/>
+            android:textSize="14sp"/>
 
         <LinearLayout
             android:id="@+id/ll_vote"

@@ -29,9 +29,9 @@ import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
-import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
+import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
 
@@ -51,7 +51,10 @@ public class JokeFragment extends BaseFragment {
 	SwipeRefreshLayout mSwipeRefreshLayout;
 	@InjectView(R.id.google_progress)
 	GoogleProgressBar google_progress;
-
+	@InjectView(R.id.tv_no_thing)
+	MatchTextView tv_no_thing;
+	@InjectView(R.id.tv_error)
+	MatchTextView tv_error;
 
 	private JokeAdapter mAdapter;
 	private RecyclerView.LayoutManager mLayoutManager;
@@ -210,8 +213,8 @@ public class JokeFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				//避免快速点击，造成大量网络访问
 
+				//避免快速点击，造成大量网络访问
 				if (holder.isClickFinish) {
 					vote(comment_ID, tyle, holder, joke);
 					holder.isClickFinish = false;
@@ -310,7 +313,9 @@ public class JokeFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short(error.getMessage());
+
+					tv_error.setVisibility(View.VISIBLE);
+					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish();
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
@@ -334,6 +339,7 @@ public class JokeFragment extends BaseFragment {
 				public void onResponse(ArrayList<Comment> response) {
 
 					google_progress.setVisibility(View.GONE);
+					tv_error.setVisibility(View.GONE);
 
 					for (int i = 0; i < jokes.size(); i++) {
 						jokes.get(i).setComment_counts(response.get(i).getComments() + "");
@@ -358,13 +364,11 @@ public class JokeFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					mLoadFinisCallBack.loadFinish();
+					tv_error.setVisibility(View.VISIBLE);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
-					ShowToast.Short(error.getMessage());
-
-					Logger.d(error.getMessage());
 
 				}
 			}

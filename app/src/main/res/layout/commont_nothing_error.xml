@@ -16,5 +16,16 @@
         android:layout_height="wrap_content">
     </com.socks.jiandan.view.matchview.MatchTextView>
 
+    <com.socks.jiandan.view.matchview.MatchTextView
+        android:id="@+id/tv_error"
+        android:layout_width="wrap_content"
+        match:text="ERROR"
+        match:textSize="8sp"
+        android:layout_gravity="center"
+        match:textColor="#000000"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+    </com.socks.jiandan.view.matchview.MatchTextView>
+
 
 </merge>

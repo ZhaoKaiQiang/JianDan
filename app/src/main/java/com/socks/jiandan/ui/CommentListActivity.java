@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
@@ -27,11 +28,16 @@ import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
 import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.utils.logger.Logger;
+import com.socks.jiandan.view.floorview.FloorView;
+import com.socks.jiandan.view.floorview.SubComments;
+import com.socks.jiandan.view.floorview.SubFloorFactory;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,6 +53,8 @@ public class CommentListActivity extends BaseActivity {
 	GoogleProgressBar google_progress;
 	@InjectView(R.id.tv_no_thing)
 	MatchTextView tv_no_thing;
+	@InjectView(R.id.tv_error)
+	MatchTextView tv_error;
 
 	private String thread_key;
 	private CommentAdapter mAdapter;
@@ -151,6 +159,20 @@ public class CommentListActivity extends BaseActivity {
 					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
 					holder.ll_vote.setVisibility(View.GONE);
 
+					//有楼层,盖楼
+					if (commentator.getFloorNum() > 1) {
+
+						SubComments cmts = new SubComments(addFloors(commentator));
+						holder.floors_parent.setComments(cmts);
+						holder.floors_parent.setFactory(new SubFloorFactory());
+						holder.floors_parent.setBoundDrawer(getResources().getDrawable(
+								R.drawable.bg_comment));
+						holder.floors_parent.init();
+
+					} else {
+						holder.floors_parent.setVisibility(View.GONE);
+					}
+
 					if (!TextUtil.isNull(commentator.getAvatar_url())) {
 						String headerUrl = commentator.getAvatar_url();
 						Logger.d("headerUrl = " + headerUrl);
@@ -164,11 +186,34 @@ public class CommentListActivity extends BaseActivity {
 
 		}
 
+		private List<Commentator> addFloors(Commentator commentator) {
+
+			//只有一层
+			if (commentator.getFloorNum() == 1) {
+				return null;
+			}
+
+			List<String> parentIds = Arrays.asList(commentator.getParents());
+			List<Commentator> commentators = new ArrayList<>();
+
+			for (Commentator comm : this.commentators) {
+
+				if (parentIds.contains(comm.getPost_id())) {
+					commentators.add(comm);
+				}
+
+			}
+
+			Collections.reverse(commentators);
+
+			return commentators;
+
+		}
+
 		@Override
 		public int getItemCount() {
 			return commentators.size();
 		}
-
 
 		@Override
 		public int getItemViewType(int position) {
@@ -182,6 +227,8 @@ public class CommentListActivity extends BaseActivity {
 				public void onResponse(ArrayList<Commentator> response) {
 
 					google_progress.setVisibility(View.GONE);
+					tv_error.setVisibility(View.GONE);
+
 					if (response.size() == 0) {
 						tv_no_thing.setVisibility(View.VISIBLE);
 					} else {
@@ -197,7 +244,6 @@ public class CommentListActivity extends BaseActivity {
 							} else {
 								normalComment.add(commentator);
 							}
-
 						}
 
 						//添加热门评论标签
@@ -223,7 +269,15 @@ public class CommentListActivity extends BaseActivity {
 					mSwipeRefreshLayout.setRefreshing(false);
 
 				}
-			}, errorListener()));
+			}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					mSwipeRefreshLayout.setRefreshing(false);
+					google_progress.setVisibility(View.GONE);
+					tv_error.setVisibility(View.VISIBLE);
+					tv_no_thing.setVisibility(View.GONE);
+				}
+			}));
 		}
 
 
@@ -237,8 +291,9 @@ public class CommentListActivity extends BaseActivity {
 		private LinearLayout ll_vote;
 		private SimpleDraweeView img_header;
 
-		private TextView tv_flag;
+		private FloorView floors_parent;
 
+		private TextView tv_flag;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -247,8 +302,11 @@ public class CommentListActivity extends BaseActivity {
 			tv_time = (TextView) itemView.findViewById(R.id.tv_time);
 			ll_vote = (LinearLayout) itemView.findViewById(R.id.ll_vote);
 			img_header = (SimpleDraweeView) itemView.findViewById(R.id.img_header);
+			floors_parent = (FloorView) itemView.findViewById(R.id.floors_parent);
 
 			tv_flag = (TextView) itemView.findViewById(R.id.tv_flag);
+
+			setIsRecyclable(false);
 
 		}
 	}
