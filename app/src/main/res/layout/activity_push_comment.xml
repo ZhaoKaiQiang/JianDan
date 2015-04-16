@@ -26,7 +26,9 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:background="@null"
+        android:inputType="textMultiLine"
         android:gravity="left"
+        android:maxLength="500"
         android:textColor="@color/primary_text_default_material_light"
         android:textSize="16sp"/>
 
