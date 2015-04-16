@@ -63,7 +63,7 @@ public class AutoLoadRecyclerView extends RecyclerView implements LoadFinishCall
 	}
 
 	@Override
-	public void loadFinish() {
+	public void loadFinish(Object obj) {
 		isLoadingMore = false;
 	}
 

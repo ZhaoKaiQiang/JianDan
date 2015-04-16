@@ -316,7 +316,7 @@ public class JokeFragment extends BaseFragment {
 
 					tv_error.setVisibility(View.VISIBLE);
 					google_progress.setVisibility(View.GONE);
-					mLoadFinisCallBack.loadFinish();
+					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
@@ -358,12 +358,12 @@ public class JokeFragment extends BaseFragment {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
 
-					mLoadFinisCallBack.loadFinish();
+					mLoadFinisCallBack.loadFinish(null);
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					mLoadFinisCallBack.loadFinish();
+					mLoadFinisCallBack.loadFinish(null);
 					tv_error.setVisibility(View.VISIBLE);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {

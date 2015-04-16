@@ -10,7 +10,10 @@ import java.util.TimeZone;
  */
 public class Commentator implements Comparable {
 
+	//评论列表
 	public static final String URL_COMMENT_LIST = "http://jandan.duoshuo.com/api/threads/listPosts.json?thread_key=";
+	//发表评论
+	public static final String URL_PUSH_COMMENT = "http://jandan.duoshuo.com/api/posts/create.json";
 
 	//评论内容标签
 	public static final String TAG_HOT = "hot";

@@ -5,13 +5,17 @@ package com.socks.jiandan.utils;
  */
 public class TextUtil {
 
-	public static boolean isNull(String str) {
+	public static boolean isNull(CharSequence... str) {
 
-		if (str == null || str.length() == 0 || str.equals("null")) {
-			return true;
-		} else {
-			return false;
+		for (CharSequence cha : str) {
+			if (cha == null || cha.length() == 0 || cha.equals("null")) {
+				return true;
+			} else {
+				return false;
+			}
 		}
+
+		return true;
 	}
 
 }

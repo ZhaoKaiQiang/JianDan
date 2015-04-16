@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.socks.jiandan.ui.PushCommentActivity">
+    <item android:id="@+id/action_push"
+          android:title="@string/action_push"
+          android:orderInCategory="100"
+          android:icon="@android:drawable/ic_menu_send"
+          app:showAsAction="always"/>
+</menu>

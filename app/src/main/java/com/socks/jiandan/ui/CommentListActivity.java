@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
+import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.model.Commentator;
 import com.socks.jiandan.net.Request4CommentList;
 import com.socks.jiandan.utils.ShowToast;
@@ -57,6 +60,7 @@ public class CommentListActivity extends BaseActivity {
 	MatchTextView tv_error;
 
 	private String thread_key;
+	private String thread_id;
 	private CommentAdapter mAdapter;
 	private SwipeBackUtil mSwipeBackUtil;
 
@@ -101,6 +105,8 @@ public class CommentListActivity extends BaseActivity {
 	@Override
 	public void initData() {
 
+		tv_no_thing.setVisibility(View.GONE);
+		google_progress.setVisibility(View.VISIBLE);
 		thread_key = getIntent().getStringExtra("thread_key");
 
 		if (TextUtils.isEmpty(thread_key) || thread_key.equals("0")) {
@@ -142,7 +148,7 @@ public class CommentListActivity extends BaseActivity {
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 
-			Commentator commentator = commentators.get(position);
+			final Commentator commentator = commentators.get(position);
 
 			switch (commentator.getType()) {
 				case Commentator.TYPE_HOT:
@@ -154,6 +160,41 @@ public class CommentListActivity extends BaseActivity {
 				case Commentator.TYPE_NORMAL:
 					holder.tv_name.setText(commentator.getName());
 					holder.tv_content.setText(commentator.getMessage());
+
+					holder.tv_content.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+
+							new MaterialDialog.Builder(CommentListActivity.this)
+									.title(commentator.getName())
+									.items(R.array.comment_dialog)
+									.itemsCallback(new MaterialDialog.ListCallback() {
+										@Override
+										public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+											switch (which) {
+												case 0:
+													Intent intent = new Intent
+															(CommentListActivity.this,
+																	PushCommentActivity.class);
+													intent.putExtra("parent_id", commentator.getPost_id());
+													intent.putExtra("thread_id", thread_id);
+													intent.putExtra("parent_name", commentator
+															.getName());
+													startActivityForResult(intent, 0);
+													break;
+												case 1:
+													break;
+											}
+
+										}
+									})
+									.show();
+
+
+						}
+					});
+
 					String timeString = commentator.getCreated_at().replace("T", " ");
 					timeString = timeString.substring(0, timeString.indexOf("+"));
 					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
@@ -277,6 +318,11 @@ public class CommentListActivity extends BaseActivity {
 					tv_error.setVisibility(View.VISIBLE);
 					tv_no_thing.setVisibility(View.GONE);
 				}
+			}, new LoadFinishCallBack() {
+				@Override
+				public void loadFinish(Object obj) {
+					thread_id = (String) obj;
+				}
 			}));
 		}
 
@@ -290,7 +336,6 @@ public class CommentListActivity extends BaseActivity {
 		private TextView tv_time;
 		private LinearLayout ll_vote;
 		private SimpleDraweeView img_header;
-
 		private FloorView floors_parent;
 
 		private TextView tv_flag;
@@ -312,6 +357,16 @@ public class CommentListActivity extends BaseActivity {
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode == RESULT_OK) {
+			initData();
+		}
+
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_comment_list, menu);
 		return true;
@@ -325,7 +380,9 @@ public class CommentListActivity extends BaseActivity {
 				finish();
 				return true;
 			case R.id.action_edit:
-				ShowToast.Short("发表评论");
+				Intent intent = new Intent(this, PushCommentActivity.class);
+				intent.putExtra("thread_id", thread_id);
+				startActivityForResult(intent, 0);
 				return true;
 		}
 

@@ -7,6 +7,7 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.model.Commentator;
 import com.socks.jiandan.utils.TextUtil;
 
@@ -23,10 +24,14 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
 
 	private Response.Listener<ArrayList<Commentator>> listener;
 
-	public Request4CommentList(String url, Response.Listener<ArrayList<Commentator>> listener,
-	                           Response.ErrorListener errorListener) {
+	private LoadFinishCallBack callBack;
+
+	public Request4CommentList(String url, Response
+			.Listener<ArrayList<Commentator>> listener,
+	                           Response.ErrorListener errorListener,LoadFinishCallBack callBack) {
 		super(Method.GET, url, errorListener);
 		this.listener = listener;
+		this.callBack = callBack;
 	}
 
 	@Override
@@ -40,6 +45,8 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
 			String allThreadId = resultJson.getString("response").replace("[", "").replace
 					("]", "").replace("\"", "");
 			String[] threadIds = allThreadId.split("\\,");
+
+			callBack.loadFinish(resultJson.optJSONObject("thread").optString("thread_id"));
 
 			if (TextUtils.isEmpty(threadIds[0])) {
 				return Response.success(new ArrayList<Commentator>(), HttpHeaderParser
@@ -105,4 +112,5 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
 	protected void deliverResponse(ArrayList<Commentator> response) {
 		listener.onResponse(response);
 	}
+
 }

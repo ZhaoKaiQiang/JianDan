@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="16dp">
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:hint="姓名"
+        android:layout_marginTop="4dp"
+        android:textColor="#000000"
+        android:singleLine="true"
+        android:maxLength="15"
+        />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:hint="邮箱"
+        android:singleLine="true"
+        android:layout_marginTop="4dp"
+        android:textColor="#000000"
+
+        />
+
+</LinearLayout>
