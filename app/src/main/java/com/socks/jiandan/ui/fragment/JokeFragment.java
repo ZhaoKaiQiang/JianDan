@@ -1,5 +1,8 @@
 package com.socks.jiandan.ui.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -12,14 +15,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
+import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.Comment;
 import com.socks.jiandan.model.Joke;
 import com.socks.jiandan.model.Vote;
@@ -27,6 +33,7 @@ import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Joke;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
+import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
@@ -175,6 +182,37 @@ public class JokeFragment extends BaseFragment {
 					.secondary_text_default_material_light));
 			holder.tv_unsupport_des.setTextColor(getResources().getColor(R.color
 					.secondary_text_default_material_light));
+
+			holder.img_share.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					new MaterialDialog.Builder(getActivity())
+							.items(R.array.joke_dialog)
+							.itemsCallback(new MaterialDialog.ListCallback() {
+								@Override
+								public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+									switch (which) {
+										//分享
+										case 0:
+											ShareUtil.shareText(getActivity(), joke.getComment_content());
+											break;
+										//复制
+										case 1:
+											ClipboardManager clip = (ClipboardManager)
+													getActivity().getSystemService(Context
+															.CLIPBOARD_SERVICE);
+											clip.setPrimaryClip(ClipData.newPlainText
+													(null, joke.getComment_content()));
+											ShowToast.Short(ToastMsg.COPY_SUCCESS);
+											break;
+									}
+
+								}
+							})
+							.show();
+				}
+			});
 
 			holder.ll_support.setOnClickListener(new onVoteClickListener(joke.getComment_ID(),
 					Vote.OO, holder, joke));
@@ -389,6 +427,8 @@ public class JokeFragment extends BaseFragment {
 		private TextView tv_unsupport_des;
 		private TextView tv_support_des;
 
+		private ImageView img_share;
+
 		private LinearLayout ll_support;
 		private LinearLayout ll_unsupport;
 		private LinearLayout ll_comment;
@@ -408,6 +448,8 @@ public class JokeFragment extends BaseFragment {
 			tv_comment_count = (TextView) contentView.findViewById(R.id.tv_comment_count);
 			tv_unsupport_des = (TextView) contentView.findViewById(R.id.tv_unsupport_des);
 			tv_support_des = (TextView) contentView.findViewById(R.id.tv_support_des);
+
+			img_share = (ImageView) contentView.findViewById(R.id.img_share);
 
 			ll_support = (LinearLayout) contentView.findViewById(R.id.ll_support);
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);

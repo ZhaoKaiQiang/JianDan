@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SocialSDK_sms">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/SocialSDK_sms.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

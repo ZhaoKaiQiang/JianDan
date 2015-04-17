@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="comment_dialog">
+        <item>回复</item>
+        <item>复制</item>
+    </string-array>
+
+
+    <string-array name="joke_dialog">
+        <item>分享</item>
+        <item>复制</item>
+    </string-array>
+
+
+</resources>

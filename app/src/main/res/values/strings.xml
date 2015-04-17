@@ -1,12 +1,9 @@
 <resources>
-    <string name="app_name">煎蛋</string>
+    <string name="app_name">煎蛋增强版</string>
     <string name="title_activity_comment_list">吐槽</string>
     <string name="title_activity_push_comment">回复</string>
     <string name="action_push">发送</string>
 
-    <string-array name="comment_dialog">
-        <item>回复</item>
-        <item>复制</item>
-    </string-array>
+
 
 </resources>

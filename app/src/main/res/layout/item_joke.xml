@@ -165,15 +165,15 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
-                android:background="@null"
+                android:scaleType="centerInside"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_more_horiz_grey600_24dp"
-                android:visibility="visible"/>
+                />
         </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>
