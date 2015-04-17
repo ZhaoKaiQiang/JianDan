@@ -27,10 +27,10 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.Comment;
-import com.socks.jiandan.model.Joke;
+import com.socks.jiandan.model.Picture;
 import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4CommentCounts;
-import com.socks.jiandan.net.Request4Joke;
+import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShareUtil;
@@ -50,7 +50,7 @@ import butterknife.InjectView;
  *
  * @author zhaokaiqiang
  */
-public class JokeFragment extends BaseFragment {
+public class PictureFragment extends BaseFragment {
 
 	@InjectView(R.id.recycler_view)
 	AutoLoadRecyclerView mRecyclerView;
@@ -61,17 +61,17 @@ public class JokeFragment extends BaseFragment {
 	@InjectView(R.id.tv_error)
 	MatchTextView tv_error;
 
-	private JokeAdapter mAdapter;
+	private PictureAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
 
-	public JokeFragment() {
+	public PictureFragment() {
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("段子");
+		mActionBar.setTitle("无聊图");
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class JokeFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mAdapter = new JokeAdapter();
+		mAdapter = new PictureAdapter();
 		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.loadFirst();
 
@@ -139,32 +139,32 @@ public class JokeFragment extends BaseFragment {
 		}
 	}
 
-	public class JokeAdapter extends RecyclerView.Adapter<ViewHolder> {
+	public class PictureAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
-		private ArrayList<Joke> mJokes;
+		private ArrayList<Picture> mJokes;
 
-		public JokeAdapter() {
-			mJokes = new ArrayList<Joke>();
+		public PictureAdapter() {
+			mJokes = new ArrayList<Picture>();
 		}
 
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent,
 		                                     int viewType) {
 			View v = LayoutInflater.from(parent.getContext())
-					.inflate(R.layout.item_joke, parent, false);
+					.inflate(R.layout.item_pic, parent, false);
 			return new ViewHolder(v);
 		}
 
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-			final Joke joke = mJokes.get(position);
-			holder.tv_content.setText(joke.getComment_content());
-			holder.tv_author.setText(joke.getComment_author());
-			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(joke.getComment_date()));
-			holder.tv_like.setText(joke.getVote_positive());
-			holder.tv_comment_count.setText(joke.getComment_counts());
+			final Picture picture = mJokes.get(position);
+			holder.tv_content.setText(picture.getText_content().trim());
+			holder.tv_author.setText(picture.getComment_author());
+			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(picture.getComment_date()));
+			holder.tv_like.setText(picture.getVote_positive());
+			holder.tv_comment_count.setText(picture.getComment_counts());
 
 			//用于恢复默认的文字
 			holder.tv_like.setTypeface(Typeface.DEFAULT);
@@ -173,7 +173,7 @@ public class JokeFragment extends BaseFragment {
 			holder.tv_support_des.setTextColor(getResources().getColor(R.color
 					.secondary_text_default_material_light));
 
-			holder.tv_unlike.setText(joke.getVote_negative());
+			holder.tv_unlike.setText(picture.getVote_negative());
 			holder.tv_unlike.setTypeface(Typeface.DEFAULT);
 			holder.tv_unlike.setTextColor(getResources().getColor(R.color
 					.secondary_text_default_material_light));
@@ -192,7 +192,7 @@ public class JokeFragment extends BaseFragment {
 									switch (which) {
 										//分享
 										case 0:
-											ShareUtil.shareText(getActivity(), joke.getComment_content());
+											ShareUtil.shareText(getActivity(), picture.getComment_content());
 											break;
 										//复制
 										case 1:
@@ -200,7 +200,7 @@ public class JokeFragment extends BaseFragment {
 													getActivity().getSystemService(Context
 															.CLIPBOARD_SERVICE);
 											clip.setPrimaryClip(ClipData.newPlainText
-													(null, joke.getComment_content()));
+													(null, picture.getComment_content()));
 											ShowToast.Short(ToastMsg.COPY_SUCCESS);
 											break;
 									}
@@ -211,18 +211,18 @@ public class JokeFragment extends BaseFragment {
 				}
 			});
 
-			holder.ll_support.setOnClickListener(new onVoteClickListener(joke.getComment_ID(),
-					Vote.OO, holder, joke));
+			holder.ll_support.setOnClickListener(new onVoteClickListener(picture.getComment_ID(),
+					Vote.OO, holder, picture));
 
-			holder.ll_unsupport.setOnClickListener(new onVoteClickListener(joke.getComment_ID(),
-					Vote.XX, holder, joke));
+			holder.ll_unsupport.setOnClickListener(new onVoteClickListener(picture.getComment_ID(),
+					Vote.XX, holder, picture));
 
 			holder.ll_comment.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 
 					Intent intent = new Intent(getActivity(), CommentListActivity.class);
-					intent.putExtra("thread_key", "comment-" + joke.getComment_ID());
+					intent.putExtra("thread_key", "comment-" + picture.getComment_ID());
 					startActivity(intent);
 				}
 			});
@@ -237,13 +237,13 @@ public class JokeFragment extends BaseFragment {
 			private String comment_ID;
 			private String tyle;
 			private ViewHolder holder;
-			private Joke joke;
+			private Picture picture;
 
-			public onVoteClickListener(String comment_ID, String tyle, ViewHolder holder, Joke joke) {
+			public onVoteClickListener(String comment_ID, String tyle, ViewHolder holder, Picture joke) {
 				this.comment_ID = comment_ID;
 				this.tyle = tyle;
 				this.holder = holder;
-				this.joke = joke;
+				this.picture = joke;
 			}
 
 			@Override
@@ -251,7 +251,7 @@ public class JokeFragment extends BaseFragment {
 
 				//避免快速点击，造成大量网络访问
 				if (holder.isClickFinish) {
-					vote(comment_ID, tyle, holder, joke);
+					vote(comment_ID, tyle, holder, picture);
 					holder.isClickFinish = false;
 				}
 
@@ -263,7 +263,7 @@ public class JokeFragment extends BaseFragment {
 		 *
 		 * @param comment_ID
 		 */
-		public void vote(String comment_ID, String tyle, final ViewHolder holder, final Joke joke) {
+		public void vote(String comment_ID, String tyle, final ViewHolder holder, final Picture picture) {
 
 			String url;
 
@@ -284,9 +284,9 @@ public class JokeFragment extends BaseFragment {
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
 								ShowToast.Short("顶的好舒服~");
 								//变红+1
-								int vote = Integer.valueOf(joke.getVote_positive());
-								joke.setVote_positive((vote + 1) + "");
-								holder.tv_like.setText(joke.getVote_positive());
+								int vote = Integer.valueOf(picture.getVote_positive());
+								picture.setVote_positive((vote + 1) + "");
+								holder.tv_like.setText(picture.getVote_positive());
 								holder.tv_like.setTypeface(Typeface.DEFAULT_BOLD);
 								holder.tv_like.setTextColor(getResources().getColor
 										(android.R.color.holo_red_light));
@@ -296,9 +296,9 @@ public class JokeFragment extends BaseFragment {
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
 								ShowToast.Short("疼...轻点插");
 								//变绿+1
-								int vote = Integer.valueOf(joke.getVote_negative());
-								joke.setVote_negative((vote + 1) + "");
-								holder.tv_unlike.setText(joke.getVote_negative());
+								int vote = Integer.valueOf(picture.getVote_negative());
+								picture.setVote_negative((vote + 1) + "");
+								holder.tv_unlike.setText(picture.getVote_negative());
 								holder.tv_unlike.setTypeface(Typeface.DEFAULT_BOLD);
 								holder.tv_unlike.setTextColor(getResources().getColor
 										(android.R.color.holo_green_light));
@@ -315,7 +315,7 @@ public class JokeFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short("神秘力量导致投票失败");
+					ShowToast.Short(ToastMsg.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -338,11 +338,11 @@ public class JokeFragment extends BaseFragment {
 		}
 
 		private void loadData() {
-			executeRequest(new Request4Joke(Joke.getRequestUrl(page),
-					new Response.Listener<ArrayList<Joke>>
+			executeRequest(new Request4Picture(Picture.getRequestUrl(page),
+					new Response.Listener<ArrayList<Picture>>
 							() {
 						@Override
-						public void onResponse(ArrayList<Joke> response) {
+						public void onResponse(ArrayList<Picture> response) {
 							getCommentCounts(response);
 						}
 					}, new Response.ErrorListener() {
@@ -360,10 +360,10 @@ public class JokeFragment extends BaseFragment {
 		}
 
 		//获取评论数量
-		private void getCommentCounts(final ArrayList<Joke> jokes) {
+		private void getCommentCounts(final ArrayList<Picture> pictures) {
 
 			StringBuilder sb = new StringBuilder();
-			for (Joke joke : jokes) {
+			for (Picture joke : pictures) {
 				sb.append("comment-" + joke.getComment_ID() + ",");
 			}
 
@@ -376,15 +376,15 @@ public class JokeFragment extends BaseFragment {
 					google_progress.setVisibility(View.GONE);
 					tv_error.setVisibility(View.GONE);
 
-					for (int i = 0; i < jokes.size(); i++) {
-						jokes.get(i).setComment_counts(response.get(i).getComments() + "");
+					for (int i = 0; i < pictures.size(); i++) {
+						pictures.get(i).setComment_counts(response.get(i).getComments() + "");
 					}
 
 					if (page == 1) {
 						mJokes.clear();
-						mJokes.addAll(jokes);
+						mJokes.addAll(pictures);
 					} else {
-						mJokes.addAll(jokes);
+						mJokes.addAll(pictures);
 					}
 
 					notifyDataSetChanged();

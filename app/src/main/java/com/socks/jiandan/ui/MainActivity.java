@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
 		//为ActionBar添加点击事件
 		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
-				(this) * 4 / 7,
+				(this) * 1 / 2,
 				LinearLayout.LayoutParams.MATCH_PARENT));
 		linearLayout.setBackgroundColor(Color.TRANSPARENT);
 
