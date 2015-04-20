@@ -4,9 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.graphics.drawable.Animatable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,16 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
@@ -43,8 +43,9 @@ import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
-import com.socks.jiandan.utils.logger.Logger;
+import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
+import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
@@ -71,6 +72,8 @@ public class PictureFragment extends BaseFragment {
 
 	private PictureAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
+	private ImageLoader imageLoader;
+	private DisplayImageOptions options;
 
 	public PictureFragment() {
 	}
@@ -120,6 +123,17 @@ public class PictureFragment extends BaseFragment {
 		mAdapter = new PictureAdapter();
 		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.loadFirst();
+
+		imageLoader = ImageLoader.getInstance();
+
+		options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true)
+				.cacheOnDisk(true)
+				.bitmapConfig(Bitmap.Config.RGB_565)
+				.resetViewBeforeLoading(true)
+				.considerExifParams(true)
+				.imageScaleType(ImageScaleType.EXACTLY)
+				.build();
 
 	}
 
@@ -172,33 +186,35 @@ public class PictureFragment extends BaseFragment {
 			String picUrl = picture.getPics()[0];
 
 			if (picUrl.endsWith("gif")) {
-
 				holder.img_gif.setVisibility(View.VISIBLE);
-
-				ControllerListener controllerListener = new BaseControllerListener() {
-					@Override
-					public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
-
-						if (animatable != null) {
-							animatable.start();
-							holder.img_gif.setVisibility(View.GONE);
-						}
-					}
-
-				};
-
-				DraweeController controller = Fresco.newDraweeControllerBuilder()
-						.setControllerListener(controllerListener)
-						.setTapToRetryEnabled(true)
-						.setUri(Uri.parse(picUrl)).build();
-				holder.mSimpleDraweeView.setController(controller);
-
 			} else {
 				holder.img_gif.setVisibility(View.GONE);
-				holder.mSimpleDraweeView.setImageURI(Uri.parse(picUrl));
 			}
 
-			holder.tv_content.setText(picture.getText_content().trim());
+			holder.progress.setVisibility(View.VISIBLE);
+
+			imageLoader.displayImage(picUrl, holder.img, options, new
+							SimpleImageLoadingListener() {
+								@Override
+								public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+									super.onLoadingComplete(imageUri, view, loadedImage);
+									holder.progress.setVisibility(View.GONE);
+								}
+							},
+					new ImageLoadingProgressListener() {
+						@Override
+						public void onProgressUpdate(String imageUri, View view, int current, int total) {
+							holder.progress.setProgress((int) (current * 100f / total));
+						}
+					});
+
+			if (TextUtil.isNull(picture.getText_content().trim())) {
+				holder.tv_content.setVisibility(View.GONE);
+			} else {
+				holder.tv_content.setVisibility(View.VISIBLE);
+				holder.tv_content.setText(picture.getText_content().trim());
+			}
+
 			holder.tv_author.setText(picture.getComment_author());
 			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(picture.getComment_date()));
 			holder.tv_like.setText(picture.getVote_positive());
@@ -403,7 +419,6 @@ public class PictureFragment extends BaseFragment {
 			StringBuilder sb = new StringBuilder();
 			for (Picture joke : pictures) {
 				sb.append("comment-" + joke.getComment_ID() + ",");
-				Logger.d(joke.getComment_ID());
 			}
 
 			executeRequest(new Request4CommentCounts(Comment.getCommentCountsURL(sb.toString()), new Response
@@ -465,12 +480,14 @@ public class PictureFragment extends BaseFragment {
 
 		private ImageView img_share;
 		private ImageView img_gif;
+		private ShowMaxImageView img;
 
 		private LinearLayout ll_support;
 		private LinearLayout ll_unsupport;
 		private LinearLayout ll_comment;
 
-		private SimpleDraweeView mSimpleDraweeView;
+		private ProgressBar progress;
+
 
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
@@ -491,7 +508,9 @@ public class PictureFragment extends BaseFragment {
 
 			img_share = (ImageView) contentView.findViewById(R.id.img_share);
 			img_gif = (ImageView) contentView.findViewById(R.id.img_gif);
-			mSimpleDraweeView = (SimpleDraweeView) contentView.findViewById(R.id.simple_drawee_View);
+			img = (ShowMaxImageView) contentView.findViewById(R.id.img);
+
+			progress = (ProgressBar) contentView.findViewById(R.id.progress);
 
 			ll_support = (LinearLayout) contentView.findViewById(R.id.ll_support);
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);

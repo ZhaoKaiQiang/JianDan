@@ -7,7 +7,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.reflect.TypeToken;
 import com.socks.jiandan.model.Picture;
-import com.socks.jiandan.utils.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -37,8 +36,6 @@ public class Request4Picture extends Request<ArrayList<Picture>> {
 			ArrayList<Picture> pictures = (ArrayList<Picture>) JSONParser.toObject(jsonStr,
 					new TypeToken<ArrayList<Picture>>() {
 					}.getType());
-
-			Logger.d("pictures = "+pictures);
 
 			return Response.success(pictures, HttpHeaderParser.parseCacheHeaders(response));
 
