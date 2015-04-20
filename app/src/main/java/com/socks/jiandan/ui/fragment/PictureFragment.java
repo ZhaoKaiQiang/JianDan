@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.Animatable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -22,6 +24,11 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.controller.ControllerListener;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
@@ -36,6 +43,7 @@ import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
@@ -134,7 +142,7 @@ public class PictureFragment extends BaseFragment {
 
 	@Override
 	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.mJokes.size() > 0) {
+		if (mRecyclerView != null && mAdapter.pictures.size() > 0) {
 			mRecyclerView.scrollToPosition(0);
 		}
 	}
@@ -142,10 +150,10 @@ public class PictureFragment extends BaseFragment {
 	public class PictureAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
-		private ArrayList<Picture> mJokes;
+		private ArrayList<Picture> pictures;
 
 		public PictureAdapter() {
-			mJokes = new ArrayList<Picture>();
+			pictures = new ArrayList<Picture>();
 		}
 
 		@Override
@@ -159,7 +167,37 @@ public class PictureFragment extends BaseFragment {
 		@Override
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-			final Picture picture = mJokes.get(position);
+			final Picture picture = pictures.get(position);
+
+			String picUrl = picture.getPics()[0];
+
+			if (picUrl.endsWith("gif")) {
+
+				holder.img_gif.setVisibility(View.VISIBLE);
+
+				ControllerListener controllerListener = new BaseControllerListener() {
+					@Override
+					public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
+
+						if (animatable != null) {
+							animatable.start();
+							holder.img_gif.setVisibility(View.GONE);
+						}
+					}
+
+				};
+
+				DraweeController controller = Fresco.newDraweeControllerBuilder()
+						.setControllerListener(controllerListener)
+						.setTapToRetryEnabled(true)
+						.setUri(Uri.parse(picUrl)).build();
+				holder.mSimpleDraweeView.setController(controller);
+
+			} else {
+				holder.img_gif.setVisibility(View.GONE);
+				holder.mSimpleDraweeView.setImageURI(Uri.parse(picUrl));
+			}
+
 			holder.tv_content.setText(picture.getText_content().trim());
 			holder.tv_author.setText(picture.getComment_author());
 			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(picture.getComment_date()));
@@ -324,7 +362,7 @@ public class PictureFragment extends BaseFragment {
 
 		@Override
 		public int getItemCount() {
-			return mJokes.size();
+			return pictures.size();
 		}
 
 		public void loadFirst() {
@@ -349,7 +387,7 @@ public class PictureFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					tv_error.setVisibility(View.VISIBLE);
+					ShowToast.Short(ToastMsg.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
@@ -365,6 +403,7 @@ public class PictureFragment extends BaseFragment {
 			StringBuilder sb = new StringBuilder();
 			for (Picture joke : pictures) {
 				sb.append("comment-" + joke.getComment_ID() + ",");
+				Logger.d(joke.getComment_ID());
 			}
 
 			executeRequest(new Request4CommentCounts(Comment.getCommentCountsURL(sb.toString()), new Response
@@ -381,10 +420,10 @@ public class PictureFragment extends BaseFragment {
 					}
 
 					if (page == 1) {
-						mJokes.clear();
-						mJokes.addAll(pictures);
+						PictureAdapter.this.pictures.clear();
+						PictureAdapter.this.pictures.addAll(pictures);
 					} else {
-						mJokes.addAll(pictures);
+						PictureAdapter.this.pictures.addAll(pictures);
 					}
 
 					notifyDataSetChanged();
@@ -399,7 +438,7 @@ public class PictureFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					mLoadFinisCallBack.loadFinish(null);
-					tv_error.setVisibility(View.VISIBLE);
+					ShowToast.Short(ToastMsg.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
@@ -425,10 +464,14 @@ public class PictureFragment extends BaseFragment {
 		private TextView tv_support_des;
 
 		private ImageView img_share;
+		private ImageView img_gif;
 
 		private LinearLayout ll_support;
 		private LinearLayout ll_unsupport;
 		private LinearLayout ll_comment;
+
+		private SimpleDraweeView mSimpleDraweeView;
+
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
 
@@ -447,6 +490,8 @@ public class PictureFragment extends BaseFragment {
 			tv_support_des = (TextView) contentView.findViewById(R.id.tv_support_des);
 
 			img_share = (ImageView) contentView.findViewById(R.id.img_share);
+			img_gif = (ImageView) contentView.findViewById(R.id.img_gif);
+			mSimpleDraweeView = (SimpleDraweeView) contentView.findViewById(R.id.simple_drawee_View);
 
 			ll_support = (LinearLayout) contentView.findViewById(R.id.ll_support);
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);

@@ -9,6 +9,8 @@ public class ToastMsg {
 
 	public static final String VOTE_FAILED = "神秘力量导致投票失败 ⊙︿⊙";
 
+	public static final String LOAD_FAILED = "神秘力量导致加载失败 ⊙︿⊙";
+
 	public static final String INPUT_TOO_SHORT = "你的..太短..";
 
 	public static final String COPY_SUCCESS = "复制成功";

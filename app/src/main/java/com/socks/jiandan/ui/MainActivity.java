@@ -15,8 +15,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.socks.jiandan.R;
-import com.socks.jiandan.ui.fragment.JokeFragment;
 import com.socks.jiandan.ui.fragment.MainMenuFragment;
+import com.socks.jiandan.ui.fragment.PictureFragment;
 import com.socks.jiandan.utils.AppManager;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
 		};
 		mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-		replaceFragment(R.id.frame_container, new JokeFragment());
+		replaceFragment(R.id.frame_container, new PictureFragment());
 		replaceFragment(R.id.drawer_container, new MainMenuFragment());
 	}
 

@@ -1,12 +1,11 @@
 package com.socks.jiandan.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Created by zhaokaiqiang on 15/4/8.
  */
-public class Picture implements Serializable{
+public class Picture implements Serializable {
 
 	public static final String URL_DUANZI = "http://jandan.net/?oxwlxojflwblxbsapi=jandan.get_pic_comments&page=";
 
@@ -35,7 +34,7 @@ public class Picture implements Serializable{
 	               String comment_author_url, String comment_author_IP,
 	               String comment_date, String comment_date_gmt,
 	               String comment_content, String text_content, String comment_agent,
-	               String vote_positive, String vote_negative, String comment_counts,String []
+	               String vote_positive, String vote_negative, String comment_counts, String []
 			               pics) {
 		super();
 		this.comment_ID = comment_ID;
@@ -195,7 +194,7 @@ public class Picture implements Serializable{
 				", comment_agent='" + comment_agent + '\'' +
 				", vote_positive='" + vote_positive + '\'' +
 				", vote_negative='" + vote_negative + '\'' +
-				", pics=" + Arrays.toString(pics) +
+				", pics=" + pics +
 				", comment_counts='" + comment_counts + '\'' +
 				'}';
 	}
