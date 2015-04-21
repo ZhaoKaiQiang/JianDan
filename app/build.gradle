@@ -29,4 +29,5 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.3.0+'
     compile 'com.afollestad:material-dialogs:0.7.2.0'
     compile files('libs/universal-image-loader-1.9.3.jar')
+    compile files('libs/uk-co-senab-photoview-source.jar')
 }

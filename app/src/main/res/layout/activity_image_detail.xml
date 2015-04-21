@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <WebView
+        android:id="@+id/web_gif"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00aa00"
+        android:scrollbars="none"
+        android:visibility="gone"/>
+
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true"
+        android:background="#7f000000">
+
+        <ImageButton
+            android:id="@+id/img_back"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_action_back"/>
+
+        <ImageButton
+            android:id="@+id/img_share"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:src="@drawable/ic_action_share"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topbar"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:indeterminate="false"
+        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal_holo"
+        android:indeterminateOnly="false"
+        android:maxHeight="16dp"
+        android:minHeight="16dp"
+        android:mirrorForRtl="true"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_horizontal_holo_dark"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/bottombar"
+        android:layout_alignParentBottom="true"
+        android:background="#7f000000"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/like"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:text="OO"
+            android:textColor="#ffffffff"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/unlike"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:text="XX"
+            android:textColor="#ffffffff"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <ImageButton
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_action_chat"/>
+
+        <ImageButton
+            android:id="@+id/download"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_action_download"/>
+    </LinearLayout>
+
+</RelativeLayout>

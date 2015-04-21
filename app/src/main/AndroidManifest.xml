@@ -28,6 +28,10 @@
             android:name=".ui.PushCommentActivity"
             android:label="@string/title_activity_push_comment" >
         </activity>
+        <activity
+            android:name=".ui.ImageDetailActivity"
+            android:theme="@style/ImageDetailActivityTheme">
+        </activity>
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
+import com.socks.jiandan.ui.ImageDetailActivity;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -185,8 +186,10 @@ public class PictureFragment extends BaseFragment {
 
 			String picUrl = picture.getPics()[0];
 
-			if (picUrl.endsWith("gif")) {
+			if (picUrl.endsWith(".gif")) {
 				holder.img_gif.setVisibility(View.VISIBLE);
+				picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
+						("large", "small");
 			} else {
 				holder.img_gif.setVisibility(View.GONE);
 			}
@@ -214,6 +217,24 @@ public class PictureFragment extends BaseFragment {
 				holder.tv_content.setVisibility(View.VISIBLE);
 				holder.tv_content.setText(picture.getText_content().trim());
 			}
+
+			holder.img.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(), ImageDetailActivity.class);
+
+					intent.putExtra("img_author", picture.getComment_author());
+					intent.putExtra("img_url", picture.getPics());
+					intent.putExtra("img_id", picture.getComment_ID());
+					intent.putExtra("thread_key", "comment-" + picture.getComment_ID());
+
+					if (picture.getPics()[0].endsWith(".gif")) {
+						intent.putExtra("is_need_webview", true);
+					}
+
+					startActivity(intent);
+				}
+			});
 
 			holder.tv_author.setText(picture.getComment_author());
 			holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(picture.getComment_date()));

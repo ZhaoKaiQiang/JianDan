@@ -17,4 +17,12 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="ImageDetailActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorBackground">@android:color/black</item>
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
 </resources>
