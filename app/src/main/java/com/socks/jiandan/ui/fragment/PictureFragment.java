@@ -1,12 +1,10 @@
 package com.socks.jiandan.ui.fragment;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +38,7 @@ import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
+import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
@@ -49,6 +48,7 @@ import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -238,7 +238,7 @@ public class PictureFragment extends BaseFragment {
 				@Override
 				public void onClick(View v) {
 					new MaterialDialog.Builder(getActivity())
-							.items(R.array.joke_dialog)
+							.items(R.array.picture_dialog)
 							.itemsCallback(new MaterialDialog.ListCallback() {
 								@Override
 								public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -246,16 +246,17 @@ public class PictureFragment extends BaseFragment {
 									switch (which) {
 										//分享
 										case 0:
-											ShareUtil.shareText(getActivity(), picture.getComment_content());
+											String imgPath = imageLoader.getDiskCache().get(picture
+													.getPics()[0]).getAbsolutePath();
+											ShareUtil.sharePicture(getActivity(), imgPath);
 											break;
-										//复制
+										//保存
 										case 1:
-											ClipboardManager clip = (ClipboardManager)
-													getActivity().getSystemService(Context
-															.CLIPBOARD_SERVICE);
-											clip.setPrimaryClip(ClipData.newPlainText
-													(null, picture.getComment_content()));
-											ShowToast.Short(ToastMsg.COPY_SUCCESS);
+											if (picture.getPics().length == 1) {
+												save(picture.getPics()[0]);
+											} else {
+												ShowToast.Short("暂时不支持保存多张图片");
+											}
 											break;
 									}
 
@@ -280,6 +281,27 @@ public class PictureFragment extends BaseFragment {
 					startActivity(intent);
 				}
 			});
+
+		}
+
+		private void save(String picUrl) {
+			String[] urls = picUrl.split("\\.");
+			File picFile = imageLoader.getDiskCache().get(picUrl);
+			File picDir = new File(Environment
+					.getExternalStoragePublicDirectory
+							(Environment.DIRECTORY_PICTURES), "jiandan");
+
+			if (!picDir.exists()) {
+				picDir.mkdir();
+			}
+			File newFile = new File(picDir, "jiandan_" + picFile.getName() + "." + urls[urls
+					.length - 1]);
+
+			if (FileUtil.copyTo(picFile, newFile)) {
+				ShowToast.Short(ToastMsg.SAVE_SUCCESS + " " + newFile.getAbsolutePath());
+			} else {
+				ShowToast.Short(ToastMsg.SAVE_FAILED);
+			}
 
 		}
 

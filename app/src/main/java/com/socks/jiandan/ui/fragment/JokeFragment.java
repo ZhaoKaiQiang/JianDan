@@ -192,7 +192,8 @@ public class JokeFragment extends BaseFragment {
 									switch (which) {
 										//分享
 										case 0:
-											ShareUtil.shareText(getActivity(), joke.getComment_content());
+											ShareUtil.shareText(getActivity(), joke
+													.getComment_content().trim() + ToastMsg.SHARE_TAIL);
 											break;
 										//复制
 										case 1:
