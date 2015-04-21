@@ -29,6 +29,7 @@
             android:label="@string/title_activity_push_comment" >
         </activity>
         <activity
+            android:hardwareAccelerated="false"
             android:name=".ui.ImageDetailActivity"
             android:theme="@style/ImageDetailActivityTheme">
         </activity>

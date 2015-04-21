@@ -4,19 +4,23 @@
                 android:layout_height="match_parent"
     >
 
-    <WebView
-        android:id="@+id/web_gif"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00aa00"
-        android:scrollbars="none"
-        android:visibility="gone"/>
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+        <WebView
+            android:id="@+id/web_gif"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:layerType="software"
+            />
 
-    <uk.co.senab.photoview.PhotoView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
+        <uk.co.senab.photoview.PhotoView
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/topbar"
@@ -46,15 +50,12 @@
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="16dp"
         android:layout_below="@id/topbar"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:indeterminate="false"
         android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal_holo"
-        android:indeterminateOnly="false"
-        android:maxHeight="16dp"
-        android:minHeight="16dp"
         android:mirrorForRtl="true"
         android:progress="0"
         android:progressDrawable="@drawable/progress_horizontal_holo_dark"/>
