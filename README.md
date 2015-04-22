@@ -14,10 +14,11 @@
 
 ##目前已完成的功能
 - 查看段子
+- 查看无聊图(静态图和GIF动态图)
 - 对段子、无聊图进行投票
-- 查看吐槽
-- 吐槽与回复
-- 查看无聊图静态图和GIF动态图
+- 段子的复制与分享
+- 无聊图的保存与分享
+- 查看吐槽与回复
 
 ##优化功能
 - 添加加载等待动画
@@ -25,12 +26,14 @@
 - 添加段子列表界面，点击标题栏快速返回顶端
 - 添加评论楼层过多隐藏
 - 优化无聊图列表显示，GIF使用缩略图，不直接下载，后期将添加网络状态判断
+- 添加网络状态检测
 
 ##使用到的开源框架
 - [Volley](https://android.googlesource.com/platform/frameworks/volley)
 - [Fresco](https://code.facebook.com/projects/465232426958622/fresco/)
 - [Universal Image Load](https://github.com/nostra13/Android-Universal-Image-Loader)
 - [butter knife](https://github.com/JakeWharton/butterknife)
+- [EventBus](https://github.com/greenrobot/EventBus)
 - [material-dialogs](https://github.com/afollestad/material-dialogs)
 - [gson](https://code.google.com/p/google-gson/)
 

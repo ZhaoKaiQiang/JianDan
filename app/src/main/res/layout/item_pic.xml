@@ -72,6 +72,7 @@
                 android:indeterminateOnly="false"
                 android:mirrorForRtl="true"
                 android:progress="0"
+                android:visibility="gone"
                 android:progressDrawable="@drawable/progress_horizontal_holo_dark"/>
 
             <com.socks.jiandan.view.ShowMaxImageView

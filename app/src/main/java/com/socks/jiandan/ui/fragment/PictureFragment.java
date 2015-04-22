@@ -1,6 +1,5 @@
 package com.socks.jiandan.ui.fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -45,6 +44,7 @@ import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.ui.ImageDetailActivity;
 import com.socks.jiandan.utils.CacheUtil;
 import com.socks.jiandan.utils.FileUtil;
+import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
@@ -82,10 +82,11 @@ public class PictureFragment extends BaseFragment {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 
-	private BroadcastReceiver netStateReceiver;
-
-	private MaterialDialog noNetWorkDialog;
-
+	private boolean isWifiConnected;
+	//用于记录是否是首次进入
+	private boolean isFirstChange;
+	//记录最后一次提示显示时间，防止多次提示
+	private long lastShowTime;
 
 	public PictureFragment() {
 	}
@@ -95,6 +96,7 @@ public class PictureFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		mActionBar.setTitle("无聊图");
+		isFirstChange = true;
 	}
 
 	@Override
@@ -156,7 +158,27 @@ public class PictureFragment extends BaseFragment {
 	}
 
 	public void onEventMainThread(NetWorkEvent event) {
-		
+
+		if (event.getType() == NetWorkEvent.AVAILABLE) {
+
+			if (NetWorkUtil.isWifiConnected(getActivity())) {
+				isWifiConnected = true;
+				if (!isFirstChange && (System.currentTimeMillis() - lastShowTime) > 3000) {
+					ShowToast.Short("已切换为WIFI模式，自动加载GIF图片");
+					lastShowTime = System.currentTimeMillis();
+				}
+
+			} else {
+				isWifiConnected = false;
+				if (!isFirstChange && (System.currentTimeMillis() - lastShowTime) > 3000) {
+					ShowToast.Short("已切换为省流量模式，只加载GIF缩略图");
+					lastShowTime = System.currentTimeMillis();
+				}
+			}
+
+			isFirstChange = false;
+		}
+
 	}
 
 	@Override
@@ -215,9 +237,13 @@ public class PictureFragment extends BaseFragment {
 
 			if (picUrl.endsWith(".gif")) {
 				holder.img_gif.setVisibility(View.VISIBLE);
-				//优化列表页，GIF图只加载缩略图，详情页才加载真实图片，后期将添加网络判断
-				picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
-						("large", "small");
+
+				//非WIFI网络情况下，GIF图只加载缩略图，详情页才加载真实图片
+				if (!isWifiConnected) {
+					picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
+							("large", "small");
+				}
+
 			} else {
 				holder.img_gif.setVisibility(View.GONE);
 			}
@@ -297,8 +323,18 @@ public class PictureFragment extends BaseFragment {
 										case 0:
 											String[] urls = picture
 													.getPics()[0].split("\\.");
+
 											File cacheFile = imageLoader.getDiskCache().get(picture
 													.getPics()[0]);
+
+											//如果不存在，则使用缩略图进行分享
+											if (!cacheFile.exists()) {
+												String picUrl = picture.getPics()[0];
+												picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
+														("large", "small");
+												cacheFile = imageLoader.getDiskCache().get(picUrl);
+											}
+
 											File newFile = new File(CacheUtil.getSharePicName
 													(cacheFile, urls));
 
@@ -344,8 +380,19 @@ public class PictureFragment extends BaseFragment {
 		}
 
 		private void save(String picUrl) {
+
+			boolean isSmallPic = false;
 			String[] urls = picUrl.split("\\.");
 			File cacheFile = imageLoader.getDiskCache().get(picUrl);
+
+			//如果是GIF格式，优先保存GIF动态图，如果不存在，则保存缩略图
+			if (!cacheFile.exists()) {
+				String cacheUrl = picUrl.replace("mw600", "small").replace("mw1200", "small")
+						.replace("large", "small");
+				cacheFile = imageLoader.getDiskCache().get(cacheUrl);
+				isSmallPic = true;
+			}
+
 			File picDir = new File(CacheUtil.getSaveDirPath());
 
 			if (!picDir.exists()) {
@@ -357,25 +404,47 @@ public class PictureFragment extends BaseFragment {
 			if (FileUtil.copyTo(cacheFile, newFile)) {
 				//保存成功之后，更新媒体库
 				MediaScannerConnection.scanFile(getActivity(), new String[]{newFile
-						.getAbsolutePath()}, null, new MediaScannerConnection.MediaScannerConnectionClient() {
-					@Override
-					public void onMediaScannerConnected() {
-
-					}
-
-					@Override
-					public void onScanCompleted(String path, Uri uri) {
-						Looper.prepare();
-						ShowToast.Short(ToastMsg.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
-								.FILE_SAVE + File.separator + newFile.getName());
-						Looper.loop();
-					}
-				});
+						.getAbsolutePath()}, null, new MyMediaScannerConnectionClient(isSmallPic,
+						newFile));
 			} else {
 				ShowToast.Short(ToastMsg.SAVE_FAILED);
 			}
 
 		}
+
+		/**
+		 * 更新媒体库
+		 */
+		private class MyMediaScannerConnectionClient implements MediaScannerConnection
+				.MediaScannerConnectionClient {
+
+			private boolean isSmallPic;
+			private File newFile;
+
+			public MyMediaScannerConnectionClient(boolean isSmallPic, File newFile) {
+				this.isSmallPic = isSmallPic;
+				this.newFile = newFile;
+			}
+
+			@Override
+			public void onMediaScannerConnected() {
+
+			}
+
+			@Override
+			public void onScanCompleted(String path, Uri uri) {
+				Looper.prepare();
+				if (isSmallPic) {
+					ShowToast.Short(ToastMsg.SAVE_SMALL_SUCCESS + " \n相册" + File.separator + CacheUtil
+							.FILE_SAVE + File.separator + newFile.getName());
+				} else {
+					ShowToast.Short(ToastMsg.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
+							.FILE_SAVE + File.separator + newFile.getName());
+				}
+				Looper.loop();
+			}
+		}
+
 
 		/**
 		 * 投票监听器

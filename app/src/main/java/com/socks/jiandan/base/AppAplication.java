@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
+import com.socks.jiandan.utils.logger.Logger;
 
 public class AppAplication extends Application {
 
@@ -21,6 +22,9 @@ public class AppAplication extends Application {
 		mContext = getApplicationContext();
 		Fresco.initialize(mContext);
 		initImageLoader(mContext);
+
+		Logger.init().hideThreadInfo();
+
 	}
 
 	public static Context getContext() {

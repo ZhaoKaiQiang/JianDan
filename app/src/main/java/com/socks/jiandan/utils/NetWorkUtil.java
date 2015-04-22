@@ -28,4 +28,22 @@ public class NetWorkUtil {
 		return result;
 	}
 
+
+	/**
+	 * 判断当前的网络连接方式是否为WIFI
+	 *
+	 * @param context
+	 * @return
+	 */
+	public static boolean isWifiConnected(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo wifiNetworkInfo = connectivityManager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		if (wifiNetworkInfo.isConnected()) {
+			return true;
+		}
+		return false;
+	}
+
 }
