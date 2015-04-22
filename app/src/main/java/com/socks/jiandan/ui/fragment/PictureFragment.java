@@ -3,8 +3,10 @@ package com.socks.jiandan.ui.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +41,7 @@ import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.ui.ImageDetailActivity;
+import com.socks.jiandan.utils.CacheUtil;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -188,6 +191,7 @@ public class PictureFragment extends BaseFragment {
 
 			if (picUrl.endsWith(".gif")) {
 				holder.img_gif.setVisibility(View.VISIBLE);
+				//优化列表页，GIF图只加载缩略图，详情页才加载真实图片
 				picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
 						("large", "small");
 			} else {
@@ -267,9 +271,19 @@ public class PictureFragment extends BaseFragment {
 									switch (which) {
 										//分享
 										case 0:
-											String imgPath = imageLoader.getDiskCache().get(picture
-													.getPics()[0]).getAbsolutePath();
-											ShareUtil.sharePicture(getActivity(), imgPath);
+											String[] urls = picture
+													.getPics()[0].split("\\.");
+											File cacheFile = imageLoader.getDiskCache().get(picture
+													.getPics()[0]);
+											File newFile = new File(CacheUtil.getSharePicName
+													(cacheFile, urls));
+
+											if (FileUtil.copyTo(cacheFile, newFile)) {
+												ShareUtil.sharePicture(getActivity(), newFile.getAbsolutePath(),
+														"分享自煎蛋增强版 " + picture.getPics()[0]);
+											} else {
+												ShowToast.Short(ToastMsg.LOAD_SHARE);
+											}
 											break;
 										//保存
 										case 1:
@@ -307,19 +321,32 @@ public class PictureFragment extends BaseFragment {
 
 		private void save(String picUrl) {
 			String[] urls = picUrl.split("\\.");
-			File picFile = imageLoader.getDiskCache().get(picUrl);
-			File picDir = new File(Environment
-					.getExternalStoragePublicDirectory
-							(Environment.DIRECTORY_PICTURES), "jiandan");
+			File cacheFile = imageLoader.getDiskCache().get(picUrl);
+			File picDir = new File(CacheUtil.getSaveDirPath());
 
 			if (!picDir.exists()) {
 				picDir.mkdir();
 			}
-			File newFile = new File(picDir, "jiandan_" + picFile.getName() + "." + urls[urls
-					.length - 1]);
 
-			if (FileUtil.copyTo(picFile, newFile)) {
-				ShowToast.Short(ToastMsg.SAVE_SUCCESS + " " + newFile.getAbsolutePath());
+			final File newFile = new File(picDir, CacheUtil.getSavePicName(cacheFile, urls));
+
+			if (FileUtil.copyTo(cacheFile, newFile)) {
+				//保存成功之后，更新媒体库
+				MediaScannerConnection.scanFile(getActivity(), new String[]{newFile
+						.getAbsolutePath()}, null, new MediaScannerConnection.MediaScannerConnectionClient() {
+					@Override
+					public void onMediaScannerConnected() {
+
+					}
+
+					@Override
+					public void onScanCompleted(String path, Uri uri) {
+						Looper.prepare();
+						ShowToast.Short(ToastMsg.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
+								.FILE_SAVE + File.separator + newFile.getName());
+						Looper.loop();
+					}
+				});
 			} else {
 				ShowToast.Short(ToastMsg.SAVE_FAILED);
 			}

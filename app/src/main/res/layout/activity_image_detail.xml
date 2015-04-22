@@ -4,23 +4,21 @@
                 android:layout_height="match_parent"
     >
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
-        <WebView
-            android:id="@+id/web_gif"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:layerType="software"
-            />
+    <WebView
+        android:id="@+id/web_gif"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layerType="software"
+        android:visibility="visible"
+        />
 
-        <uk.co.senab.photoview.PhotoView
-            android:id="@+id/img"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            />
-    </FrameLayout>
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        />
 
     <RelativeLayout
         android:id="@+id/topbar"
@@ -54,10 +52,9 @@
         android:layout_below="@id/topbar"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:indeterminate="false"
+        android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal_holo"
         android:mirrorForRtl="true"
-        android:progress="0"
         android:progressDrawable="@drawable/progress_horizontal_holo_dark"/>
 
 

@@ -2,6 +2,7 @@ package com.socks.jiandan.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -53,11 +54,8 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 	private DisplayImageOptions options;
 	private ImageLoader imageLoader;
-
 	private File imgCacheFile;
-
 	private String imgPath;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +93,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 		if (is_need_webview) {
 
-			img.setVisibility(View.GONE);
-
 			webView.getSettings().setJavaScriptEnabled(true);
-			webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 			webView.addJavascriptInterface(new JSObject(), "external");
 			webView.setWebViewClient(new WebViewClient() {
 				@Override
@@ -110,31 +105,36 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 			});
 
 			webView.setWebChromeClient(new WebChromeClient());
+			webView.setBackgroundColor(Color.BLACK);
 
-			imageLoader.displayImage(urls[0], img, options, new SimpleImageLoadingListener() {
+			img.setVisibility(View.GONE);
 
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+			imageLoader.displayImage(urls[0], img, options, new
+					SimpleImageLoadingListener() {
 
-					progress.setVisibility(View.GONE);
+						@Override
+						public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-					imgCacheFile = DiskCacheUtils.findInCache(urls[0], imageLoader.getDiskCache());
-					if (imgCacheFile != null) {
-						imgPath = "file://" + imgCacheFile.getAbsolutePath();
-						showImgInWebView(imgPath);
-					}
-				}
+							progress.setVisibility(View.GONE);
 
-				@Override
-				public void onLoadingStarted(String imageUri, View view) {
-					progress.setVisibility(View.VISIBLE);
-				}
+							imgCacheFile = DiskCacheUtils.findInCache(urls[0], imageLoader.getDiskCache());
+							if (imgCacheFile != null) {
+								imgPath = "file://" + imgCacheFile.getAbsolutePath();
+								showImgInWebView(imgPath);
+							}
+						}
 
-				@Override
-				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-					progress.setVisibility(View.GONE);
-				}
-			});
+						@Override
+						public void onLoadingStarted(String imageUri, View view) {
+							progress.setVisibility(View.VISIBLE);
+						}
+
+						@Override
+						public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+							progress.setVisibility(View.GONE);
+							ShowToast.Short("加载失败" + failReason.getType().name());
+						}
+					});
 
 		} else {
 
