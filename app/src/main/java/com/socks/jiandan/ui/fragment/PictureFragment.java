@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -34,6 +35,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.Comment;
+import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.model.Picture;
 import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4CommentCounts;
@@ -57,6 +59,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.greenrobot.event.EventBus;
 
 /**
  * 无聊图碎片
@@ -79,6 +82,11 @@ public class PictureFragment extends BaseFragment {
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
 
+	private BroadcastReceiver netStateReceiver;
+
+	private MaterialDialog noNetWorkDialog;
+
+
 	public PictureFragment() {
 	}
 
@@ -87,6 +95,12 @@ public class PictureFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		mActionBar.setTitle("无聊图");
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		EventBus.getDefault().register(this);
 	}
 
 	@Override
@@ -141,6 +155,16 @@ public class PictureFragment extends BaseFragment {
 
 	}
 
+	public void onEventMainThread(NetWorkEvent event) {
+		
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		EventBus.getDefault().unregister(this);
+	}
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_joke, menu);
@@ -191,7 +215,7 @@ public class PictureFragment extends BaseFragment {
 
 			if (picUrl.endsWith(".gif")) {
 				holder.img_gif.setVisibility(View.VISIBLE);
-				//优化列表页，GIF图只加载缩略图，详情页才加载真实图片
+				//优化列表页，GIF图只加载缩略图，详情页才加载真实图片，后期将添加网络判断
 				picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
 						("large", "small");
 			} else {

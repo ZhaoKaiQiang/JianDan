@@ -38,7 +38,6 @@ import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
-import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
 
@@ -58,8 +57,6 @@ public class JokeFragment extends BaseFragment {
 	SwipeRefreshLayout mSwipeRefreshLayout;
 	@InjectView(R.id.google_progress)
 	GoogleProgressBar google_progress;
-	@InjectView(R.id.tv_error)
-	MatchTextView tv_error;
 
 	private JokeAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
@@ -316,7 +313,7 @@ public class JokeFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short("神秘力量导致投票失败");
+					ShowToast.Short(ToastMsg.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -350,7 +347,8 @@ public class JokeFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					tv_error.setVisibility(View.VISIBLE);
+					ShowToast.Short(ToastMsg.LOAD_FAILED);
+
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
@@ -375,7 +373,6 @@ public class JokeFragment extends BaseFragment {
 				public void onResponse(ArrayList<Comment> response) {
 
 					google_progress.setVisibility(View.GONE);
-					tv_error.setVisibility(View.GONE);
 
 					for (int i = 0; i < jokes.size(); i++) {
 						jokes.get(i).setComment_counts(response.get(i).getComments() + "");
@@ -399,8 +396,8 @@ public class JokeFragment extends BaseFragment {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					ShowToast.Short(ToastMsg.LOAD_FAILED);
 					mLoadFinisCallBack.loadFinish(null);
-					tv_error.setVisibility(View.VISIBLE);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
