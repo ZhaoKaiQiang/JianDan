@@ -5,12 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,8 +34,10 @@ import java.io.File;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
+ * 图片详情页
  * Created by zhaokaiqiang on 15/4/21.
  */
 public class ImageDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -46,6 +53,19 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	@InjectView(R.id.progress)
 	ProgressBar progress;
 
+	@InjectView(R.id.tv_like)
+	TextView tv_like;
+	@InjectView(R.id.tv_unlike)
+	TextView tv_unlike;
+	@InjectView(R.id.img_comment)
+	ImageButton img_comment;
+	@InjectView(R.id.img_download)
+	ImageButton img_download;
+	@InjectView(R.id.ll_bottom_bar)
+	LinearLayout ll_bottom_bar;
+	@InjectView(R.id.rl_top_bar)
+	RelativeLayout rl_top_bar;
+
 	private String author;
 	private String[] urls;
 	private String id;
@@ -56,6 +76,15 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	private ImageLoader imageLoader;
 	private File imgCacheFile;
 	private String imgPath;
+
+	private Animation animBottomBarIn;
+	private Animation animBottomBarOut;
+	private Animation animTopBarIn;
+	private Animation animTopBarOut;
+
+	private boolean isBarShow = true;
+
+	private boolean isImgHaveLoad = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +120,14 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
 
-		if (is_need_webview) {
 
+		animBottomBarIn = AnimationUtils.loadAnimation(this, R.anim.push_bottom_in);
+		animBottomBarOut = AnimationUtils.loadAnimation(this, R.anim.push_bottom_out);
+
+		animTopBarIn = AnimationUtils.loadAnimation(this, R.anim.push_top_in);
+		animTopBarOut = AnimationUtils.loadAnimation(this, R.anim.push_top_out);
+
+		if (is_need_webview) {
 			webView.getSettings().setJavaScriptEnabled(true);
 			webView.addJavascriptInterface(new JSObject(), "external");
 			webView.setWebViewClient(new WebViewClient() {
@@ -121,7 +156,11 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 							if (imgCacheFile != null) {
 								imgPath = "file://" + imgCacheFile.getAbsolutePath();
 								showImgInWebView(imgPath);
+								isImgHaveLoad = true;
 							}
+
+							toggleBar();
+
 						}
 
 						@Override
@@ -152,10 +191,14 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 									imgPath = "file://" + imgCacheFile.getAbsolutePath();
 									img.setVisibility(View.GONE);
 									showImgInWebView(imgPath);
+									isImgHaveLoad = true;
 								}
 							} else {
 								img.setImageBitmap(loadedImage);
+								isImgHaveLoad = true;
 							}
+
+							toggleBar();
 
 						}
 
@@ -172,7 +215,32 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 		}
 
+		img.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+			@Override
+			public void onViewTap(View view, float x, float y) {
+				toggleBar();
+			}
+		});
+
+
 	}
+
+	private void toggleBar() {
+
+		if (isImgHaveLoad) {
+			if (isBarShow) {
+				isBarShow = false;
+				ll_bottom_bar.startAnimation(animBottomBarOut);
+				rl_top_bar.startAnimation(animTopBarOut);
+			} else {
+				isBarShow = true;
+				ll_bottom_bar.startAnimation(animBottomBarIn);
+				rl_top_bar.startAnimation(animTopBarIn);
+			}
+		}
+
+	}
+
 
 	@Override
 	public void onClick(View v) {
@@ -225,6 +293,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
+					toggleBar();
 				}
 			});
 		}
