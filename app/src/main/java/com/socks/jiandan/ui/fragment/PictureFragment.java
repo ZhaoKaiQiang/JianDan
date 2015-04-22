@@ -59,7 +59,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
- * 段子碎片
+ * 无聊图碎片
  *
  * @author zhaokaiqiang
  */
@@ -557,7 +557,6 @@ public class PictureFragment extends BaseFragment {
 		private LinearLayout ll_comment;
 
 		private ProgressBar progress;
-
 
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
