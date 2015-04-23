@@ -101,12 +101,17 @@ public class AutoLoadRecyclerView extends RecyclerView implements LoadFinishCall
 					case 1:
 						if (pauseOnScroll) {
 							imageLoader.pause();
+						} else {
+							imageLoader.resume();
 						}
 						break;
 					case 2:
 						if (pauseOnFling) {
 							imageLoader.pause();
+						} else {
+							imageLoader.resume();
 						}
+						break;
 				}
 			}
 		}
