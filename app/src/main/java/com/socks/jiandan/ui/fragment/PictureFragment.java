@@ -3,10 +3,7 @@ package com.socks.jiandan.ui.fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +39,6 @@ import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.ui.ImageDetailActivity;
-import com.socks.jiandan.utils.CacheUtil;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
@@ -54,7 +50,6 @@ import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -321,37 +316,13 @@ public class PictureFragment extends BaseFragment {
 									switch (which) {
 										//分享
 										case 0:
-											String[] urls = picture
-													.getPics()[0].split("\\.");
-
-											File cacheFile = imageLoader.getDiskCache().get(picture
+											ShareUtil.sharePicture(getActivity(), picture
 													.getPics()[0]);
-
-											//如果不存在，则使用缩略图进行分享
-											if (!cacheFile.exists()) {
-												String picUrl = picture.getPics()[0];
-												picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
-														("large", "small");
-												cacheFile = imageLoader.getDiskCache().get(picUrl);
-											}
-
-											File newFile = new File(CacheUtil.getSharePicName
-													(cacheFile, urls));
-
-											if (FileUtil.copyTo(cacheFile, newFile)) {
-												ShareUtil.sharePicture(getActivity(), newFile.getAbsolutePath(),
-														"分享自煎蛋增强版 " + picture.getPics()[0]);
-											} else {
-												ShowToast.Short(ToastMsg.LOAD_SHARE);
-											}
 											break;
 										//保存
 										case 1:
-											if (picture.getPics().length == 1) {
-												save(picture.getPics()[0]);
-											} else {
-												ShowToast.Short("暂时不支持保存多张图片");
-											}
+											FileUtil.savePicture(getActivity(), picture
+													.getPics()[0]);
 											break;
 									}
 
@@ -370,7 +341,6 @@ public class PictureFragment extends BaseFragment {
 			holder.ll_comment.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
 					Intent intent = new Intent(getActivity(), CommentListActivity.class);
 					intent.putExtra("thread_key", "comment-" + picture.getComment_ID());
 					startActivity(intent);
@@ -378,73 +348,6 @@ public class PictureFragment extends BaseFragment {
 			});
 
 		}
-
-		private void save(String picUrl) {
-
-			boolean isSmallPic = false;
-			String[] urls = picUrl.split("\\.");
-			File cacheFile = imageLoader.getDiskCache().get(picUrl);
-
-			//如果是GIF格式，优先保存GIF动态图，如果不存在，则保存缩略图
-			if (!cacheFile.exists()) {
-				String cacheUrl = picUrl.replace("mw600", "small").replace("mw1200", "small")
-						.replace("large", "small");
-				cacheFile = imageLoader.getDiskCache().get(cacheUrl);
-				isSmallPic = true;
-			}
-
-			File picDir = new File(CacheUtil.getSaveDirPath());
-
-			if (!picDir.exists()) {
-				picDir.mkdir();
-			}
-
-			final File newFile = new File(picDir, CacheUtil.getSavePicName(cacheFile, urls));
-
-			if (FileUtil.copyTo(cacheFile, newFile)) {
-				//保存成功之后，更新媒体库
-				MediaScannerConnection.scanFile(getActivity(), new String[]{newFile
-						.getAbsolutePath()}, null, new MyMediaScannerConnectionClient(isSmallPic,
-						newFile));
-			} else {
-				ShowToast.Short(ToastMsg.SAVE_FAILED);
-			}
-
-		}
-
-		/**
-		 * 更新媒体库
-		 */
-		private class MyMediaScannerConnectionClient implements MediaScannerConnection
-				.MediaScannerConnectionClient {
-
-			private boolean isSmallPic;
-			private File newFile;
-
-			public MyMediaScannerConnectionClient(boolean isSmallPic, File newFile) {
-				this.isSmallPic = isSmallPic;
-				this.newFile = newFile;
-			}
-
-			@Override
-			public void onMediaScannerConnected() {
-
-			}
-
-			@Override
-			public void onScanCompleted(String path, Uri uri) {
-				Looper.prepare();
-				if (isSmallPic) {
-					ShowToast.Short(ToastMsg.SAVE_SMALL_SUCCESS + " \n相册" + File.separator + CacheUtil
-							.FILE_SAVE + File.separator + newFile.getName());
-				} else {
-					ShowToast.Short(ToastMsg.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
-							.FILE_SAVE + File.separator + newFile.getName());
-				}
-				Looper.loop();
-			}
-		}
-
 
 		/**
 		 * 投票监听器

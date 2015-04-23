@@ -25,7 +25,6 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.constant.ToastMsg;
-import com.socks.jiandan.utils.CacheUtil;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShareUtil;
@@ -110,26 +109,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				finish();
 				break;
 			case R.id.img_share:
-				String[] urls = img_urls[0].split("\\.");
-				File cacheFile = imageLoader.getDiskCache().get(img_urls[0]);
-
-				//如果不存在，则使用缩略图进行分享
-				if (!cacheFile.exists()) {
-					String picUrl = img_urls[0];
-					picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
-							("large", "small");
-					cacheFile = imageLoader.getDiskCache().get(picUrl);
-				}
-
-				File newFile = new File(CacheUtil.getSharePicName
-						(cacheFile, urls));
-
-				if (FileUtil.copyTo(cacheFile, newFile)) {
-					ShareUtil.sharePicture(this, newFile.getAbsolutePath(),
-							"分享自煎蛋增强版 " + img_urls[0]);
-				} else {
-					ShowToast.Short(ToastMsg.LOAD_SHARE);
-				}
+				ShareUtil.sharePicture(this, img_urls[0]);
 				break;
 			case R.id.tv_like:
 				ShowToast.Short("OO");
@@ -138,10 +118,12 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				ShowToast.Short("XX");
 				break;
 			case R.id.img_comment:
-				ShowToast.Short("吐槽");
+				Intent intent = new Intent(this, CommentListActivity.class);
+				intent.putExtra("thread_key", threadKey);
+				startActivity(intent);
 				break;
 			case R.id.img_download:
-				ShowToast.Short("保存");
+				FileUtil.savePicture(this, img_urls[0]);
 				break;
 		}
 

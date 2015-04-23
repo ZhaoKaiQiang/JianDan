@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.constant.ToastMsg;
 
@@ -13,6 +14,37 @@ import java.io.File;
  * Created by zhaokaiqiang on 15/4/17.
  */
 public class ShareUtil {
+
+	/**
+	 * 从
+	 * @param activity
+	 * @param url
+	 */
+	public static void sharePicture(Activity activity,String url){
+
+		String[] urlSplits = url.split("\\.");
+
+		File cacheFile = ImageLoader.getInstance().getDiskCache().get(url);
+
+		//如果不存在，则使用缩略图进行分享
+		if (!cacheFile.exists()) {
+			String picUrl = url;
+			picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
+					("large", "small");
+			cacheFile = ImageLoader.getInstance().getDiskCache().get(picUrl);
+		}
+
+		File newFile = new File(CacheUtil.getSharePicName
+				(cacheFile, urlSplits));
+
+		if (FileUtil.copyTo(cacheFile, newFile)) {
+			ShareUtil.sharePicture(activity, newFile.getAbsolutePath(),
+					"分享自煎蛋增强版 " + url);
+		} else {
+			ShowToast.Short(ToastMsg.LOAD_SHARE);
+		}
+	}
+
 
 	public static void shareText(Activity activity, String shareText) {
 

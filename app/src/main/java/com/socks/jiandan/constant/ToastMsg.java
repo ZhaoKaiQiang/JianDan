@@ -23,6 +23,6 @@ public class ToastMsg {
 
 	public static final String SAVE_SMALL_SUCCESS = "保存缩略图成功";
 
-	public static final String SHARE_TAIL = "@煎蛋增强版 https://github.com/ZhaoKaiQiang";
+	public static final String SHARE_TAIL = "分享自煎蛋增强版 https://github.com/ZhaoKaiQiang";
 
 }
