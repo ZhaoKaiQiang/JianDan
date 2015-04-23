@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.socks.jiandan.R;
+import com.socks.jiandan.constant.ToastMsg;
 
 import java.io.File;
 
@@ -35,7 +36,14 @@ public class ShareUtil {
 			ShowToast.Short("分享图片不存在哦");
 			return;
 		}
-		intent.putExtra(Intent.EXTRA_TEXT, shareText);
+
+		//GIF图片指明出处url，其他图片指向项目地址
+		if (imgPath.endsWith(".gif")) {
+			intent.putExtra(Intent.EXTRA_TEXT, shareText);
+		} else {
+			intent.putExtra(Intent.EXTRA_TEXT, ToastMsg.SHARE_TAIL);
+		}
+
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		activity.startActivity(Intent.createChooser(intent, activity.getResources().getString(R
 				.string.app_name)));

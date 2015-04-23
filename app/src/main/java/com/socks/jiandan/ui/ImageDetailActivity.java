@@ -1,12 +1,11 @@
 package com.socks.jiandan.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -26,7 +25,10 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.utils.CacheUtil;
+import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ScreenSizeUtil;
+import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 
 import java.io.File;
@@ -67,7 +69,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	RelativeLayout rl_top_bar;
 
 	private String author;
-	private String[] urls;
+	private String[] img_urls;
 	private String id;
 	private String threadKey;
 	private boolean is_need_webview;
@@ -77,13 +79,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	private File imgCacheFile;
 	private String imgPath;
 
-	private Animation animBottomBarIn;
-	private Animation animBottomBarOut;
-	private Animation animTopBarIn;
-	private Animation animTopBarOut;
-
 	private boolean isBarShow = true;
-
 	private boolean isImgHaveLoad = false;
 
 	@Override
@@ -99,13 +95,63 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	public void initView() {
 		img_back.setOnClickListener(this);
 		img_share.setOnClickListener(this);
+		tv_like.setOnClickListener(this);
+		tv_unlike.setOnClickListener(this);
+		img_comment.setOnClickListener(this);
+		img_download.setOnClickListener(this);
+
+	}
+
+	@Override
+	public void onClick(View v) {
+
+		switch (v.getId()) {
+			case R.id.img_back:
+				finish();
+				break;
+			case R.id.img_share:
+				String[] urls = img_urls[0].split("\\.");
+				File cacheFile = imageLoader.getDiskCache().get(img_urls[0]);
+
+				//如果不存在，则使用缩略图进行分享
+				if (!cacheFile.exists()) {
+					String picUrl = img_urls[0];
+					picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
+							("large", "small");
+					cacheFile = imageLoader.getDiskCache().get(picUrl);
+				}
+
+				File newFile = new File(CacheUtil.getSharePicName
+						(cacheFile, urls));
+
+				if (FileUtil.copyTo(cacheFile, newFile)) {
+					ShareUtil.sharePicture(this, newFile.getAbsolutePath(),
+							"分享自煎蛋增强版 " + img_urls[0]);
+				} else {
+					ShowToast.Short(ToastMsg.LOAD_SHARE);
+				}
+				break;
+			case R.id.tv_like:
+				ShowToast.Short("OO");
+				break;
+			case R.id.tv_unlike:
+				ShowToast.Short("XX");
+				break;
+			case R.id.img_comment:
+				ShowToast.Short("吐槽");
+				break;
+			case R.id.img_download:
+				ShowToast.Short("保存");
+				break;
+		}
+
 	}
 
 	@Override
 	public void initData() {
 		Intent intent = getIntent();
 		author = intent.getStringExtra("img_author");
-		urls = intent.getStringArrayExtra("img_url");
+		img_urls = intent.getStringArrayExtra("img_url");
 		id = intent.getStringExtra("img_id");
 		threadKey = intent.getStringExtra("thread_key");
 		is_need_webview = intent.getBooleanExtra("is_need_webview", false);
@@ -119,13 +165,6 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				.considerExifParams(true)
 				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
-
-
-		animBottomBarIn = AnimationUtils.loadAnimation(this, R.anim.push_bottom_in);
-		animBottomBarOut = AnimationUtils.loadAnimation(this, R.anim.push_bottom_out);
-
-		animTopBarIn = AnimationUtils.loadAnimation(this, R.anim.push_top_in);
-		animTopBarOut = AnimationUtils.loadAnimation(this, R.anim.push_top_out);
 
 		if (is_need_webview) {
 			webView.getSettings().setJavaScriptEnabled(true);
@@ -144,7 +183,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 			img.setVisibility(View.GONE);
 
-			imageLoader.displayImage(urls[0], img, options, new
+			imageLoader.displayImage(img_urls[0], img, options, new
 					SimpleImageLoadingListener() {
 
 						@Override
@@ -152,14 +191,12 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 							progress.setVisibility(View.GONE);
 
-							imgCacheFile = DiskCacheUtils.findInCache(urls[0], imageLoader.getDiskCache());
+							imgCacheFile = DiskCacheUtils.findInCache(img_urls[0], imageLoader.getDiskCache());
 							if (imgCacheFile != null) {
 								imgPath = "file://" + imgCacheFile.getAbsolutePath();
 								showImgInWebView(imgPath);
 								isImgHaveLoad = true;
 							}
-
-							toggleBar();
 
 						}
 
@@ -177,7 +214,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 		} else {
 
-			imageLoader.loadImage(urls[0], options, new
+			imageLoader.loadImage(img_urls[0], options, new
 					SimpleImageLoadingListener() {
 						@Override
 						public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -186,7 +223,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 							if (loadedImage.getHeight() > ScreenSizeUtil
 									.getScreenWidth(ImageDetailActivity.this)) {
-								imgCacheFile = DiskCacheUtils.findInCache(urls[0], imageLoader.getDiskCache());
+								imgCacheFile = DiskCacheUtils.findInCache(img_urls[0], imageLoader.getDiskCache());
 								if (imgCacheFile != null) {
 									imgPath = "file://" + imgCacheFile.getAbsolutePath();
 									img.setVisibility(View.GONE);
@@ -197,8 +234,6 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 								img.setImageBitmap(loadedImage);
 								isImgHaveLoad = true;
 							}
-
-							toggleBar();
 
 						}
 
@@ -222,39 +257,51 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 			}
 		});
 
+	}
 
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		toggleBar();
 	}
 
 	private void toggleBar() {
 
 		if (isImgHaveLoad) {
+
 			if (isBarShow) {
+				//隐藏
 				isBarShow = false;
-				ll_bottom_bar.startAnimation(animBottomBarOut);
-				rl_top_bar.startAnimation(animTopBarOut);
+
+				ObjectAnimator
+						.ofFloat(ll_bottom_bar, "translationY", 0, ll_bottom_bar.getHeight())
+						.setDuration(400)
+						.start();
+
+				ObjectAnimator
+						.ofFloat(rl_top_bar, "translationY", 0, -rl_top_bar.getHeight())
+						.setDuration(400)
+						.start();
+
 			} else {
+				//显示
 				isBarShow = true;
-				ll_bottom_bar.startAnimation(animBottomBarIn);
-				rl_top_bar.startAnimation(animTopBarIn);
+
+				ObjectAnimator
+						.ofFloat(ll_bottom_bar, "translationY", ll_bottom_bar.getHeight(), 0)
+						.setDuration(400)
+						.start();
+
+				ObjectAnimator
+						.ofFloat(rl_top_bar, "translationY", -rl_top_bar.getHeight(), 0)
+						.setDuration(400)
+						.start();
+
 			}
 		}
 
 	}
 
-
-	@Override
-	public void onClick(View v) {
-
-		switch (v.getId()) {
-			case R.id.img_back:
-				finish();
-				break;
-			case R.id.img_share:
-				ShowToast.Short("分享");
-				break;
-		}
-
-	}
 
 	/**
 	 * 使用ImageView加载GIF图片

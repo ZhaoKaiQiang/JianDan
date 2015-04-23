@@ -47,7 +47,8 @@
             android:layout_toRightOf="@id/left_placeholder"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="AAA"
+            android:text="AAAAAAAAAA"
+            android:maxLength="10"
             android:textColor="@color/primary_text_default_material_light"
             android:textSize="15.0sp"
             android:textStyle="bold"/>
