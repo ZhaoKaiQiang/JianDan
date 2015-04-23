@@ -3,7 +3,6 @@ package com.socks.jiandan.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -18,7 +17,7 @@ import com.socks.jiandan.utils.ScreenSizeUtil;
  */
 public class ShowMaxImageView extends ImageView {
 
-	private Bitmap mBitmap;
+	private float mHeight = 0;
 
 	public ShowMaxImageView(Context context) {
 		super(context);
@@ -34,19 +33,23 @@ public class ShowMaxImageView extends ImageView {
 
 	@Override
 	public void setImageBitmap(Bitmap bm) {
+
 		if (bm != null) {
-			mBitmap = getMatrixBitmap(bm);
+			getHeight(bm);
 		}
+
 		super.setImageBitmap(bm);
 		requestLayout();
+		invalidate();
 	}
-
 
 	@Override
 	public void setImageDrawable(Drawable drawable) {
+
 		if (drawable != null) {
-			mBitmap = getMatrixBitmap(drawableToBitamp(drawable));
+			getHeight(drawableToBitamp(drawable));
 		}
+
 		super.setImageDrawable(drawable);
 		requestLayout();
 		invalidate();
@@ -55,62 +58,48 @@ public class ShowMaxImageView extends ImageView {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-		if (mBitmap != null) {
-			int resultWidth = 0;
-			int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+
+		if (mHeight != 0) {
+
 			int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-
-			if (modeWidth == MeasureSpec.EXACTLY) {
-				resultWidth = sizeWidth;
-			} else {
-				resultWidth = mBitmap.getWidth();
-				if (modeWidth == MeasureSpec.AT_MOST) {
-					resultWidth = Math.max(resultWidth, sizeWidth);
-				}
-			}
-
-			int resultHeight = 0;
-			int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 			int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-			if (modeHeight == MeasureSpec.EXACTLY) {
-				resultHeight = sizeHeight;
-			} else {
-				resultHeight = mBitmap.getHeight();
-				if (modeHeight == MeasureSpec.AT_MOST) {
-					resultHeight = Math.max(resultHeight, sizeHeight);
-				}
+			int resultHeight = (int) Math.max(mHeight, sizeHeight);
 
-				if (resultHeight >= ScreenSizeUtil.getScreenHeight((Activity) getContext())) {
-					resultHeight = ScreenSizeUtil.getScreenHeight((Activity) getContext()) / 3;
-				}
-
+			if (resultHeight >= ScreenSizeUtil.getScreenHeight((Activity) getContext())) {
+				resultHeight = ScreenSizeUtil.getScreenHeight((Activity) getContext()) / 3;
 			}
-			setMeasuredDimension(resultWidth, resultHeight);
+
+			setMeasuredDimension(sizeWidth, resultHeight);
 		} else {
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		}
 
 	}
 
-	private Bitmap getMatrixBitmap(Bitmap bm) {
-		float width = getWidth();
-		int bitmapWidth = bm.getWidth();
-		int bitmapHeight = bm.getHeight();
+	private void getHeight(Bitmap bm) {
+
+		float bitmapWidth = bm.getWidth();
+		float bitmapHeight = bm.getHeight();
 
 		if (bitmapWidth > 0 && bitmapHeight > 0) {
-			float scaleWidth = width / bitmapWidth;
-			Matrix matrix = new Matrix();
-			matrix.postScale(scaleWidth, scaleWidth);
-			return Bitmap.createBitmap(bm, 0, 0, bitmapWidth, bitmapHeight, matrix, true);
+			float scaleWidth = getWidth() / bitmapWidth;
+			if (scaleWidth != 0) {
+				mHeight = bitmapHeight * scaleWidth;
+			}
+		}
+
+	}
+
+
+	private Bitmap drawableToBitamp(Drawable drawable) {
+
+		if (drawable != null) {
+			BitmapDrawable bd = (BitmapDrawable) drawable;
+			return bd.getBitmap();
 		} else {
 			return null;
 		}
-	}
-
-	private Bitmap drawableToBitamp(Drawable drawable) {
-		BitmapDrawable bd = (BitmapDrawable) drawable;
-		return bd.getBitmap();
 	}
 
 }

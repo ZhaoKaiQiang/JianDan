@@ -136,15 +136,14 @@ public class SisterFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		imageLoader = ImageLoader.getInstance();
-		mRecyclerView.setOnPauseListenerParams(imageLoader, true, true);
+		mRecyclerView.setOnPauseListenerParams(imageLoader, false, true);
 
 		options = new DisplayImageOptions.Builder()
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
 				.bitmapConfig(Bitmap.Config.RGB_565)
+				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
 				.resetViewBeforeLoading(true)
-				.considerExifParams(true)
-				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
 
 		mAdapter = new PictureAdapter();
@@ -231,19 +230,8 @@ public class SisterFragment extends BaseFragment {
 
 			String picUrl = picture.getPics()[0];
 
-			if (picUrl.endsWith(".gif")) {
-				holder.img_gif.setVisibility(View.VISIBLE);
-
-				//非WIFI网络情况下，GIF图只加载缩略图，详情页才加载真实图片
-				if (!isWifiConnected) {
-					picUrl = picUrl.replace("mw600", "small").replace("mw1200", "small").replace
-							("large", "small");
-				}
-
-			} else {
-				holder.img_gif.setVisibility(View.GONE);
-			}
-
+			holder.img_gif.setVisibility(View.GONE);
+			holder.progress.setProgress(0);
 			holder.progress.setVisibility(View.VISIBLE);
 
 			imageLoader.displayImage(picUrl, holder.img, options, new
@@ -277,11 +265,7 @@ public class SisterFragment extends BaseFragment {
 					intent.putExtra("img_url", picture.getPics());
 					intent.putExtra("img_id", picture.getComment_ID());
 					intent.putExtra("thread_key", "comment-" + picture.getComment_ID());
-
-					if (picture.getPics()[0].endsWith(".gif")) {
-						intent.putExtra("is_need_webview", true);
-					}
-
+					intent.putExtra("is_need_webview", false);
 					startActivity(intent);
 				}
 			});
@@ -403,7 +387,7 @@ public class SisterFragment extends BaseFragment {
 							String result = response.getResult();
 
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-								ShowToast.Short("顶的好舒服~");
+								ShowToast.Short(ToastMsg.VOTE_OO);
 								//变红+1
 								int vote = Integer.valueOf(picture.getVote_positive());
 								picture.setVote_positive((vote + 1) + "");
@@ -415,7 +399,7 @@ public class SisterFragment extends BaseFragment {
 										(android.R.color.holo_red_light));
 
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-								ShowToast.Short("疼...轻点插");
+								ShowToast.Short(ToastMsg.VOTE_XX);
 								//变绿+1
 								int vote = Integer.valueOf(picture.getVote_negative());
 								picture.setVote_negative((vote + 1) + "");
@@ -427,7 +411,7 @@ public class SisterFragment extends BaseFragment {
 										(android.R.color.holo_green_light));
 
 							} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-								ShowToast.Short("投过票了");
+								ShowToast.Short(ToastMsg.VOTE_REPEAT);
 							} else {
 								ShowToast.Short("卧槽，发生了什么！");
 							}

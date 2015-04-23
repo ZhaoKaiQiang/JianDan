@@ -4,12 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.socks.jiandan.utils.logger.Logger;
 
 public class AppAplication extends Application {
@@ -21,10 +18,8 @@ public class AppAplication extends Application {
 		super.onCreate();
 		mContext = getApplicationContext();
 		Fresco.initialize(mContext);
-		initImageLoader(mContext);
-
+		initImageLoader();
 		Logger.init().hideThreadInfo();
-
 	}
 
 	public static Context getContext() {
@@ -32,15 +27,9 @@ public class AppAplication extends Application {
 	}
 
 	// 初始化ImageLoader
-	public static void initImageLoader(Context context) {
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
-				.threadPriority(Thread.NORM_PRIORITY - 2)
-				.denyCacheImageMultipleSizesInMemory()
-				.memoryCache(new LruMemoryCache(10 * 1024 * 1024))
-				.memoryCacheSize(10 * 1024 * 1024)
-				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+	public static void initImageLoader() {
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.imageDownloader(new BaseImageDownloader(context, 5 * 1000, 30 * 1000))
 				.writeDebugLogs()
 				.build();
 		ImageLoader.getInstance().init(config);

@@ -280,7 +280,7 @@ public class JokeFragment extends BaseFragment {
 							String result = response.getResult();
 
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-								ShowToast.Short("顶的好舒服~");
+								ShowToast.Short(ToastMsg.VOTE_OO);
 								//变红+1
 								int vote = Integer.valueOf(joke.getVote_positive());
 								joke.setVote_positive((vote + 1) + "");
@@ -292,7 +292,7 @@ public class JokeFragment extends BaseFragment {
 										(android.R.color.holo_red_light));
 
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-								ShowToast.Short("疼...轻点插");
+								ShowToast.Short(ToastMsg.VOTE_XX);
 								//变绿+1
 								int vote = Integer.valueOf(joke.getVote_negative());
 								joke.setVote_negative((vote + 1) + "");
@@ -304,7 +304,7 @@ public class JokeFragment extends BaseFragment {
 										(android.R.color.holo_green_light));
 
 							} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-								ShowToast.Short("投过票了");
+								ShowToast.Short(ToastMsg.VOTE_REPEAT);
 							} else {
 								ShowToast.Short("卧槽，发生了什么！");
 							}

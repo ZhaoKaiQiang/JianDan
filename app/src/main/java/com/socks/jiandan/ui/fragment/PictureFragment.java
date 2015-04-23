@@ -23,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.socks.jiandan.R;
@@ -136,14 +135,12 @@ public class PictureFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		imageLoader = ImageLoader.getInstance();
-		mRecyclerView.setOnPauseListenerParams(imageLoader, true, true);
+		mRecyclerView.setOnPauseListenerParams(imageLoader, false, true);
 		options = new DisplayImageOptions.Builder()
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.resetViewBeforeLoading(true)
-				.considerExifParams(true)
-				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
 
 		mAdapter = new PictureAdapter();
@@ -243,7 +240,22 @@ public class PictureFragment extends BaseFragment {
 				holder.img_gif.setVisibility(View.GONE);
 			}
 
+			holder.progress.setProgress(0);
 			holder.progress.setVisibility(View.VISIBLE);
+
+//			imageLoader.loadImage(picUrl, null, options, new SimpleImageLoadingListener() {
+//
+//				@Override
+//				public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+//					holder.progress.setVisibility(View.GONE);
+//					holder.img.setImageBitmap(bitmap);
+//				}
+//			}, new ImageLoadingProgressListener() {
+//				@Override
+//				public void onProgressUpdate(String imageUri, View view, int current, int total) {
+//					holder.progress.setProgress((int) (current * 100f / total));
+//				}
+//			});
 
 			imageLoader.displayImage(picUrl, holder.img, options, new
 							SimpleImageLoadingListener() {
