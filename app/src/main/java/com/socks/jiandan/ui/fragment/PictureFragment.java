@@ -135,12 +135,8 @@ public class PictureFragment extends BaseFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		mAdapter = new PictureAdapter();
-		mRecyclerView.setAdapter(mAdapter);
-		mAdapter.loadFirst();
-
 		imageLoader = ImageLoader.getInstance();
-
+		mRecyclerView.setOnPauseListenerParams(imageLoader, true, true);
 		options = new DisplayImageOptions.Builder()
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
@@ -149,6 +145,10 @@ public class PictureFragment extends BaseFragment {
 				.considerExifParams(true)
 				.imageScaleType(ImageScaleType.EXACTLY)
 				.build();
+
+		mAdapter = new PictureAdapter();
+		mRecyclerView.setAdapter(mAdapter);
+		mAdapter.loadFirst();
 
 	}
 
