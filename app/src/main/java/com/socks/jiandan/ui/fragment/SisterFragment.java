@@ -57,11 +57,11 @@ import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 /**
- * 无聊图碎片
+ * 妹子图碎片
  *
  * @author zhaokaiqiang
  */
-public class PictureFragment extends BaseFragment {
+public class SisterFragment extends BaseFragment {
 
 	@InjectView(R.id.recycler_view)
 	AutoLoadRecyclerView mRecyclerView;
@@ -83,14 +83,14 @@ public class PictureFragment extends BaseFragment {
 	//记录最后一次提示显示时间，防止多次提示
 	private long lastShowTime;
 
-	public PictureFragment() {
+	public SisterFragment() {
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("无聊图");
+		mActionBar.setTitle("妹子图");
 		isFirstChange = true;
 	}
 
@@ -458,7 +458,8 @@ public class PictureFragment extends BaseFragment {
 		}
 
 		private void loadData() {
-			executeRequest(new Request4Picture(Picture.getRequestUrl(Picture.PictureType.Duanzi, page),
+			executeRequest(new Request4Picture(Picture.getRequestUrl(Picture.PictureType.Syster,
+					page),
 					new Response.Listener<ArrayList<Picture>>
 							() {
 						@Override
