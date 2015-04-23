@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -16,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -25,6 +28,8 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.model.Vote;
+import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShareUtil;
@@ -66,6 +71,8 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 	LinearLayout ll_bottom_bar;
 	@InjectView(R.id.rl_top_bar)
 	RelativeLayout rl_top_bar;
+
+	public static final int ANIMATION_DURATION = 400;
 
 	private String author;
 	private String[] img_urls;
@@ -112,10 +119,10 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				ShareUtil.sharePicture(this, img_urls[0]);
 				break;
 			case R.id.tv_like:
-				ShowToast.Short("OO");
+				vote(id, Vote.OO);
 				break;
 			case R.id.tv_unlike:
-				ShowToast.Short("XX");
+				vote(id, Vote.XX);
 				break;
 			case R.id.img_comment:
 				Intent intent = new Intent(this, CommentListActivity.class);
@@ -251,18 +258,18 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 		if (isImgHaveLoad) {
 
+			//隐藏
 			if (isBarShow) {
-				//隐藏
 				isBarShow = false;
 
 				ObjectAnimator
 						.ofFloat(ll_bottom_bar, "translationY", 0, ll_bottom_bar.getHeight())
-						.setDuration(400)
+						.setDuration(ANIMATION_DURATION)
 						.start();
 
 				ObjectAnimator
 						.ofFloat(rl_top_bar, "translationY", 0, -rl_top_bar.getHeight())
-						.setDuration(400)
+						.setDuration(ANIMATION_DURATION)
 						.start();
 
 			} else {
@@ -271,12 +278,12 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 				ObjectAnimator
 						.ofFloat(ll_bottom_bar, "translationY", ll_bottom_bar.getHeight(), 0)
-						.setDuration(400)
+						.setDuration(ANIMATION_DURATION)
 						.start();
 
 				ObjectAnimator
 						.ofFloat(rl_top_bar, "translationY", -rl_top_bar.getHeight(), 0)
-						.setDuration(400)
+						.setDuration(ANIMATION_DURATION)
 						.start();
 
 			}
@@ -286,7 +293,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
 
 	/**
-	 * 使用ImageView加载GIF图片
+	 * 使用WebView加载GIF图片和大图
 	 *
 	 * @param s
 	 */
@@ -295,6 +302,49 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 			webView.loadDataWithBaseURL("", "<!doctype html> <html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <title></title><style type=\"text/css\"> html,body{width:100%;height:100%;margin:0;padding:0;background-color:black;} *{ -webkit-tap-highlight-color: rgba(0, 0, 0, 0);}#box{ width:100%;height:100%; display:table; text-align:center; background-color:black;} body{-webkit-user-select: none;user-select: none;-khtml-user-select: none;}#box span{ display:table-cell; vertical-align:middle;} #box img{  width:100%;} </style> </head> <body> <div id=\"box\"><span><img src=\"img_url\" alt=\"\"></span></div> <script type=\"text/javascript\" >document.body.onclick=function(e){window.external.onClick();e.preventDefault(); };function load_img(){var url=document.getElementsByTagName(\"img\")[0];url=url.getAttribute(\"src\");var img=new Image();img.src=url;if(img.complete){\twindow.external.img_has_loaded();\treturn;};img.onload=function(){window.external.img_has_loaded();};img.onerror=function(){\twindow.external.img_loaded_error();};};load_img();</script></body> </html>".replace("img_url", s), "text/html", "utf-8", "");
 		}
 	}
+
+	private void vote(String comment_ID, String tyle) {
+
+		String url;
+
+		if (tyle.equals(Vote.XX)) {
+			url = Vote.getXXUrl(comment_ID);
+		} else {
+			url = Vote.getOOUrl(comment_ID);
+		}
+
+		executeRequest(new Request4Vote(url, new
+				Response.Listener<Vote>() {
+					@Override
+					public void onResponse(Vote response) {
+
+						String result = response.getResult();
+
+						if (result.equals(Vote.RESULT_OO_SUCCESS)) {
+							ShowToast.Short(ToastMsg.VOTE_OO);
+							tv_like.setTypeface(Typeface.DEFAULT_BOLD);
+							tv_like.setTextColor(getResources().getColor
+									(android.R.color.holo_red_light));
+						} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
+							ShowToast.Short(ToastMsg.VOTE_XX);
+							tv_unlike.setTypeface(Typeface.DEFAULT_BOLD);
+							tv_unlike.setTextColor(getResources().getColor
+									(android.R.color.holo_green_light));
+						} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
+							ShowToast.Short(ToastMsg.VOTE_REPEAT);
+						} else {
+							ShowToast.Short("卧槽，发生了什么！");
+						}
+
+					}
+				}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				ShowToast.Short(ToastMsg.VOTE_FAILED);
+			}
+		}));
+	}
+
 
 	public class JSObject {
 
