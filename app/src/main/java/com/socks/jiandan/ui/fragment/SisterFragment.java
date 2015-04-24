@@ -144,6 +144,7 @@ public class SisterFragment extends BaseFragment {
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
 				.resetViewBeforeLoading(true)
+				.showImageOnLoading(R.drawable.ic_loading_large)
 				.build();
 
 		mAdapter = new PictureAdapter();

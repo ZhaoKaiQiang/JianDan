@@ -18,7 +18,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             fresco:roundedCornerRadius="5dp"
-            fresco:placeholderImage="@mipmap/ic_launcher"
+            fresco:placeholderImage="@drawable/ic_loading_small"
             />
 
     </LinearLayout>

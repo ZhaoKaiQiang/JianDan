@@ -141,6 +141,7 @@ public class PictureFragment extends BaseFragment {
 				.cacheOnDisk(true)
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.resetViewBeforeLoading(true)
+				.showImageOnLoading(R.drawable.ic_loading_large)
 				.build();
 
 		mAdapter = new PictureAdapter();

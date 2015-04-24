@@ -7,8 +7,14 @@ import android.support.v4.app.Fragment;
  */
 public class MenuItem {
 
+	public enum FragmentType {
+		XINXIANSHI, WULIAOTU, MEIZITU, DUANZI, XIAODIANYING
+	}
+
+
 	private String title;
 	private int resourceId;
+	private FragmentType type;
 	private Class<? extends Fragment> fragment;
 
 	public String getTitle() {
@@ -35,7 +41,17 @@ public class MenuItem {
 		this.fragment = fragment;
 	}
 
-	public MenuItem(){};
+
+	public FragmentType getType() {
+		return type;
+	}
+
+	public void setType(FragmentType type) {
+		this.type = type;
+	}
+
+	public MenuItem() {
+	}
 
 	public MenuItem(String title, int resourceId, Class<? extends Fragment> fragment) {
 		this.resourceId = resourceId;
@@ -43,4 +59,10 @@ public class MenuItem {
 		this.fragment = fragment;
 	}
 
+	public MenuItem(String title, int resourceId, FragmentType type, Class<? extends Fragment> fragment) {
+		this.title = title;
+		this.resourceId = resourceId;
+		this.type = type;
+		this.fragment = fragment;
+	}
 }
