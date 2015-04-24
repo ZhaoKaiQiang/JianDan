@@ -244,20 +244,6 @@ public class PictureFragment extends BaseFragment {
 			holder.progress.setProgress(0);
 			holder.progress.setVisibility(View.VISIBLE);
 
-//			imageLoader.loadImage(picUrl, null, options, new SimpleImageLoadingListener() {
-//
-//				@Override
-//				public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-//					holder.progress.setVisibility(View.GONE);
-//					holder.img.setImageBitmap(bitmap);
-//				}
-//			}, new ImageLoadingProgressListener() {
-//				@Override
-//				public void onProgressUpdate(String imageUri, View view, int current, int total) {
-//					holder.progress.setProgress((int) (current * 100f / total));
-//				}
-//			});
-
 			imageLoader.displayImage(picUrl, holder.img, options, new
 							SimpleImageLoadingListener() {
 								@Override
