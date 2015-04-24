@@ -77,7 +77,7 @@ public class MainMenuFragment extends BaseFragment {
 
 		mAdapter = new MenuAdapter();
 		mAdapter.menuItems.add(new MenuItem("新鲜事", R.drawable.ic_explore_white_24dp, MenuItem.FragmentType.XINXIANSHI,
-				JokeFragment.class));
+				FreshNewsFragment.class));
 		mAdapter.menuItems.add(new MenuItem("无聊图", R.drawable.ic_mood_white_24dp, MenuItem.FragmentType.WULIAOTU,
 				PictureFragment.class));
 		mAdapter.menuItems.add(new MenuItem("妹子图", R.drawable.ic_local_florist_white_24dp, MenuItem.FragmentType.MEIZITU,
