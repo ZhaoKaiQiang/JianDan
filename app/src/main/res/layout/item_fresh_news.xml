@@ -11,6 +11,7 @@
     app:cardCornerRadius="2dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
+    android:id="@+id/card_bg"
     >
 
     <RelativeLayout

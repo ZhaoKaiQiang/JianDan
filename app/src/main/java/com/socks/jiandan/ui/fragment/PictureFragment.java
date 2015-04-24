@@ -182,7 +182,7 @@ public class PictureFragment extends BaseFragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_joke, menu);
+		inflater.inflate(R.menu.menu_refresh, menu);
 	}
 
 	@Override

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.socks.jiandan">
+<manifest package="com.socks.jiandan"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <supports-screens
         android:anyDensity="true"
@@ -22,8 +22,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -32,8 +32,8 @@
         </activity>
         <activity
             android:name=".ui.CommentListActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_comment_list">
+            android:label="@string/title_activity_comment_list"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ui.PushCommentActivity"
@@ -43,6 +43,11 @@
             android:name=".ui.ImageDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImageDetailActivityTheme">
+        </activity>
+        <activity
+            android:name=".ui.FreshNewsDetailActivity"
+            android:label="@string/title_activity_fresh_news_detail"
+            android:theme="@style/PostDetailActivityTheme">
         </activity>
     </application>
 

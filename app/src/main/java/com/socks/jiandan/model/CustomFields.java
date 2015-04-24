@@ -3,11 +3,13 @@ package com.socks.jiandan.model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * 新鲜事中的自定义字段
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class CustomFields {
+public class CustomFields implements Serializable {
 
 	//自定义缩略图大小
 	public String thumb_c;

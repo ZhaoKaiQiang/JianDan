@@ -1,8 +1,10 @@
 package com.socks.jiandan.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
 import com.socks.jiandan.net.Request4FreshNews;
+import com.socks.jiandan.ui.FreshNewsDetailActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
@@ -115,7 +118,7 @@ public class FreshNewsFragment extends BaseFragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.menu_joke, menu);
+		inflater.inflate(R.menu.menu_refresh, menu);
 	}
 
 	@Override
@@ -162,6 +165,17 @@ public class FreshNewsFragment extends BaseFragment {
 			holder.tv_title.setText(freshNews.getTitle());
 			holder.tv_info.setText(freshNews.getAuthor().getName() + "@" + freshNews.getTags()
 					.getTitle());
+
+			holder.card_bg.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
+					intent.putExtra("FreshNews", freshNewses);
+					intent.putExtra("position", position);
+					startActivity(intent);
+				}
+			});
+
 
 		}
 
@@ -223,12 +237,14 @@ public class FreshNewsFragment extends BaseFragment {
 		private TextView tv_title;
 		private TextView tv_info;
 		private ImageView img;
+		private CardView card_bg;
 
 		public ViewHolder(View contentView) {
 			super(contentView);
 			tv_title = (TextView) contentView.findViewById(R.id.tv_title);
 			tv_info = (TextView) contentView.findViewById(R.id.tv_info);
 			img = (ImageView) contentView.findViewById(R.id.img);
+			card_bg = (CardView) contentView.findViewById(R.id.card_bg);
 		}
 	}
 }

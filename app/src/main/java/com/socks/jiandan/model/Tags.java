@@ -3,11 +3,13 @@ package com.socks.jiandan.model;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * 新鲜事中的自定义字段
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class Tags {
+public class Tags implements Serializable {
 
 	private int id;
 	private String slug;

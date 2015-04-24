@@ -2,10 +2,12 @@ package com.socks.jiandan.model;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class Author {
+public class Author implements Serializable{
 
 	public String id;
 	public String slug;
