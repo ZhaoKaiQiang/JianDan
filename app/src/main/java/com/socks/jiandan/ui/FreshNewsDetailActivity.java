@@ -31,7 +31,7 @@ public class FreshNewsDetailActivity extends BaseActivity {
 
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
+		actionBar.setDisplayShowTitleEnabled(true);
 		ArrayList<FreshNews> FreshNews = (ArrayList<FreshNews>) getIntent().getSerializableExtra
 				("FreshNews");
 

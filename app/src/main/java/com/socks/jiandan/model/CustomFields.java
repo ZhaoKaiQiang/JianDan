@@ -39,7 +39,27 @@ public class CustomFields implements Serializable {
 		return customFields;
 	}
 
+	public String getThumb_c() {
+		return thumb_c;
+	}
 
+	public void setThumb_c(String thumb_c) {
+		this.thumb_c = thumb_c;
+	}
 
+	public String getThumb_m() {
+		return thumb_m;
+	}
 
+	public void setThumb_m(String thumb_m) {
+		this.thumb_m = thumb_m;
+	}
+
+	public String getViews() {
+		return views;
+	}
+
+	public void setViews(String views) {
+		this.views = views;
+	}
 }

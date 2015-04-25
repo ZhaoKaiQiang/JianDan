@@ -6,9 +6,11 @@ import java.io.Serializable;
  * 新鲜事
  * Created by zhaokaiqiang on 15/4/24.
  */
-public class FreshNews implements Serializable{
+public class FreshNews implements Serializable {
 
 	public static final String URL_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
+
+	public static final String URL_DRESH_NEWS_DETAIL = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_post&include=content&id=";
 
 	//文章id
 	private String id;
@@ -48,6 +50,11 @@ public class FreshNews implements Serializable{
 	public static String getUrlFreshNews(int page) {
 		return URL_FRESH_NEWS + page;
 	}
+
+	public static String getUrlFreshNewsDetail(String id) {
+		return URL_DRESH_NEWS_DETAIL + id;
+	}
+
 
 	@Override
 	public String toString() {

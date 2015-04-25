@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -29,6 +28,7 @@ import com.socks.jiandan.net.Request4FreshNews;
 import com.socks.jiandan.ui.FreshNewsDetailActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
+import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class FreshNewsFragment extends BaseFragment {
 				.cacheOnDisk(true)
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.resetViewBeforeLoading(true)
-				.showImageOnLoading(R.drawable.ic_loading_small)
+				.showImageOnLoading(R.drawable.ic_loading_large)
 				.build();
 
 		mAdapter = new FreshNewsAdapter();
@@ -161,10 +161,12 @@ public class FreshNewsFragment extends BaseFragment {
 		public void onBindViewHolder(final ViewHolder holder, final int position) {
 
 			final FreshNews freshNews = freshNewses.get(position);
-			imageLoader.displayImage(freshNews.getCustomFields().thumb_c, holder.img, options);
+			imageLoader.displayImage(freshNews.getCustomFields().getThumb_m(), holder.img, options);
 			holder.tv_title.setText(freshNews.getTitle());
 			holder.tv_info.setText(freshNews.getAuthor().getName() + "@" + freshNews.getTags()
 					.getTitle());
+
+			holder.tv_views.setText("浏览" + freshNews.getCustomFields().getViews() + "次");
 
 			holder.card_bg.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -236,14 +238,17 @@ public class FreshNewsFragment extends BaseFragment {
 
 		private TextView tv_title;
 		private TextView tv_info;
-		private ImageView img;
+		private TextView tv_views;
+//		private ImageView img;
+		private ShowMaxImageView img;
 		private CardView card_bg;
 
 		public ViewHolder(View contentView) {
 			super(contentView);
 			tv_title = (TextView) contentView.findViewById(R.id.tv_title);
 			tv_info = (TextView) contentView.findViewById(R.id.tv_info);
-			img = (ImageView) contentView.findViewById(R.id.img);
+			tv_views = (TextView) contentView.findViewById(R.id.tv_views);
+			img = (ShowMaxImageView) contentView.findViewById(R.id.img);
 			card_bg = (CardView) contentView.findViewById(R.id.card_bg);
 		}
 	}

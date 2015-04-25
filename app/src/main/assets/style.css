@@ -1,0 +1,214 @@
+/*  
+
+Theme Name:iphone
+
+*/
+
+
+
+/* Common */
+
+body {text-align: center;font-size: 13px;font-family: "Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;  -webkit-text-size-adjust: none; color: #111111;background: #FFFFFF; margin: 0px; padding: 0px;word-wrap:break-word; word-break:normal;}
+
+ol, ul, li, h1, h2, h3, h4, h5, h6, p, form, input {margin: 0px;padding: 0px;}
+
+object, embed { display:none; }
+
+.loading {background:url(http://s.tankr.net/spinner.gif) no-repeat 0 0;width:100px;height:9px;text-indent:-9999px;font-size:0;margin-top:10px;}
+
+#nice_comments {border-top: 1px solid #ccc; padding-top: 10px;}
+
+.tags a{color: #555555; background-color: #DDD; padding: 2px 4px; line-height: 2.2em;}
+
+/* Clearfix */
+
+.clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+
+*html .clearfix {height: 1%;}
+
+.clearfix { /*IE7 fix*/display: inline-block;}
+
+.clearfix {display: block;}
+
+.break {font-size: 0; height: 0;width: 0;clear: both;}
+
+.righttext {float: right;font-size:10px;font-weight:normal;-webkit-text-size-adjust:none;color:#BBBBBB;}
+
+.righttext a{color:#BBBBBB;}
+
+
+
+/* Structure */
+
+#pagewrapper {text-align: left;font-size: 13px;background-: #FFFFFF;margin: 0px auto;width:100%;}
+
+#headerwrapper { background:url(images/logo-2010.gif) no-repeat scroll 0 9px #FFFFFF; }
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+#headerwrapper { background:url(images/logo-2010-ratio2.gif) no-repeat scroll 0 9px #FFFFFF; -webkit-background-size:100px 35px;}
+
+}
+
+#headerwrapper #head-nav { color:#aaaaaa;font-size:12px;padding: 7px 10px;margin-top:14px;background-color:#111111;}
+
+#headerwrapper #head-nav a { color:#aaaaaa; padding-right:8px;}
+
+#headerwrapper #head-nav .here { color:#FFFFFF; }
+
+#headerimg {padding: 20px 0 10px 10px;}
+
+#headerwrapper h1, #headerwrapper h1 a {display:none;}
+
+#headerwrapper #description {color: #FFFFFF;font-size: 13px;}
+
+#mainwrapper {}
+
+#maincontent {background-color: #FFFFFF;width: 100%;margin: 0;padding: 0;}
+
+#footer {background-color: #111111;text-align: center;padding: 10px;font-size: 9px;}
+
+#footer p {color: #FFFFFF;}
+
+#footer a {color: #FFFFFF;}
+
+#footer a:hover, #footer a:active {color: #FFFFFF;}
+
+
+
+/* Main Content */
+
+#maincontent .post {border-bottom: 1px solid #DDD; padding:5px 10px;font-size: 13px;font-family: "Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;}
+
+#maincontent hr{color: #DDD; border: none; border-bottom: 1px dashed #DEDEDE; margin-bottom: 5px;}
+
+#maincontent .posthit {padding: 0px;}
+
+#maincontent h2.thetitle, #maincontent h2.thetitle a, #maincontent h2.thetitlesingle, #maincontent .postpage h2.thetitle {font-size: 20px;font-weight:bold; line-height: 23px;width: 100%; color:#DD1111;text-decoration: none;}
+
+#maincontent .postinfo {font-size: 14px;color: #717171; padding: 5px 0;}
+
+#maincontent .entry, #maincontent .entrytext {display: block;color: #111111;font-size: 16px; line-height: 1.6em;}
+
+#maincontent .thumb {float: left; height:125px; overflow:hidden;padding-right:10px; display: inline;}
+
+#maincontent .thumb img {width: 125px;}
+
+#maincontent .thumb_s {float: left; height:75px; overflow:hidden;padding-right:10px; display: inline;}
+
+#maincontent .thumb_s img {width: 75px;}
+
+#maincontent .indexs {min-height: 75px;font-size: 11px;color: #111111; padding: 5px 0;}
+
+#maincontent .postmetadata {color: #111111;display: block;background-color: #F9F9F9;
+
+font-size: 10px;padding: 5px 10px;margin-bottom: 10px;}
+
+#maincontent .postmetadata a {text-decoration: none;}
+
+
+
+/* Main Content Elements */
+
+#maincontent a, a:link, a:visited {color: #105CB6;text-decoration: none;}
+
+#maincontent a:hover {color: #DD1111;}
+
+#maincontent img {border:0 none;margin:5px 0;max-width:100%;;}
+
+#maincontent p {margin-bottom: 10px;}
+
+#maincontent blockquote {margin:10px 0;padding: 10px 10px 0px;background-color: #F9F9F9;border-width: 1px 0;border-style: solid;border-color: #ECECEC;}
+
+#maincontent blockquote img {max-width:100%;}
+
+
+
+#maincontent h1, #maincontent h2, #maincontent h3, #maincontent h4, #maincontent h5, #maincontent h6 {margin-bottom: 5px;}
+
+#maincontent ul {padding-left: 15px;}
+
+#maincontent ol {padding-left: 15px;}
+
+#maincontent li {list-style-type :none;line-height:1.7em;}
+
+
+
+/* Comments */
+
+#maincontent .comments {margin-top:20px;font-size: 13px;font-family: "Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;}
+
+h3#comments {color: #111111;}
+
+#maincontent h3#respond {font-size: 13px;}
+
+#maincontent #respond {border-top: 1px solid #DDD; padding-top: 10px;}
+
+#maincontent ol.commentlist {margin-left:-15px;}
+
+#maincontent ol.commentlist li { padding:0; margin:10px 0; }
+
+#maincontent ol.commentlist li.alt { border-top: 1px solid #DDD;border-bottom: 1px solid #DDD;}
+
+#maincontent .commentmetadata {color: #c8c8c8;margin:0 10px;font-size: 10px;line-height:1.5em;}
+
+#maincontent .commentlist .time {-webkit-text-size-adjust:none; font-size: 10px;font-weight:normal;color: #999999;}
+
+#maincontent .commentlist .time a {color: #999999;}
+
+#maincontent .commenttext {margin:0; }
+
+#maincontent .commenttext .vote {margin-top:-20px;}
+
+#maincontent .commentlist img {max-width:100%;;cursor: pointer;} 
+#maincontent .commentlist .imgs {max-height:300px !important;cursor: pointer;} 
+
+#commentform input {font-size: 13px;font-family:"Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;padding: 0;}
+
+#commentform textarea {font-size: 13px;font-family:"Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;padding: 0 5px;overflow:auto;}
+
+#commentform #submit {font-size: 13px;font-family:"Microsoft YaHei","Hiragino Sans GB W3",Tahoma,Arial;width:100%; padding:4px 0;}
+
+/* Pages */
+
+h2.pagetitle {color: #DD1111;font-size: 15px;margin: 10px 10px 10px!important;}
+
+
+
+/* Previous and Next Navigation */
+
+#maincontent .prevnextnavigation {margin: 10px;display: block;}
+
+.alignleft {float: left;}
+
+.alignright {float: right;}
+
+
+
+.wp-pagenavi {padding: 10px 5px 10px 0; margin: 0px; font-size:11px;}
+
+.wp-pagenavi a{padding: 2px 3px; margin:1px; border: solid 1px #DEDEDE;}
+
+.indexnavi {padding: 10px; margin: 0px; font-size:12px;}
+
+.indexnavi a{padding: 2px 3px; margin:1px; border: solid 1px #DEDEDE;}
+
+/** ajax-comment-vote **/
+
+.hotcomment{width:100%;}
+
+.hotcomment .in{}
+
+.acv_author{border-top:1px solid #ECECEC; background:#F9F9F9; padding:4px 0;}
+
+.vote{text-align:right;width:100%; font-size:10px;color:#999999;}
+
+.votehot {text-align:right;}
+
+.acv_comment{margin:5px 0; padding:2px; background:#FFFFFF; word-wrap:break-word;}
+
+.acv_comment img,.acv_comment embed,.acv_comment iframe {max-width: 100%; }
+
+.acv4:link,.acv4:visited{color:#FF9999; -webkit-text-size-adjust:none; font-size:10px;}
+
+.acva:link,.acva:visited{color:#9999FF; -webkit-text-size-adjust:none; font-size:10px;}
