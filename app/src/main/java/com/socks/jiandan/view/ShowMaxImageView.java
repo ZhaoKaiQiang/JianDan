@@ -40,7 +40,6 @@ public class ShowMaxImageView extends ImageView {
 
 		super.setImageBitmap(bm);
 		requestLayout();
-		invalidate();
 	}
 
 	@Override
@@ -52,12 +51,10 @@ public class ShowMaxImageView extends ImageView {
 
 		super.setImageDrawable(drawable);
 		requestLayout();
-		invalidate();
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
 
 		if (mHeight != 0) {
 
@@ -84,9 +81,7 @@ public class ShowMaxImageView extends ImageView {
 
 		if (bitmapWidth > 0 && bitmapHeight > 0) {
 			float scaleWidth = getWidth() / bitmapWidth;
-			if (scaleWidth != 0) {
-				mHeight = bitmapHeight * scaleWidth;
-			}
+			mHeight = bitmapHeight * scaleWidth;
 		}
 
 	}

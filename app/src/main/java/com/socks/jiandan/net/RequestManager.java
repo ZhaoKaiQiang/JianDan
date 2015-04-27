@@ -4,7 +4,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.socks.jiandan.base.AppAplication;
-import com.socks.jiandan.utils.logger.Logger;
 
 
 /**
@@ -22,7 +21,7 @@ public class RequestManager {
 		}
 		mRequestQueue.add(request);
 
-		Logger.d("addRequest = "+request.getUrl());
+//		Logger.d("addRequest = "+request.getUrl());
 
 	}
 

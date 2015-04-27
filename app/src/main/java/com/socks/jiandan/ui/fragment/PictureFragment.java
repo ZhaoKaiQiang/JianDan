@@ -181,6 +181,13 @@ public class PictureFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		//清除内存缓存，避免由于内存缓存造成的图片显示不完整
+		imageLoader.clearMemoryCache();
+	}
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_refresh, menu);
 	}
