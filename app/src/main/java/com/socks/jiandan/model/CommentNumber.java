@@ -3,7 +3,7 @@ package com.socks.jiandan.model;
 /**
  * Created by zhaokaiqiang on 15/4/10.
  */
-public class Comment {
+public class CommentNumber {
 
 	//用于获取评论数量
 	public static final String URL_COMMENT_COUNTS = "http://jandan.duoshuo.com/api/threads/counts.json?threads=";
@@ -16,10 +16,10 @@ public class Comment {
 	private String thread_key;
 	private int comments;
 
-	public Comment() {
+	public CommentNumber() {
 	}
 
-	public Comment(String thread_id, String thread_key, int comments) {
+	public CommentNumber(String thread_id, String thread_key, int comments) {
 		this.thread_id = thread_id;
 		this.thread_key = thread_key;
 		this.comments = comments;

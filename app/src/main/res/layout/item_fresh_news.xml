@@ -24,23 +24,14 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textStyle="bold"
-            android:text="我是标题sfsdfsdfdsfdsfsdfdsfdsf"
+            android:text="我是标题"
             android:textColor="@color/primary_text_default_material_light"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp">
-
-            <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="袜子@无厘头"
-                android:textColor="@color/secondary_text_default_material_light"
-                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/tv_views"
@@ -52,6 +43,17 @@
                 android:textColor="@color/secondary_text_default_material_light"
                 android:textSize="14sp"/>
 
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@id/tv_views"
+                android:singleLine="true"
+                android:text="袜子@无厘头"
+                android:textColor="@color/secondary_text_default_material_light"
+                android:textSize="14sp"/>
+
         </RelativeLayout>
 
         <com.socks.jiandan.view.ShowMaxImageView
@@ -59,8 +61,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:contentDescription="@null"
             android:scaleType="centerCrop"
             />

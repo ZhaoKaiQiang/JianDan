@@ -239,7 +239,6 @@ public class FreshNewsFragment extends BaseFragment {
 		private TextView tv_title;
 		private TextView tv_info;
 		private TextView tv_views;
-//		private ImageView img;
 		private ShowMaxImageView img;
 		private CardView card_bg;
 

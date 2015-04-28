@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -17,24 +16,23 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.model.Comment4FreshNews;
 import com.socks.jiandan.model.Commentator;
-import com.socks.jiandan.net.Request4CommentList;
+import com.socks.jiandan.net.Request4FreshNewsCommentList;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
+import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -42,15 +40,17 @@ import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class CommentListActivity extends BaseActivity {
-
+/**
+ * 新鲜事评论列表页
+ */
+public class CommentList4FreshNewsActivity extends BaseActivity {
 
 	@InjectView(R.id.swipe_refresh)
 	SwipeRefreshLayout mSwipeRefreshLayout;
@@ -63,13 +63,10 @@ public class CommentListActivity extends BaseActivity {
 	@InjectView(R.id.tv_error)
 	MatchTextView tv_error;
 
-	private String thread_key;
+	private String id;
 	private String thread_id;
 	private CommentAdapter mAdapter;
 	private SwipeBackUtil mSwipeBackUtil;
-
-	private ImageLoader imageLoader;
-	private DisplayImageOptions options;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +85,7 @@ public class CommentListActivity extends BaseActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setDisplayShowHomeEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(false);
 
 		mSwipeBackUtil = new SwipeBackUtil(this);
 
@@ -107,16 +105,6 @@ public class CommentListActivity extends BaseActivity {
 			}
 		});
 
-		imageLoader = ImageLoader.getInstance();
-
-		options = new DisplayImageOptions.Builder()
-				.cacheInMemory(true)
-				.cacheOnDisk(true)
-				.bitmapConfig(Bitmap.Config.RGB_565)
-				.resetViewBeforeLoading(true)
-				.showImageOnLoading(R.drawable.ic_loading_small)
-				.build();
-
 	}
 
 	@Override
@@ -124,9 +112,9 @@ public class CommentListActivity extends BaseActivity {
 
 		tv_no_thing.setVisibility(View.GONE);
 		google_progress.setVisibility(View.VISIBLE);
-		thread_key = getIntent().getStringExtra("thread_key");
+		id = getIntent().getStringExtra("id");
 
-		if (TextUtils.isEmpty(thread_key) || thread_key.equals("0")) {
+		if (TextUtils.isEmpty(id) || id.equals("0")) {
 			ShowToast.Short("禁止评论");
 			finish();
 		}
@@ -139,10 +127,10 @@ public class CommentListActivity extends BaseActivity {
 
 	private class CommentAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-		private ArrayList<Commentator> commentators;
+		private ArrayList<Comment4FreshNews> commentators;
 
 		public CommentAdapter() {
-			commentators = new ArrayList<>();
+			commentators = new ArrayList<Comment4FreshNews>();
 		}
 
 		@Override
@@ -165,24 +153,29 @@ public class CommentListActivity extends BaseActivity {
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 
-			final Commentator commentator = commentators.get(position);
+			final Comment4FreshNews commentator = commentators.get(position);
 
 			switch (commentator.getType()) {
-				case Commentator.TYPE_HOT:
+				case Comment4FreshNews.TYPE_HOT:
 					holder.tv_flag.setText("热门评论");
 					break;
-				case Commentator.TYPE_NEW:
+				case Comment4FreshNews.TYPE_NEW:
 					holder.tv_flag.setText("最新评论");
 					break;
 				case Commentator.TYPE_NORMAL:
-					holder.tv_name.setText(commentator.getName());
-					holder.tv_content.setText(commentator.getMessage());
 
+					holder.ll_left.setVisibility(View.GONE);
+
+					holder.like.setText(commentator.getVote_positive() + "");
+					holder.unlike.setText(commentator.getVote_negative() + "");
+
+					holder.tv_name.setText(commentator.getName());
+					holder.tv_content.setText(commentator.getContent().trim());
 					holder.tv_content.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
 
-							new MaterialDialog.Builder(CommentListActivity.this)
+							new MaterialDialog.Builder(CommentList4FreshNewsActivity.this)
 									.title(commentator.getName())
 									.items(R.array.comment_dialog)
 									.itemsCallback(new MaterialDialog.ListCallback() {
@@ -193,9 +186,9 @@ public class CommentListActivity extends BaseActivity {
 												//评论
 												case 0:
 													Intent intent = new Intent
-															(CommentListActivity.this,
+															(CommentList4FreshNewsActivity.this,
 																	PushCommentActivity.class);
-													intent.putExtra("parent_id", commentator.getPost_id());
+													intent.putExtra("parent_id", "");
 													intent.putExtra("thread_id", thread_id);
 													intent.putExtra("parent_name", commentator
 															.getName());
@@ -205,7 +198,7 @@ public class CommentListActivity extends BaseActivity {
 													//复制到剪贴板
 													ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 													clip.setPrimaryClip(ClipData.newPlainText
-															(null, commentator.getMessage()));
+															(null, commentator.getContent()));
 													ShowToast.Short(ToastMsg.COPY_SUCCESS);
 													break;
 											}
@@ -214,13 +207,11 @@ public class CommentListActivity extends BaseActivity {
 									})
 									.show();
 
+
 						}
 					});
 
-					String timeString = commentator.getCreated_at().replace("T", " ");
-					timeString = timeString.substring(0, timeString.indexOf("+"));
-					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
-					holder.ll_vote.setVisibility(View.GONE);
+					holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(commentator.getDate()));
 
 					//有楼层,盖楼
 					if (commentator.getFloorNum() > 1) {
@@ -236,35 +227,41 @@ public class CommentListActivity extends BaseActivity {
 						holder.floors_parent.setVisibility(View.GONE);
 					}
 
-					imageLoader.displayImage(commentator.getAvatar_url(), holder.img_header);
-
 					break;
 			}
 
 		}
 
-		private List<Commentator> addFloors(Commentator commentator) {
+		private List<Comment4FreshNews> addFloors(Comment4FreshNews commentator) {
 
 			//只有一层
-			if (commentator.getFloorNum() == 1) {
+			if (commentator.getParent().equals("0") || TextUtil.isNull(commentator.getParent())) {
 				return null;
 			}
 
-			List<String> parentIds = Arrays.asList(commentator.getParents());
-			ArrayList<Commentator> commentators = new ArrayList<>();
+			String parent = commentator.getParent();
+			ArrayList<Comment4FreshNews> commentators = new ArrayList<>();
+			commentators.add(commentator);
 
-			for (Commentator comm : this.commentators) {
+			//按照时间从早到晚排序，最先评论在前面
+			Collections.sort(this.commentators);
+			Collections.reverse(this.commentators);
 
-				if (parentIds.contains(comm.getPost_id())) {
+			for (Comment4FreshNews comm : this.commentators) {
+
+				if (parent.equals("" + comm.getId())) {
+					comm.setFloorNum(commentator.getFloorNum());
 					commentators.add(comm);
+					commentator.setFloorNum(commentator.getFloorNum() + 1);
+					if (comm.getParent().equals("0")) {
+						break;
+					} else {
+						parent = comm.getId() + "";
+					}
 				}
-
 			}
 
-			Collections.reverse(commentators);
-
 			return commentators;
-
 		}
 
 		@Override
@@ -278,10 +275,10 @@ public class CommentListActivity extends BaseActivity {
 		}
 
 		public void loadData() {
-			executeRequest(new Request4CommentList(Commentator.getUrlCommentList(thread_key), new Response
-					.Listener<ArrayList<Commentator>>() {
+			executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments(id), new Response
+					.Listener<ArrayList<Comment4FreshNews>>() {
 				@Override
-				public void onResponse(ArrayList<Commentator> response) {
+				public void onResponse(ArrayList<Comment4FreshNews> response) {
 
 					google_progress.setVisibility(View.GONE);
 					tv_error.setVisibility(View.GONE);
@@ -291,38 +288,45 @@ public class CommentListActivity extends BaseActivity {
 					} else {
 						commentators.clear();
 
-						ArrayList<Commentator> hotCommentator = new ArrayList<>();
-						ArrayList<Commentator> normalComment = new ArrayList<>();
+						//如果评论条数大于6，就选择positive前6作为热门评论
+						if (response.size() > 6) {
+							Comment4FreshNews comment4FreshNews = new Comment4FreshNews();
+							comment4FreshNews.setType(Comment4FreshNews.TYPE_HOT);
+							commentators.add(comment4FreshNews);
 
-						//添加热门评论
-						for (Commentator commentator : response) {
-							if (commentator.getTag().equals(Commentator.TAG_HOT)) {
-								hotCommentator.add(commentator);
-							} else {
-								normalComment.add(commentator);
+							Collections.sort(response, new Comparator<Comment4FreshNews>() {
+								@Override
+								public int compare(Comment4FreshNews lhs, Comment4FreshNews rhs) {
+									return lhs.getVote_positive() <= rhs.getVote_positive() ? 1 :
+											-1;
+								}
+							});
+
+							List<Comment4FreshNews> subComments = response.subList(0, 6);
+
+							for (Comment4FreshNews subComment : subComments) {
+								subComment.setTag(Comment4FreshNews.TAG_HOT);
+							}
+
+							commentators.addAll(subComments);
+
+						}
+
+						Comment4FreshNews comment4FreshNews = new Comment4FreshNews();
+						comment4FreshNews.setType(Comment4FreshNews.TYPE_NEW);
+						commentators.add(comment4FreshNews);
+
+						Collections.sort(response);
+
+						for (Comment4FreshNews comment4Normal : response) {
+							if (comment4Normal.getTag().equals(Comment4FreshNews.TAG_NORMAL)) {
+								commentators.add(comment4Normal);
 							}
 						}
 
-						//添加热门评论标签
-						if (hotCommentator.size() != 0) {
-							Collections.sort(hotCommentator);
-							Commentator hotCommentFlag = new Commentator();
-							hotCommentFlag.setType(Commentator.TYPE_HOT);
-							hotCommentator.add(0, hotCommentFlag);
-							commentators.addAll(hotCommentator);
-						}
-
-						//添加最新评论及标签
-						if (normalComment.size() != 0) {
-							Commentator newCommentFlag = new Commentator();
-							newCommentFlag.setType(Commentator.TYPE_NEW);
-							commentators.add(newCommentFlag);
-							Collections.sort(normalComment);
-							commentators.addAll(normalComment);
-						}
-
-						mAdapter.notifyDataSetChanged();
 					}
+
+					mAdapter.notifyDataSetChanged();
 					mSwipeRefreshLayout.setRefreshing(false);
 
 				}
@@ -349,11 +353,12 @@ public class CommentListActivity extends BaseActivity {
 
 		private TextView tv_name;
 		private TextView tv_content;
+		private TextView like;
+		private TextView unlike;
 		private TextView tv_time;
 		private LinearLayout ll_vote;
-		private ImageView img_header;
 		private FloorView floors_parent;
-
+		private LinearLayout ll_left;
 		private TextView tv_flag;
 
 		public ViewHolder(View itemView) {
@@ -361,14 +366,15 @@ public class CommentListActivity extends BaseActivity {
 			tv_name = (TextView) itemView.findViewById(R.id.tv_name);
 			tv_content = (TextView) itemView.findViewById(R.id.tv_content);
 			tv_time = (TextView) itemView.findViewById(R.id.tv_time);
+			like = (TextView) itemView.findViewById(R.id.like);
+			unlike = (TextView) itemView.findViewById(R.id.unlike);
 			ll_vote = (LinearLayout) itemView.findViewById(R.id.ll_vote);
-			img_header = (ImageView) itemView.findViewById(R.id.img_header);
+			ll_left = (LinearLayout) itemView.findViewById(R.id.ll_left);
 			floors_parent = (FloorView) itemView.findViewById(R.id.floors_parent);
 
 			tv_flag = (TextView) itemView.findViewById(R.id.tv_flag);
 
 			setIsRecyclable(false);
-
 		}
 	}
 

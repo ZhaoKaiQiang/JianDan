@@ -1,5 +1,7 @@
 package com.socks.jiandan.model;
 
+import com.socks.jiandan.view.floorview.Commentable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.TimeZone;
 /**
  * Created by zhaokaiqiang on 15/4/10.
  */
-public class Commentator implements Comparable {
+public class Commentator implements Comparable ,Commentable{
 
 	//评论列表
 	public static final String URL_COMMENT_LIST = "http://jandan.duoshuo.com/api/threads/listPosts.json?thread_key=";
@@ -180,5 +182,20 @@ public class Commentator implements Comparable {
 
 	public void setPost_id(String post_id) {
 		this.post_id = post_id;
+	}
+
+	@Override
+	public int getCommentFloorNum() {
+		return getFloorNum();
+	}
+
+	@Override
+	public String getCommentContent() {
+		return getMessage();
+	}
+
+	@Override
+	public String getAuthorName() {
+		return getName();
 	}
 }

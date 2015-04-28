@@ -26,7 +26,7 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
-import com.socks.jiandan.model.Comment;
+import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.Joke;
 import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4CommentCounts;
@@ -366,11 +366,11 @@ public class JokeFragment extends BaseFragment {
 				sb.append("comment-" + joke.getComment_ID() + ",");
 			}
 
-			executeRequest(new Request4CommentCounts(Comment.getCommentCountsURL(sb.toString()), new Response
-					.Listener<ArrayList<Comment>>() {
+			executeRequest(new Request4CommentCounts(CommentNumber.getCommentCountsURL(sb.toString()), new Response
+					.Listener<ArrayList<CommentNumber>>() {
 
 				@Override
-				public void onResponse(ArrayList<Comment> response) {
+				public void onResponse(ArrayList<CommentNumber> response) {
 
 					google_progress.setVisibility(View.GONE);
 

@@ -3,6 +3,7 @@
     <string name="title_activity_comment_list">吐槽</string>
     <string name="title_activity_push_comment">回复</string>
     <string name="action_push">发送</string>
+    <string name="action_share">分享</string>
     <string name="title_activity_fresh_news_detail">新鲜事</string>
 
 </resources>

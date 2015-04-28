@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.socks.jiandan.R;
-import com.socks.jiandan.model.Commentator;
 
 import java.util.Iterator;
 
@@ -73,7 +72,7 @@ public class FloorView extends LinearLayout {
 		if (null == datas.iterator())
 			return;
 		if (datas.getFloorNum() < 7) {
-			for (Iterator<Commentator> iterator = datas.iterator(); iterator
+			for (Iterator<? extends Commentable> iterator = datas.iterator(); iterator
 					.hasNext(); ) {
 				View view = factory.buildSubFloor(iterator.next(), this);
 				addView(view);
@@ -95,7 +94,7 @@ public class FloorView extends LinearLayout {
 							0);
 					v.findViewById(R.id.hide_pb).setVisibility(View.VISIBLE);
 					removeAllViews();
-					for (Iterator<Commentator> iterator = datas.iterator(); iterator
+					for (Iterator<? extends Commentable> iterator = datas.iterator(); iterator
 							.hasNext(); ) {
 						View view = factory.buildSubFloor(iterator.next(),
 								FloorView.this);

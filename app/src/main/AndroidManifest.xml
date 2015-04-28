@@ -49,6 +49,12 @@
             android:label="@string/title_activity_fresh_news_detail"
             android:theme="@style/PostDetailActivityTheme">
         </activity>
+        <activity
+            android:name=".ui.CommentList4FreshNewsActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+
     </application>
 
 </manifest>

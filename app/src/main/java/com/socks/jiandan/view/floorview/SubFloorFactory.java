@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.socks.jiandan.R;
-import com.socks.jiandan.model.Commentator;
 
 /**
  * @ClassName: 	SubFloorFactory
@@ -21,7 +20,7 @@ import com.socks.jiandan.model.Commentator;
  */
 public class SubFloorFactory {
 
-    public View buildSubFloor ( Commentator cmt, ViewGroup group ) {
+    public View buildSubFloor ( Commentable cmt, ViewGroup group ) {
         LayoutInflater inflater = ( LayoutInflater ) group.getContext ().getSystemService ( Context.LAYOUT_INFLATER_SERVICE ) ;
         View view = inflater.inflate ( R.layout.item_comment_floor, null ) ;
         RelativeLayout show = ( RelativeLayout ) view.findViewById ( R.id.show_sub_floor_content ) ;
@@ -31,13 +30,13 @@ public class SubFloorFactory {
         TextView floorNum = ( TextView ) view.findViewById ( R.id.sub_floor_num ) ;
         TextView username = ( TextView ) view.findViewById ( R.id.sub_floor_username ) ;
         TextView content = ( TextView ) view.findViewById ( R.id.sub_floor_content ) ;
-        floorNum.setText ( String.valueOf ( cmt.getFloorNum () ) ) ;
-        username.setText ( cmt.getName() ) ;
-        content.setText ( cmt.getMessage() ) ;
+        floorNum.setText ( String.valueOf ( cmt.getCommentFloorNum() ) ) ;
+        username.setText ( cmt.getAuthorName() ) ;
+        content.setText ( cmt.getCommentContent()) ;
         return view ;
     }
 
-    public View buildSubHideFloor ( Commentator cmt, ViewGroup group ) {
+    public View buildSubHideFloor ( Commentable cmt, ViewGroup group ) {
         LayoutInflater inflater = ( LayoutInflater ) group.getContext ().getSystemService ( Context.LAYOUT_INFLATER_SERVICE ) ;
         View view = inflater.inflate ( R.layout.item_comment_floor, null ) ;
         RelativeLayout show = ( RelativeLayout ) view.findViewById ( R.id.show_sub_floor_content ) ;

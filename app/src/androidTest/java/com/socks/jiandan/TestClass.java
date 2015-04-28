@@ -1,13 +1,12 @@
 package com.socks.jiandan;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
+import android.test.InstrumentationTestCase;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.socks.jiandan.model.Commentator;
-import com.socks.jiandan.net.Request4CommentList;
+import com.socks.jiandan.model.Comment4FreshNews;
+import com.socks.jiandan.net.Request4FreshNewsCommentList;
 import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.logger.Logger;
@@ -15,27 +14,30 @@ import com.socks.jiandan.utils.logger.Logger;
 import java.util.ArrayList;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Created by zhaokaiqiang on 15/4/27.
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-	public ApplicationTest() {
-		super(Application.class);
-	}
+public class TestClass extends InstrumentationTestCase{
 
+	public TestClass(){
+
+	}
 
 	public void testGetCommentators() throws Exception {
 
-		String url = "http://jandan.duoshuo.com/api/threads/listPosts.json?thread_key=comment-2750904";
-		executeRequest(new Request4CommentList(url, new Response
-				.Listener<ArrayList<Commentator>>() {
+		executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments("" + 61245), new Response
+				.Listener<ArrayList<Comment4FreshNews>>() {
 			@Override
-			public void onResponse(ArrayList<Commentator> response) {
+			public void onResponse(ArrayList<Comment4FreshNews> response) {
 				Logger.d(response.toString());
+
+				assertEquals(1, 2);
+
 			}
 		}, errorListener()));
 
-	}
+		assertEquals(1,2);
 
+	}
 
 	protected void executeRequest(Request<?> request) {
 		RequestManager.addRequest(request, this);
