@@ -48,7 +48,6 @@
 
 ##使用到的开源框架
 - [Volley](https://android.googlesource.com/platform/frameworks/volley)
-- [Fresco](https://code.facebook.com/projects/465232426958622/fresco/)
 - [Universal Image Load](https://github.com/nostra13/Android-Universal-Image-Loader)
 - [butter knife](https://github.com/JakeWharton/butterknife)
 - [EventBus](https://github.com/greenrobot/EventBus)

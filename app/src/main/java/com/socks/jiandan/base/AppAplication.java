@@ -3,7 +3,6 @@ package com.socks.jiandan.base;
 import android.app.Application;
 import android.content.Context;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -17,7 +16,6 @@ public class AppAplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mContext = getApplicationContext();
-		Fresco.initialize(mContext);
 		initImageLoader();
 		Logger.init().hideThreadInfo();
 	}
