@@ -4,6 +4,7 @@ import com.socks.jiandan.view.floorview.Commentable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -29,18 +30,21 @@ public class Comment4FreshNews implements Comparable ,Commentable {
 	private String url;
 	private String date;
 	private String content;
+	//没有用到
 	private String parent;
+	private int parentId;
+	private ArrayList<Comment4FreshNews> parentComments;
 	private int vote_positive;
 	private int vote_negative;
 	private int index;
 
 	//用于区别布局类型：热门评论、最新评论、普通评论
-	private int type;
+	private int type=TYPE_NORMAL;
 	//所属楼层
-	private int floorNum;
+	private int floorNum=1;
 
 	//用于标示是否是热门评论
-	private String tag;
+	private String tag=TAG_NORMAL;
 
 	public Comment4FreshNews() {
 	}
@@ -169,6 +173,24 @@ public class Comment4FreshNews implements Comparable ,Commentable {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
+
+	public ArrayList<Comment4FreshNews> getParentComments() {
+		return parentComments;
+	}
+
+	public void setParentComments(ArrayList<Comment4FreshNews> parentComments) {
+		this.parentComments = parentComments;
+	}
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
+
 
 	@Override
 	public String toString() {

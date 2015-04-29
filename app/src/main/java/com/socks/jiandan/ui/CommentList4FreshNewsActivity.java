@@ -216,7 +216,7 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 					//有楼层,盖楼
 					if (commentator.getFloorNum() > 1) {
 
-						SubComments cmts = new SubComments(addFloors(commentator));
+						SubComments cmts = new SubComments(commentator.getParentComments());
 						holder.floors_parent.setComments(cmts);
 						holder.floors_parent.setFactory(new SubFloorFactory());
 						holder.floors_parent.setBoundDrawer(getResources().getDrawable(
@@ -231,38 +231,38 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 			}
 
 		}
-
-		private List<Comment4FreshNews> addFloors(Comment4FreshNews commentator) {
-
-			//只有一层
-			if (commentator.getParent().equals("0") || TextUtil.isNull(commentator.getParent())) {
-				return null;
-			}
-
-			String parent = commentator.getParent();
-			ArrayList<Comment4FreshNews> commentators = new ArrayList<>();
-			commentators.add(commentator);
-
-			//按照时间从早到晚排序，最先评论在前面
-			Collections.sort(this.commentators);
-			Collections.reverse(this.commentators);
-
-			for (Comment4FreshNews comm : this.commentators) {
-
-				if (parent.equals("" + comm.getId())) {
-					comm.setFloorNum(commentator.getFloorNum());
-					commentators.add(comm);
-					commentator.setFloorNum(commentator.getFloorNum() + 1);
-					if (comm.getParent().equals("0")) {
-						break;
-					} else {
-						parent = comm.getId() + "";
-					}
-				}
-			}
-
-			return commentators;
-		}
+//
+//		private List<Comment4FreshNews> addFloors(Comment4FreshNews commentator) {
+//
+//			//只有一层
+//			if (commentator.getParent().equals("0") || TextUtil.isNull(commentator.getParent())) {
+//				return null;
+//			}
+//
+//			String parent = commentator.getParent();
+//			ArrayList<Comment4FreshNews> commentators = new ArrayList<>();
+//			commentators.add(commentator);
+//
+//			//按照时间从早到晚排序，最先评论在前面
+//			Collections.sort(this.commentators);
+//			Collections.reverse(this.commentators);
+//
+//			for (Comment4FreshNews comm : this.commentators) {
+//
+//				if (parent.equals("" + comm.getId())) {
+//					comm.setFloorNum(commentator.getFloorNum());
+//					commentators.add(comm);
+//					commentator.setFloorNum(commentator.getFloorNum() + 1);
+//					if (comm.getParent().equals("0")) {
+//						break;
+//					} else {
+//						parent = comm.getId() + "";
+//					}
+//				}
+//			}
+//
+//			return commentators;
+//		}
 
 		@Override
 		public int getItemCount() {
