@@ -1,7 +1,5 @@
 package com.socks.jiandan.net;
 
-import android.util.Log;
-
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -10,7 +8,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.reflect.TypeToken;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.model.Comment4FreshNews;
-import com.socks.jiandan.utils.TextUtil;
+import com.socks.jiandan.utils.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -29,7 +27,7 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 	private LoadFinishCallBack callBack;
 
 	public Request4FreshNewsCommentList(String url, Response.Listener<ArrayList<Comment4FreshNews>> listener,
-										Response.ErrorListener errorListener, LoadFinishCallBack callBack) {
+	                                    Response.ErrorListener errorListener, LoadFinishCallBack callBack) {
 		super(Method.GET, url, errorListener);
 		this.listener = listener;
 		this.callBack = callBack;
@@ -66,12 +64,14 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 						getParenFreshNews(tempComments, comment4FreshNewses, parentId);
 						Collections.reverse(tempComments);
 						comment4FreshNews.setParentComments(tempComments);
-						comment4FreshNews.setFloorNum(tempComments.size()+1);
+						comment4FreshNews.setFloorNum(tempComments.size() + 1);
 						comment4FreshNews.setContent(getContentWithParent(comment4FreshNews.getContent()));
 					} else {
 						comment4FreshNews.setContent(getContentOnlySelf(comment4FreshNews.getContent()));
 					}
 				}
+
+				Logger.d(""+comment4FreshNewses);
 
 				return Response.success(comment4FreshNewses, HttpHeaderParser
 						.parseCacheHeaders(response));
@@ -91,7 +91,6 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 			if (comment4FreshNews.getId() != parentId) continue;
 			//找到了父评论
 			tempComments.add(comment4FreshNews);
-
 			//父评论又有父评论
 			if (comment4FreshNews.getParentId() != 0 && comment4FreshNews.getParentComments() != null) {
 				comment4FreshNews.setContent(getContentWithParent(comment4FreshNews.getContent()));
@@ -105,15 +104,13 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 
 
 	private int getParentId(String content) {
-//        <p>@<a href=\"#comment-2772763\" rel=\"nofollow\">小心炸弹</a>: 会</p>\n
 		try {
 			int index = content.indexOf("comment-") + 8;
 			int parentId = Integer.parseInt(content.substring(index, index + 7));
 			return parentId;
 		} catch (Exception ex) {
-
+			return 0;
 		}
-		return 0;
 	}
 
 

@@ -20,11 +20,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile files('libs/gson-2.2.4.jar')
-    compile files('libs/butterknife-6.1.0.jar')
-    compile files('libs/universal-image-loader-1.9.3.jar')
-    compile files('libs/uk-co-senab-photoview-source.jar')
+    compile fileTree(include: ['*.jar'],dir: 'libs')
+
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:cardview-v7:22.0.+'
     compile 'com.android.support:recyclerview-v7:22.0.+'
