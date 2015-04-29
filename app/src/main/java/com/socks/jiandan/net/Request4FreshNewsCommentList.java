@@ -1,5 +1,7 @@
 package com.socks.jiandan.net;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
@@ -8,10 +10,12 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.reflect.TypeToken;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.model.Comment4FreshNews;
+import com.socks.jiandan.utils.TextUtil;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +29,7 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 	private LoadFinishCallBack callBack;
 
 	public Request4FreshNewsCommentList(String url, Response.Listener<ArrayList<Comment4FreshNews>> listener,
-	                                    Response.ErrorListener errorListener, LoadFinishCallBack callBack) {
+										Response.ErrorListener errorListener, LoadFinishCallBack callBack) {
 		super(Method.GET, url, errorListener);
 		this.listener = listener;
 		this.callBack = callBack;
@@ -51,30 +55,22 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 				Pattern pattern = Pattern.compile("\\d{7}");
 
 				for (Comment4FreshNews comment4FreshNews : comment4FreshNewses) {
-
-					comment4FreshNews.setType(Comment4FreshNews.TYPE_NORMAL);
-					comment4FreshNews.setFloorNum(1);
-					comment4FreshNews.setTag(Comment4FreshNews.TAG_NORMAL);
-
+					Matcher matcher = pattern.matcher(comment4FreshNews.getContent());
+					boolean isHas7Num = matcher.find();
+					boolean isHasCommentStr = comment4FreshNews.getContent().contains("#comment-");
 					//有回复
-					if (comment4FreshNews.getContent().contains("#comment-")) {
-
-						Matcher matcher = pattern.matcher(comment4FreshNews.getContent());
-
-						if (matcher.find()) {
-							comment4FreshNews.setParent(matcher.group(0));
-							String content = comment4FreshNews.getContent().split
-									("</a>:")[1];
-							comment4FreshNews.setContent(content);
-						}
-
+					if (isHas7Num && isHasCommentStr || comment4FreshNews.getParentId() != 0) {
+						ArrayList<Comment4FreshNews> tempComments = new ArrayList<>();
+						int parentId = getParentId(comment4FreshNews.getContent());
+						comment4FreshNews.setParentId(parentId);
+						getParenFreshNews(tempComments, comment4FreshNewses, parentId);
+						Collections.reverse(tempComments);
+						comment4FreshNews.setParentComments(tempComments);
+						comment4FreshNews.setFloorNum(tempComments.size()+1);
+						comment4FreshNews.setContent(getContentWithParent(comment4FreshNews.getContent()));
+					} else {
+						comment4FreshNews.setContent(getContentOnlySelf(comment4FreshNews.getContent()));
 					}
-
-					String content = comment4FreshNews.getContent();
-					content = content.replace("</p>", "");
-					content = content.replace("<p>", "");
-					content = content.replace("<br />", "");
-					comment4FreshNews.setContent(content);
 				}
 
 				return Response.success(comment4FreshNewses, HttpHeaderParser
@@ -86,6 +82,52 @@ public class Request4FreshNewsCommentList extends Request<ArrayList<Comment4Fres
 			e.printStackTrace();
 			return Response.error(new ParseError(e));
 		}
+	}
+
+
+	private void getParenFreshNews(ArrayList<Comment4FreshNews> tempComments, ArrayList<Comment4FreshNews> comment4FreshNewses, int parentId) {
+
+		for (Comment4FreshNews comment4FreshNews : comment4FreshNewses) {
+			if (comment4FreshNews.getId() != parentId) continue;
+			//找到了父评论
+			tempComments.add(comment4FreshNews);
+
+			//父评论又有父评论
+			if (comment4FreshNews.getParentId() != 0 && comment4FreshNews.getParentComments() != null) {
+				comment4FreshNews.setContent(getContentWithParent(comment4FreshNews.getContent()));
+				tempComments.addAll(comment4FreshNews.getParentComments());
+				return;
+			}
+			//父评论没有父评论了
+			comment4FreshNews.setContent(getContentOnlySelf(comment4FreshNews.getContent()));
+		}
+	}
+
+
+	private int getParentId(String content) {
+//        <p>@<a href=\"#comment-2772763\" rel=\"nofollow\">小心炸弹</a>: 会</p>\n
+		try {
+			int index = content.indexOf("comment-") + 8;
+			int parentId = Integer.parseInt(content.substring(index, index + 7));
+			return parentId;
+		} catch (Exception ex) {
+
+		}
+		return 0;
+	}
+
+
+	private String getContentWithParent(String content) {
+		if (content.contains("</a>:"))
+			return getContentOnlySelf(content).split("</a>:")[1];
+		return content;
+	}
+
+	private String getContentOnlySelf(String content) {
+		content = content.replace("</p>", "");
+		content = content.replace("<p>", "");
+		content = content.replace("<br />", "");
+		return content;
 	}
 
 	@Override
