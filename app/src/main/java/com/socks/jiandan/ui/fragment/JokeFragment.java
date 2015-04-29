@@ -1,8 +1,5 @@
 package com.socks.jiandan.ui.fragment;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,6 +34,7 @@ import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
+import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
@@ -198,12 +196,7 @@ public class JokeFragment extends BaseFragment {
 											break;
 										//复制
 										case 1:
-											ClipboardManager clip = (ClipboardManager)
-													getActivity().getSystemService(Context
-															.CLIPBOARD_SERVICE);
-											clip.setPrimaryClip(ClipData.newPlainText
-													(null, joke.getComment_content()));
-											ShowToast.Short(ToastMsg.COPY_SUCCESS);
+											TextUtil.copy(getActivity(), joke.getComment_content());
 											break;
 									}
 

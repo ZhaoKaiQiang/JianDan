@@ -42,7 +42,6 @@ public class Comment4FreshNews implements Comparable ,Commentable {
 	private int type=TYPE_NORMAL;
 	//所属楼层
 	private int floorNum=1;
-
 	//用于标示是否是热门评论
 	private String tag=TAG_NORMAL;
 

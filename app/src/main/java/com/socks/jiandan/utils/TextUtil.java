@@ -1,5 +1,12 @@
 package com.socks.jiandan.utils;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+
+import com.socks.jiandan.constant.ToastMsg;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +42,15 @@ public class TextUtil {
 		}
 
 		return true;
+	}
+
+	public static void copy(Activity activity, String copyText) {
+		ClipboardManager clip = (ClipboardManager)
+				activity.getSystemService(Context
+						.CLIPBOARD_SERVICE);
+		clip.setPrimaryClip(ClipData.newPlainText
+				(null, copyText));
+		ShowToast.Short(ToastMsg.COPY_SUCCESS);
 	}
 
 }

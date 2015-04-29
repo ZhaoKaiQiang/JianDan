@@ -1,7 +1,10 @@
 package com.socks.jiandan.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -12,6 +15,8 @@ import android.widget.ProgressBar;
 
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
+import com.socks.jiandan.utils.ShareUtil;
+import com.socks.jiandan.utils.TextUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,6 +58,7 @@ public class VideoDetailActivity extends BaseActivity implements View.OnClickLis
 
 		actionBar.setDisplayShowHomeEnabled(true);
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle("加载中...");
 
 		imgBtn_back.setOnClickListener(this);
 		imgBtn_forward.setOnClickListener(this);
@@ -101,11 +107,27 @@ public class VideoDetailActivity extends BaseActivity implements View.OnClickLis
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_video_detail, menu);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		if (item.getItemId() == android.R.id.home) {
-			finish();
-			return true;
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+			case R.id.action_share:
+				ShareUtil.shareText(this, webview.getTitle() + " " + url);
+				return true;
+			case R.id.action_copy:
+				TextUtil.copy(this, url);
+				return true;
+			case R.id.action_open:
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				return true;
 		}
 
 		return super.onOptionsItemSelected(item);
