@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +38,7 @@ import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Video;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
+import com.socks.jiandan.ui.VideoDetailActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
@@ -195,6 +197,21 @@ public class VideoFragment extends BaseFragment {
 			holder.tv_unsupport_des.setTextColor(getResources().getColor(R.color
 					.secondary_text_default_material_light));
 
+			holder.ll_support.setOnClickListener(new onVoteClickListener(video.getComment_ID(),
+					Vote.OO, holder, video));
+
+			holder.ll_unsupport.setOnClickListener(new onVoteClickListener(video.getComment_ID(),
+					Vote.XX, holder, video));
+
+			holder.ll_comment.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+					Intent intent = new Intent(getActivity(), CommentListActivity.class);
+					intent.putExtra("thread_key", "comment-" + video.getComment_ID());
+					startActivity(intent);
+				}
+			});
 			holder.img_share.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -229,18 +246,11 @@ public class VideoFragment extends BaseFragment {
 				}
 			});
 
-			holder.ll_support.setOnClickListener(new onVoteClickListener(video.getComment_ID(),
-					Vote.OO, holder, video));
-
-			holder.ll_unsupport.setOnClickListener(new onVoteClickListener(video.getComment_ID(),
-					Vote.XX, holder, video));
-
-			holder.ll_comment.setOnClickListener(new View.OnClickListener() {
+			holder.card_parent.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
-					Intent intent = new Intent(getActivity(), CommentListActivity.class);
-					intent.putExtra("thread_key", "comment-" + video.getComment_ID());
+					Intent intent = new Intent(getActivity(), VideoDetailActivity.class);
+					intent.putExtra("url", video.getUrl());
 					startActivity(intent);
 				}
 			});
@@ -455,6 +465,8 @@ public class VideoFragment extends BaseFragment {
 		private LinearLayout ll_unsupport;
 		private LinearLayout ll_comment;
 
+		private CardView card_parent;
+
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
 
@@ -477,6 +489,8 @@ public class VideoFragment extends BaseFragment {
 			ll_support = (LinearLayout) contentView.findViewById(R.id.ll_support);
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);
 			ll_comment = (LinearLayout) contentView.findViewById(R.id.ll_comment);
+
+			card_parent = (CardView) contentView.findViewById(R.id.card_parent);
 
 		}
 	}

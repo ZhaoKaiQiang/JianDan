@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/progressbar_horizontal_blue"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary_material_dark">
+
+        <ImageButton
+            android:id="@+id/imgBtn_back"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_left_white_36dp"/>
+        <ImageButton
+            android:id="@+id/imgBtn_forward"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/imgBtn_back"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right_white_36dp"/>
+
+        <ImageButton
+            android:id="@+id/imgBtn_control"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_close_white_24dp"/>
+    </RelativeLayout>
+
+    <WebView android:id="@+id/webview"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_above="@id/rl_bottom"
+             android:background="#ffffffff"/>
+</RelativeLayout>

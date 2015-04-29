@@ -5,5 +5,9 @@
     <string name="action_push">发送</string>
     <string name="action_share">分享</string>
     <string name="title_activity_fresh_news_detail">新鲜事</string>
+    <string name="title_activity_video_detail">VideoDetailActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
