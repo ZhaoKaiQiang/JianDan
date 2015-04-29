@@ -85,7 +85,7 @@ public class MainMenuFragment extends BaseFragment {
 		mAdapter.menuItems.add(new MenuItem("段子", R.drawable.ic_chat_white_24dp, MenuItem.FragmentType.DUANZI, JokeFragment
 				.class));
 		mAdapter.menuItems.add(new MenuItem("小电影", R.drawable.ic_movie_white_24dp, MenuItem.FragmentType.XIAODIANYING,
-				JokeFragment.class));
+				VideoFragment.class));
 
 		mRecyclerView.setAdapter(mAdapter);
 

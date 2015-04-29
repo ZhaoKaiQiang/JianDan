@@ -28,7 +28,7 @@ public class AppAplication extends Application {
 	public static void initImageLoader() {
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.writeDebugLogs()
+//				.writeDebugLogs()
 				.build();
 		ImageLoader.getInstance().init(config);
 	}
