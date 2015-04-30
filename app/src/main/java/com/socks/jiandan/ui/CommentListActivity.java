@@ -1,8 +1,5 @@
 package com.socks.jiandan.ui;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -29,12 +26,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.callback.LoadFinishCallBack;
-import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.Commentator;
 import com.socks.jiandan.net.Request4CommentList;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
+import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -203,10 +200,8 @@ public class CommentListActivity extends BaseActivity {
 													break;
 												case 1:
 													//复制到剪贴板
-													ClipboardManager clip = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-													clip.setPrimaryClip(ClipData.newPlainText
-															(null, commentator.getMessage()));
-													ShowToast.Short(ToastMsg.COPY_SUCCESS);
+													TextUtil.copy(CommentListActivity.this,
+															commentator.getMessage());
 													break;
 											}
 
