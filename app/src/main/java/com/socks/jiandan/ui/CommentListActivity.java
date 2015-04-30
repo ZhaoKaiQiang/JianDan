@@ -231,7 +231,7 @@ public class CommentListActivity extends BaseActivity {
 						holder.floors_parent.setVisibility(View.GONE);
 					}
 
-					imageLoader.displayImage(commentator.getAvatar_url(), holder.img_header);
+					imageLoader.displayImage(commentator.getAvatar_url(), holder.img_header,options);
 
 					break;
 			}

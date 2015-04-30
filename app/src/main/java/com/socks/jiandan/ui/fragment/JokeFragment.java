@@ -111,6 +111,7 @@ public class JokeFragment extends BaseFragment {
 		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.loadFirst();
 
+
 	}
 
 	@Override

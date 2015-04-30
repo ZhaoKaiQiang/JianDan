@@ -19,6 +19,7 @@ import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.Commentator;
 import com.socks.jiandan.net.Request4PushComment;
+import com.socks.jiandan.net.Request4PushFreshComment;
 import com.socks.jiandan.utils.EditTextShakeHelper;
 import com.socks.jiandan.utils.SharedPreUtils;
 import com.socks.jiandan.utils.ShowToast;
@@ -41,6 +42,7 @@ public class PushCommentActivity extends BaseActivity {
 
 	private String thread_id;
 	private String parent_id;
+	private String parent_name;
 	private String author_name;
 	private String author_email;
 	private String message;
@@ -49,6 +51,7 @@ public class PushCommentActivity extends BaseActivity {
 	private EditText et_email;
 
 	private View positiveAction;
+	private MaterialDialog dialog;
 
 
 	@Override
@@ -66,12 +69,11 @@ public class PushCommentActivity extends BaseActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		String parent_name = getIntent().getStringExtra("parent_name");
+		parent_name = getIntent().getStringExtra("parent_name");
 		tv_title.setText(TextUtil.isNull(parent_name) ? "回复:" : "回复:" + parent_name);
-
+		/*新鲜事中 文章id=当前的thread_id=接口参数中的post_id*/
 		thread_id = getIntent().getStringExtra("thread_id");
 		parent_id = getIntent().getStringExtra("parent_id");
-
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class PushCommentActivity extends BaseActivity {
 					return true;
 				}
 
-				MaterialDialog dialog = new MaterialDialog.Builder(this)
+				dialog = new MaterialDialog.Builder(this)
 						.title("作为游客留言")
 						.customView(R.layout.dialog_commentotar_info, true)
 						.positiveText("确定")
@@ -113,40 +115,36 @@ public class PushCommentActivity extends BaseActivity {
 								SharedPreUtils.setString(PushCommentActivity.this,
 										"author_email", author_email);
 
-								HashMap<String, String> requestParams;
 
-								//首次评论
-								if (TextUtil.isNull(parent_id)) {
-									requestParams = Request4PushComment.getRequestParamsNoParent(thread_id,
-											author_name, author_email, message);
-								} else {
-									//回复别人
-									requestParams = Request4PushComment.getRequestParams(thread_id, parent_id,
-											author_name, author_email, message);
+								//新鲜事评论get
+								if (thread_id.length() == 5) {
+									String url;
+									//回复别人 和首次评论
+									if (!TextUtil.isNull(parent_id) && !TextUtil.isNull
+											(parent_name)) {
+										url = Request4PushFreshComment.getRequestURL(thread_id, parent_id, parent_name, author_name, author_email, message);
+									} else {
+										url = Request4PushFreshComment.getRequestURLNoParent(thread_id, author_name, author_email, message);
+									}
+									//提交评论
+									executeRequest(new Request4PushFreshComment(url, new PushCommentListener(), new PushCommentErrorListener()));
+									return;
 								}
 
-								executeRequest(new Request4PushComment(Commentator.URL_PUSH_COMMENT,
-										requestParams, new Response.Listener<Boolean>() {
-									@Override
-									public void onResponse(Boolean response) {
-
-										dialog.dismiss();
-
-										if (response) {
-											setResult(RESULT_OK);
-											finish();
-										} else {
-											ShowToast.Short(ToastMsg.COMMENT_FAILED);
-										}
-
+								//多说的评论post
+								if (TextUtil.isNull(parent_id)) {
+									HashMap<String, String> requestParams;
+									//回复别人 和首次评论
+									if (!TextUtil.isNull(parent_id)) {
+										requestParams = Request4PushComment.getRequestParams(thread_id, parent_id,
+												author_name, author_email, message);
+									} else {
+										requestParams = Request4PushComment.getRequestParamsNoParent(thread_id, author_name, author_email, message);
 									}
-								}, new Response.ErrorListener() {
-									@Override
-									public void onErrorResponse(VolleyError error) {
-										ShowToast.Short(ToastMsg.COMMENT_FAILED);
-										dialog.dismiss();
-									}
-								}));
+									//提交评论
+									executeRequest(new Request4PushComment(Commentator.URL_PUSH_COMMENT,
+											requestParams, new PushCommentListener(), new PushCommentErrorListener()));
+								}
 
 							}
 
@@ -178,6 +176,31 @@ public class PushCommentActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+
+	class PushCommentListener implements Response.Listener<Boolean> {
+		@Override
+		public void onResponse(Boolean response) {
+
+			dialog.dismiss();
+			if (response) {
+				setResult(RESULT_OK);
+				finish();
+			} else {
+				ShowToast.Short(ToastMsg.COMMENT_FAILED);
+			}
+
+		}
+	}
+
+	class PushCommentErrorListener implements Response.ErrorListener {
+		@Override
+		public void onErrorResponse(VolleyError error) {
+			ShowToast.Short(ToastMsg.COMMENT_FAILED);
+			dialog.dismiss();
+		}
+	}
+
+
 	private class InputWatcher implements TextWatcher {
 
 		@Override
@@ -188,8 +211,8 @@ public class PushCommentActivity extends BaseActivity {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-			positiveAction.setEnabled(TextUtil.isEmail(et_email.getText().toString().trim()
-			) && !TextUtil.isNull(et_name.getText().toString()));
+			positiveAction.setEnabled(TextUtil.isEmail(et_email.getText().toString().trim())
+					&& !TextUtil.isNull(et_name.getText().toString()));
 
 		}
 

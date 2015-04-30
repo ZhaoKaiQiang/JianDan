@@ -62,7 +62,6 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 	@InjectView(R.id.tv_error)
 	MatchTextView tv_error;
 
-	private String id;
 	private String thread_id;
 	private CommentAdapter mAdapter;
 	private SwipeBackUtil mSwipeBackUtil;
@@ -111,9 +110,9 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 
 		tv_no_thing.setVisibility(View.GONE);
 		google_progress.setVisibility(View.VISIBLE);
-		id = getIntent().getStringExtra("id");
+		thread_id = getIntent().getStringExtra("id");
 
-		if (TextUtils.isEmpty(id) || id.equals("0")) {
+		if (TextUtils.isEmpty(thread_id) || thread_id.equals("0")) {
 			ShowToast.Short("禁止评论");
 			finish();
 		}
@@ -187,10 +186,9 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 													Intent intent = new Intent
 															(CommentList4FreshNewsActivity.this,
 																	PushCommentActivity.class);
-													intent.putExtra("parent_id", "");
+													intent.putExtra("parent_id",String.valueOf(commentator.getId()));
 													intent.putExtra("thread_id", thread_id);
-													intent.putExtra("parent_name", commentator
-															.getName());
+													intent.putExtra("parent_name", commentator.getName());
 													startActivityForResult(intent, 0);
 													break;
 												case 1:
@@ -231,6 +229,7 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 
 		}
 
+
 		@Override
 		public int getItemCount() {
 			return commentators.size();
@@ -242,7 +241,7 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 		}
 
 		public void loadData() {
-			executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments(id), new Response
+			executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments(thread_id), new Response
 					.Listener<ArrayList<Comment4FreshNews>>() {
 				@Override
 				public void onResponse(ArrayList<Comment4FreshNews> response) {

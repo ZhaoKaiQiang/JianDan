@@ -14,7 +14,10 @@ import java.util.TimeZone;
  */
 public class Comment4FreshNews implements Comparable ,Commentable {
 
+	//评论列表
 	public static final String URL_COMMENTS = "http://jandan.net/?oxwlxojflwblxbsapi=get_post&include=comments&id=";
+	//对新鲜事发表评论
+	public static final String URL_PUSH_COMMENT ="http://jandan.net/?oxwlxojflwblxbsapi=respond.submit_comment";
 
 	//评论布局类型
 	public static final int TYPE_HOT = 0;
