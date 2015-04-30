@@ -33,6 +33,7 @@ import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
 import com.socks.jiandan.utils.TextUtil;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -63,8 +64,9 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 	@InjectView(R.id.tv_error)
 	MatchTextView tv_error;
 
-	private String id;
 	private String thread_id;
+	private String parent_id;
+	private String parent_name;
 	private CommentAdapter mAdapter;
 	private SwipeBackUtil mSwipeBackUtil;
 
@@ -112,9 +114,9 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 
 		tv_no_thing.setVisibility(View.GONE);
 		google_progress.setVisibility(View.VISIBLE);
-		id = getIntent().getStringExtra("id");
+		thread_id = getIntent().getStringExtra("id");
 
-		if (TextUtils.isEmpty(id) || id.equals("0")) {
+		if (TextUtils.isEmpty(thread_id) || thread_id.equals("0")) {
 			ShowToast.Short("禁止评论");
 			finish();
 		}
@@ -188,10 +190,9 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 													Intent intent = new Intent
 															(CommentList4FreshNewsActivity.this,
 																	PushCommentActivity.class);
-													intent.putExtra("parent_id", "");
+													intent.putExtra("parent_id",String.valueOf(commentator.getId()));
 													intent.putExtra("thread_id", thread_id);
-													intent.putExtra("parent_name", commentator
-															.getName());
+													intent.putExtra("parent_name", commentator.getName());
 													startActivityForResult(intent, 0);
 													break;
 												case 1:
@@ -231,38 +232,7 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 			}
 
 		}
-//
-//		private List<Comment4FreshNews> addFloors(Comment4FreshNews commentator) {
-//
-//			//只有一层
-//			if (commentator.getParent().equals("0") || TextUtil.isNull(commentator.getParent())) {
-//				return null;
-//			}
-//
-//			String parent = commentator.getParent();
-//			ArrayList<Comment4FreshNews> commentators = new ArrayList<>();
-//			commentators.add(commentator);
-//
-//			//按照时间从早到晚排序，最先评论在前面
-//			Collections.sort(this.commentators);
-//			Collections.reverse(this.commentators);
-//
-//			for (Comment4FreshNews comm : this.commentators) {
-//
-//				if (parent.equals("" + comm.getId())) {
-//					comm.setFloorNum(commentator.getFloorNum());
-//					commentators.add(comm);
-//					commentator.setFloorNum(commentator.getFloorNum() + 1);
-//					if (comm.getParent().equals("0")) {
-//						break;
-//					} else {
-//						parent = comm.getId() + "";
-//					}
-//				}
-//			}
-//
-//			return commentators;
-//		}
+
 
 		@Override
 		public int getItemCount() {
@@ -275,7 +245,7 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 		}
 
 		public void loadData() {
-			executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments(id), new Response
+			executeRequest(new Request4FreshNewsCommentList(Comment4FreshNews.getUrlComments(thread_id), new Response
 					.Listener<ArrayList<Comment4FreshNews>>() {
 				@Override
 				public void onResponse(ArrayList<Comment4FreshNews> response) {
