@@ -14,7 +14,6 @@ import com.socks.jiandan.callback.LoadFinishCallBack;
 public class AutoLoadRecyclerView extends RecyclerView implements LoadFinishCallBack {
 
 	private onLoadMoreListener loadMoreListener;
-	private LayoutManager mLayoutManager;
 	private boolean isLoadingMore;
 
 	public AutoLoadRecyclerView(Context context) {
@@ -27,13 +26,8 @@ public class AutoLoadRecyclerView extends RecyclerView implements LoadFinishCall
 
 	public AutoLoadRecyclerView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
 		isLoadingMore = false;
-
-		mLayoutManager = new LinearLayoutManager(context);
-		setLayoutManager(mLayoutManager);
 		setOnScrollListener(new AutoLoadScrollListener(null, true, true));
-
 	}
 
 	/**
@@ -80,13 +74,17 @@ public class AutoLoadRecyclerView extends RecyclerView implements LoadFinishCall
 		public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 			super.onScrolled(recyclerView, dx, dy);
 
-			int lastVisibleItem = ((LinearLayoutManager) mLayoutManager).findLastVisibleItemPosition();
-			int totalItemCount = mLayoutManager.getItemCount();
-			//有回调接口，并且不是加载状态，并且剩下2个item，并且向下滑动，则自动加载
-			if (loadMoreListener != null && !isLoadingMore && lastVisibleItem >= totalItemCount -
-					2 && dy > 0) {
-				loadMoreListener.loadMore();
-				isLoadingMore = true;
+			//由于GridLayoutManager是LinearLayoutManager子类，所以也适用
+			if (getLayoutManager() instanceof LinearLayoutManager) {
+				int lastVisibleItem = ((LinearLayoutManager) getLayoutManager()).findLastVisibleItemPosition();
+				int totalItemCount = AutoLoadRecyclerView.this.getAdapter().getItemCount();
+
+				//有回调接口，并且不是加载状态，并且剩下2个item，并且向下滑动，则自动加载
+				if (loadMoreListener != null && !isLoadingMore && lastVisibleItem >= totalItemCount -
+						2 && dy > 0) {
+					loadMoreListener.loadMore();
+					isLoadingMore = true;
+				}
 			}
 		}
 
