@@ -99,13 +99,13 @@
             android:visibility="visible">
 
             <LinearLayout
-                android:id="@+id/support"
+                android:id="@+id/ll_support"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/like_descr"
+                    android:id="@+id/tv_like_descr"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:gravity="center"
@@ -114,7 +114,7 @@
                     android:textSize="13.0sp"/>
 
                 <TextView
-                    android:id="@+id/like"
+                    android:id="@+id/tv_like"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:gravity="center"
@@ -124,13 +124,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/unsupport"
+                android:id="@+id/ll_unsupport"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/unlike_descr"
+                    android:id="@+id/tv_unlike_descr"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:gravity="center"
@@ -139,7 +139,7 @@
                     android:textSize="13.0sp"/>
 
                 <TextView
-                    android:id="@+id/unlike"
+                    android:id="@+id/tv_unlike"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:gravity="center"

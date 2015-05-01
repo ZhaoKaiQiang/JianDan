@@ -566,6 +566,7 @@ public class PictureFragment extends BaseFragment {
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
 
+
 		public ViewHolder(View contentView) {
 			super(contentView);
 

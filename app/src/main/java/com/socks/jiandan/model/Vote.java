@@ -8,6 +8,9 @@ public class Vote {
 	public static final String URL_VOTE = "http://jandan.net/index" +
 			".php?acv_ajax=true&option=%s&ID=%s";
 
+//	public static final String URL_VOTE4FRESH = "http://jandan.net/wp-admin/?" +
+//			+"acv_ajax=true&option=%s&ID=%s";
+
 	public static final String XX = "0";
 	public static final String OO = "1";
 
