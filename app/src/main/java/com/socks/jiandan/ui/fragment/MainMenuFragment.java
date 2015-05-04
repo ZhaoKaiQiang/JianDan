@@ -1,7 +1,10 @@
 package com.socks.jiandan.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +20,7 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.model.MenuItem;
 import com.socks.jiandan.ui.MainActivity;
-import com.socks.jiandan.utils.ShowToast;
+import com.socks.jiandan.ui.SettingActivity;
 
 import java.util.ArrayList;
 
@@ -64,7 +67,8 @@ public class MainMenuFragment extends BaseFragment {
 		rl_container.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ShowToast.Short("设置");
+				startActivity(new Intent(getActivity(), SettingActivity.class));
+				mainActivity.closeDrawer();
 			}
 		});
 
@@ -76,17 +80,7 @@ public class MainMenuFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		mAdapter = new MenuAdapter();
-		mAdapter.menuItems.add(new MenuItem("新鲜事", R.drawable.ic_explore_white_24dp, MenuItem.FragmentType.XINXIANSHI,
-				FreshNewsFragment.class));
-		mAdapter.menuItems.add(new MenuItem("无聊图", R.drawable.ic_mood_white_24dp, MenuItem.FragmentType.WULIAOTU,
-				PictureFragment.class));
-		mAdapter.menuItems.add(new MenuItem("妹子图", R.drawable.ic_local_florist_white_24dp, MenuItem.FragmentType.MEIZITU,
-				SisterFragment.class));
-		mAdapter.menuItems.add(new MenuItem("段子", R.drawable.ic_chat_white_24dp, MenuItem.FragmentType.DUANZI, JokeFragment
-				.class));
-		mAdapter.menuItems.add(new MenuItem("小电影", R.drawable.ic_movie_white_24dp, MenuItem.FragmentType.XIAODIANYING,
-				VideoFragment.class));
-
+		addAllMenuItems(mAdapter);
 		mRecyclerView.setAdapter(mAdapter);
 
 	}
@@ -109,6 +103,7 @@ public class MainMenuFragment extends BaseFragment {
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 			final MenuItem menuItem = menuItems.get(position);
+
 			holder.tv_title.setText(menuItem.getTitle());
 			holder.img_menu.setImageResource(menuItem.getResourceId());
 			holder.rl_container.setOnClickListener(new View.OnClickListener() {
@@ -153,5 +148,49 @@ public class MainMenuFragment extends BaseFragment {
 			rl_container = (RelativeLayout) itemView.findViewById(R.id.rl_container);
 		}
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		//要显示妹子图而现在没显示，则重现设置适配器
+		if (sp.getBoolean(SettingFragment.ENABLE_SISTER, false) && mAdapter.menuItems.size() == 4) {
+			addAllMenuItems(mAdapter);
+			mAdapter.notifyDataSetChanged();
+		} else if (!sp.getBoolean(SettingFragment.ENABLE_SISTER, false) && mAdapter.menuItems.size()
+				== 5) {
+			addMenuItemsNoSister(mAdapter);
+			mAdapter.notifyDataSetChanged();
+		}
+
+	}
+
+	private void addAllMenuItems(MenuAdapter mAdapter) {
+		mAdapter.menuItems.clear();
+		mAdapter.menuItems.add(new MenuItem("新鲜事", R.drawable.ic_explore_white_24dp, MenuItem.FragmentType.XINXIANSHI,
+				FreshNewsFragment.class));
+		mAdapter.menuItems.add(new MenuItem("无聊图", R.drawable.ic_mood_white_24dp, MenuItem.FragmentType.WULIAOTU,
+				PictureFragment.class));
+		mAdapter.menuItems.add(new MenuItem("妹子图", R.drawable.ic_local_florist_white_24dp, MenuItem.FragmentType.MEIZITU,
+				SisterFragment.class));
+		mAdapter.menuItems.add(new MenuItem("段子", R.drawable.ic_chat_white_24dp, MenuItem.FragmentType.DUANZI, JokeFragment
+				.class));
+		mAdapter.menuItems.add(new MenuItem("小电影", R.drawable.ic_movie_white_24dp, MenuItem.FragmentType.XIAODIANYING,
+				VideoFragment.class));
+	}
+
+	private void addMenuItemsNoSister(MenuAdapter mAdapter) {
+		mAdapter.menuItems.clear();
+		mAdapter.menuItems.add(new MenuItem("新鲜事", R.drawable.ic_explore_white_24dp, MenuItem.FragmentType.XINXIANSHI,
+				FreshNewsFragment.class));
+		mAdapter.menuItems.add(new MenuItem("无聊图", R.drawable.ic_mood_white_24dp, MenuItem.FragmentType.WULIAOTU,
+				PictureFragment.class));
+		mAdapter.menuItems.add(new MenuItem("段子", R.drawable.ic_chat_white_24dp, MenuItem.FragmentType.DUANZI, JokeFragment
+				.class));
+		mAdapter.menuItems.add(new MenuItem("小电影", R.drawable.ic_movie_white_24dp, MenuItem.FragmentType.XIAODIANYING,
+				VideoFragment.class));
+	}
+
 
 }
