@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -221,9 +224,25 @@ public class SisterFragment extends BaseFragment {
 
 		private int page;
 		private ArrayList<Picture> pictures;
+		private int lastPosition = -1;
 
 		public PictureAdapter() {
 			pictures = new ArrayList<Picture>();
+		}
+
+		private void setAnimation(View viewToAnimate, int position) {
+			if (position > lastPosition) {
+				Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R
+						.anim.item_bottom_in);
+				viewToAnimate.startAnimation(animation);
+				lastPosition = position;
+			}
+		}
+
+		@Override
+		public void onViewDetachedFromWindow(ViewHolder holder) {
+			super.onViewDetachedFromWindow(holder);
+			holder.card.clearAnimation();
 		}
 
 		@Override
@@ -266,7 +285,6 @@ public class SisterFragment extends BaseFragment {
 				holder.tv_content.setVisibility(View.VISIBLE);
 				holder.tv_content.setText(picture.getText_content().trim());
 			}
-
 
 
 			holder.img.setOnClickListener(new View.OnClickListener() {
@@ -344,6 +362,8 @@ public class SisterFragment extends BaseFragment {
 					startActivity(intent);
 				}
 			});
+
+			setAnimation(holder.card, position);
 
 		}
 
@@ -552,6 +572,7 @@ public class SisterFragment extends BaseFragment {
 		private LinearLayout ll_comment;
 
 		private ProgressBar progress;
+		private CardView card;
 
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
@@ -575,6 +596,7 @@ public class SisterFragment extends BaseFragment {
 			img = (ShowMaxImageView) contentView.findViewById(R.id.img);
 
 			progress = (ProgressBar) contentView.findViewById(R.id.progress);
+			card = (CardView) contentView.findViewById(R.id.card);
 
 			ll_support = (LinearLayout) contentView.findViewById(R.id.ll_support);
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);

@@ -18,6 +18,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -160,9 +162,25 @@ public class VideoFragment extends BaseFragment {
 
 		private int page;
 		private ArrayList<Video> mVideos;
+		private int lastPosition = -1;
 
 		public VideoAdapter() {
 			mVideos = new ArrayList<Video>();
+		}
+
+		private void setAnimation(View viewToAnimate, int position) {
+			if (position > lastPosition) {
+				Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R
+						.anim.item_bottom_in);
+				viewToAnimate.startAnimation(animation);
+				lastPosition = position;
+			}
+		}
+
+		@Override
+		public void onViewDetachedFromWindow(ViewHolder holder) {
+			super.onViewDetachedFromWindow(holder);
+			holder.card.clearAnimation();
 		}
 
 		@Override
@@ -246,7 +264,7 @@ public class VideoFragment extends BaseFragment {
 				}
 			});
 
-			holder.card_parent.setOnClickListener(new View.OnClickListener() {
+			holder.card.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), VideoDetailActivity.class);
@@ -254,6 +272,8 @@ public class VideoFragment extends BaseFragment {
 					startActivity(intent);
 				}
 			});
+
+			setAnimation(holder.card, position);
 
 		}
 
@@ -465,7 +485,7 @@ public class VideoFragment extends BaseFragment {
 		private LinearLayout ll_unsupport;
 		private LinearLayout ll_comment;
 
-		private CardView card_parent;
+		private CardView card;
 
 		//用于处理多次点击造成的网络访问
 		private boolean isClickFinish;
@@ -490,7 +510,7 @@ public class VideoFragment extends BaseFragment {
 			ll_unsupport = (LinearLayout) contentView.findViewById(R.id.ll_unsupport);
 			ll_comment = (LinearLayout) contentView.findViewById(R.id.ll_comment);
 
-			card_parent = (CardView) contentView.findViewById(R.id.card_parent);
+			card = (CardView) contentView.findViewById(R.id.card);
 
 		}
 	}

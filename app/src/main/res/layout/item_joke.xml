@@ -9,6 +9,7 @@
     android:layout_marginTop="4dp"
     app:cardBackgroundColor="#FFF"
     app:cardCornerRadius="2dp"
+    android:id="@+id/card"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
     app:contentPadding="16dp">

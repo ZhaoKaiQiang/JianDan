@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -144,13 +146,32 @@ public class FreshNewsFragment extends BaseFragment {
 		}
 	}
 
+	/**
+	 * 新鲜事适配器
+	 */
 	public class FreshNewsAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
 		private ArrayList<FreshNews> freshNewses;
+		private int lastPosition = -1;
 
 		public FreshNewsAdapter() {
 			freshNewses = new ArrayList<FreshNews>();
+		}
+
+		private void setAnimation(View viewToAnimate, int position) {
+			if (position > lastPosition) {
+				Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R
+						.anim.item_bottom_in);
+				viewToAnimate.startAnimation(animation);
+				lastPosition = position;
+			}
+		}
+
+		@Override
+		public void onViewDetachedFromWindow(ViewHolder holder) {
+			super.onViewDetachedFromWindow(holder);
+			holder.card.clearAnimation();
 		}
 
 		@Override
@@ -172,7 +193,7 @@ public class FreshNewsFragment extends BaseFragment {
 
 			holder.tv_views.setText("浏览" + freshNews.getCustomFields().getViews() + "次");
 
-			holder.card_bg.setOnClickListener(new View.OnClickListener() {
+			holder.card.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
@@ -188,6 +209,8 @@ public class FreshNewsFragment extends BaseFragment {
 					ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
 				}
 			});
+
+			setAnimation(holder.card,position);
 
 		}
 
@@ -251,7 +274,7 @@ public class FreshNewsFragment extends BaseFragment {
 		private TextView tv_views;
 		private TextView tv_share;
 		private ImageView img;
-		private CardView card_bg;
+		private CardView card;
 
 		public ViewHolder(View contentView) {
 			super(contentView);
@@ -260,7 +283,7 @@ public class FreshNewsFragment extends BaseFragment {
 			tv_views = (TextView) contentView.findViewById(R.id.tv_views);
 			tv_share = (TextView) contentView.findViewById(R.id.tv_share);
 			img = (ImageView) contentView.findViewById(R.id.img);
-			card_bg = (CardView) contentView.findViewById(R.id.card_bg);
+			card = (CardView) contentView.findViewById(R.id.card);
 		}
 	}
 }
