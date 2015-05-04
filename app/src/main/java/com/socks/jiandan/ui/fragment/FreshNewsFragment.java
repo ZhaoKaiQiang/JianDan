@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -27,9 +28,9 @@ import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
 import com.socks.jiandan.net.Request4FreshNews;
 import com.socks.jiandan.ui.FreshNewsDetailActivity;
+import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
-import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
 import java.util.ArrayList;
@@ -181,6 +182,12 @@ public class FreshNewsFragment extends BaseFragment {
 				}
 			});
 
+			holder.tv_share.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
+				}
+			});
 
 		}
 
@@ -242,7 +249,8 @@ public class FreshNewsFragment extends BaseFragment {
 		private TextView tv_title;
 		private TextView tv_info;
 		private TextView tv_views;
-		private ShowMaxImageView img;
+		private TextView tv_share;
+		private ImageView img;
 		private CardView card_bg;
 
 		public ViewHolder(View contentView) {
@@ -250,7 +258,8 @@ public class FreshNewsFragment extends BaseFragment {
 			tv_title = (TextView) contentView.findViewById(R.id.tv_title);
 			tv_info = (TextView) contentView.findViewById(R.id.tv_info);
 			tv_views = (TextView) contentView.findViewById(R.id.tv_views);
-			img = (ShowMaxImageView) contentView.findViewById(R.id.img);
+			tv_share = (TextView) contentView.findViewById(R.id.tv_share);
+			img = (ImageView) contentView.findViewById(R.id.img);
 			card_bg = (CardView) contentView.findViewById(R.id.card_bg);
 		}
 	}

@@ -2,11 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:fitsSystemWindows="true"
               android:background="#FFF"
-              android:padding="16dp"
-              android:orientation="vertical">
-
+              android:fitsSystemWindows="true"
+              android:orientation="vertical"
+              android:padding="16dp">
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
@@ -26,8 +25,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:background="@null"
-        android:inputType="textMultiLine"
         android:gravity="left"
+        android:inputType="textMultiLine"
         android:maxLength="500"
         android:textColor="@color/primary_text_default_material_light"
         android:textSize="16sp"/>
