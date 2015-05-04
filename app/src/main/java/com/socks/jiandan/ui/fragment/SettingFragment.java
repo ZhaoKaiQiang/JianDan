@@ -27,11 +27,13 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 	public static final String ABOUT_APP = "about_app";
 	public static final String APP_VERSION = "app_version";
 	public static final String ENABLE_SISTER = "enable_sister";
+	public static final String ENABLE_FRESH_BIG = "enable_fresh_big";
 
 	Preference clearCache;
 	Preference aboutApp;
 	Preference appVersion;
 	CheckBoxPreference enableSister;
+	CheckBoxPreference enableBig;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 		aboutApp = findPreference(ABOUT_APP);
 		appVersion = findPreference(APP_VERSION);
 		enableSister = (CheckBoxPreference) findPreference(ENABLE_SISTER);
+		enableBig = (CheckBoxPreference) findPreference(ENABLE_FRESH_BIG);
 
 		appVersion.setTitle(AppInfoUtil.getVersionName(getActivity()));
 
@@ -52,12 +55,25 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 		enableSister.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				enableSister.setChecked((Boolean) newValue);
 
 				if ((Boolean) newValue) {
 					ShowToast.Short("已解锁隐藏属性->妹子图");
 				} else {
 					ShowToast.Short("已关闭隐藏属性->妹子图");
+				}
+
+				return true;
+			}
+		});
+
+		enableBig.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+				if ((Boolean) newValue) {
+					ShowToast.Short("已开启大图模式");
+				} else {
+					ShowToast.Short("已关闭大图模式");
 				}
 
 				return true;

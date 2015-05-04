@@ -1,8 +1,10 @@
 package com.socks.jiandan.ui.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -58,6 +61,8 @@ public class FreshNewsFragment extends BaseFragment {
 	private LoadFinishCallBack mLoadFinisCallBack;
 	private ImageLoader imageLoader;
 	private DisplayImageOptions options;
+	//是否是大图模式
+	private static boolean isLargeMode;
 
 	public FreshNewsFragment() {
 	}
@@ -108,12 +113,25 @@ public class FreshNewsFragment extends BaseFragment {
 
 		imageLoader = ImageLoader.getInstance();
 		mRecyclerView.setOnPauseListenerParams(imageLoader, false, true);
+
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		isLargeMode = sp.getBoolean(SettingFragment.ENABLE_FRESH_BIG, true);
+
+		int loadingResource;
+
+		//大图模式
+		if (isLargeMode) {
+			loadingResource = R.drawable.ic_loading_large;
+		} else {
+			loadingResource = R.drawable.ic_loading_small;
+		}
+
 		options = new DisplayImageOptions.Builder()
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.resetViewBeforeLoading(true)
-				.showImageOnLoading(R.drawable.ic_loading_large)
+				.showImageOnLoading(loadingResource)
 				.build();
 
 		mAdapter = new FreshNewsAdapter();
@@ -171,14 +189,26 @@ public class FreshNewsFragment extends BaseFragment {
 		@Override
 		public void onViewDetachedFromWindow(ViewHolder holder) {
 			super.onViewDetachedFromWindow(holder);
-			holder.card.clearAnimation();
+			if (isLargeMode) {
+				holder.card.clearAnimation();
+			} else {
+				holder.ll_content.clearAnimation();
+			}
 		}
 
 		@Override
 		public ViewHolder onCreateViewHolder(ViewGroup parent,
 		                                     int viewType) {
+			int layoutId;
+
+			if (isLargeMode) {
+				layoutId = R.layout.item_fresh_news;
+			} else {
+				layoutId = R.layout.item_fresh_news_small;
+			}
+
 			View v = LayoutInflater.from(parent.getContext())
-					.inflate(R.layout.item_fresh_news, parent, false);
+					.inflate(layoutId, parent, false);
 			return new ViewHolder(v);
 		}
 
@@ -193,24 +223,37 @@ public class FreshNewsFragment extends BaseFragment {
 
 			holder.tv_views.setText("浏览" + freshNews.getCustomFields().getViews() + "次");
 
-			holder.card.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
-					intent.putExtra("FreshNews", freshNewses);
-					intent.putExtra("position", position);
-					startActivity(intent);
-				}
-			});
+			if (isLargeMode) {
+				holder.tv_share.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
+					}
+				});
 
-			holder.tv_share.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					ShareUtil.shareText(getActivity(), freshNews.getTitle() + " " + freshNews.getUrl());
-				}
-			});
+				holder.card.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
+						intent.putExtra("FreshNews", freshNewses);
+						intent.putExtra("position", position);
+						startActivity(intent);
+					}
+				});
 
-			setAnimation(holder.card,position);
+				setAnimation(holder.card, position);
+			} else {
+				holder.ll_content.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(getActivity(), FreshNewsDetailActivity.class);
+						intent.putExtra("FreshNews", freshNewses);
+						intent.putExtra("position", position);
+						startActivity(intent);
+					}
+				});
+				setAnimation(holder.ll_content, position);
+			}
 
 		}
 
@@ -276,14 +319,22 @@ public class FreshNewsFragment extends BaseFragment {
 		private ImageView img;
 		private CardView card;
 
+		private LinearLayout ll_content;
+
 		public ViewHolder(View contentView) {
 			super(contentView);
 			tv_title = (TextView) contentView.findViewById(R.id.tv_title);
 			tv_info = (TextView) contentView.findViewById(R.id.tv_info);
 			tv_views = (TextView) contentView.findViewById(R.id.tv_views);
-			tv_share = (TextView) contentView.findViewById(R.id.tv_share);
 			img = (ImageView) contentView.findViewById(R.id.img);
-			card = (CardView) contentView.findViewById(R.id.card);
+
+			if (isLargeMode) {
+				tv_share = (TextView) contentView.findViewById(R.id.tv_share);
+				card = (CardView) contentView.findViewById(R.id.card);
+			} else {
+				ll_content = (LinearLayout) contentView.findViewById(R.id.ll_content);
+			}
+
 		}
 	}
 }
