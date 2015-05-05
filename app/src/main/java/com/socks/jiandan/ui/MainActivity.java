@@ -50,6 +50,7 @@ public class MainActivity extends ActionBarActivity implements Initialable {
 
 	@Override
 	public void initView() {
+
 		//为ActionBar添加点击事件
 		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ScreenSizeUtil.getScreenWidth
