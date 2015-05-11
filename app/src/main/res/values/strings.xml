@@ -8,6 +8,7 @@
     <string name="action_open">浏览器打开</string>
     <string name="title_activity_fresh_news_detail">新鲜事</string>
     <string name="title_activity_video_detail">VideoDetailActivity</string>
+    <string name="title_activity_joke">段子</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

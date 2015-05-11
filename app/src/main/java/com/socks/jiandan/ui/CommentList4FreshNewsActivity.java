@@ -35,8 +35,6 @@ import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
 import com.socks.jiandan.utils.SwipeBackUtil;
-import com.socks.jiandan.utils.TextUtil;
-import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -66,7 +64,6 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 	MatchTextView tv_no_thing;
 	@InjectView(R.id.tv_error)
 	MatchTextView tv_error;
-
 
 	private String thread_id;
 	private String parent_id;

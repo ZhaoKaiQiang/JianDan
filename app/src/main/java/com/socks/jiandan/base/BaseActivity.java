@@ -9,7 +9,7 @@ package com.socks.jiandan.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -21,14 +21,11 @@ import com.socks.jiandan.utils.ShowToast;
 
 /**
  * @author zhaokaiqiang
- * @ClassName: com.drd.piaojubao.base.BaseActivity
- * @Description: 所有Activity的基类
  * @date 2014-8-6 下午5:49:10
  */
-public class BaseActivity extends ActionBarActivity implements Initialable {
+public class BaseActivity extends AppCompatActivity implements Initialable {
 
 	protected Context context;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

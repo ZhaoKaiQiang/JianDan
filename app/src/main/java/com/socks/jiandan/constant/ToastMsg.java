@@ -23,12 +23,14 @@ public class ToastMsg {
 
 	public static final String SAVE_SMALL_SUCCESS = "保存缩略图成功";
 
-	public static final String SHARE_TAIL = "分享自煎蛋增强版 https://github.com/ZhaoKaiQiang";
+	public static final String SHARE_TAIL = "分享自煎蛋增强版";
 
 	public static final String VOTE_XX = "疼...轻点插";
 
 	public static final String VOTE_OO = "顶的好舒服~";
 
 	public static final String VOTE_REPEAT = "投过票了";
+
+	public static final String WHAT_HAPPEN = "卧槽，发生了什么！";
 
 }

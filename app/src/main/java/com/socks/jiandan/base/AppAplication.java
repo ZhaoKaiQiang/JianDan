@@ -8,6 +8,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.socks.jiandan.utils.logger.Logger;
 
+/**
+ * 自定义Application
+ */
 public class AppAplication extends Application {
 
 	private static Context mContext;
@@ -15,7 +18,7 @@ public class AppAplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mContext = getApplicationContext();
+		mContext = this;
 		initImageLoader();
 		Logger.init().hideThreadInfo();
 	}
@@ -24,9 +27,11 @@ public class AppAplication extends Application {
 		return mContext;
 	}
 
-	// 初始化ImageLoader
-	public static void initImageLoader() {
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
+	/**
+	 * 初始化ImageLoader
+	 */
+	private void initImageLoader() {
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
 //				.writeDebugLogs()
 				.build();

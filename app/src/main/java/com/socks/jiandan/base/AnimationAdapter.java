@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import com.socks.jiandan.R;
 
 /**
- * 我其实是想抽取出来的所有带动画的Adapter的，但是没成功捏，类型不对哦
+ * 我其实是想抽取出来的所有带动画的Adapter的，但是没成功，类型不对
  * Created by zhaokaiqiang on 15/5/4.
  */
 public class AnimationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

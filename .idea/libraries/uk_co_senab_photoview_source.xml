@@ -4,8 +4,6 @@
       <root url="jar://$PROJECT_DIR$/app/libs/uk-co-senab-photoview-source.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/app/libs/uk-co-senab-photoview-source.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

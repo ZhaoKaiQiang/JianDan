@@ -11,6 +11,7 @@ import com.socks.jiandan.utils.logger.Logger;
  * Created by storm on 14-3-25.
  */
 public class RequestManager {
+
 	public static RequestQueue mRequestQueue = Volley.newRequestQueue(AppAplication.getContext());
 
 	private RequestManager() {

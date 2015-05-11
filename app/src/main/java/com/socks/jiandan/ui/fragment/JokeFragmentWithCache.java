@@ -3,6 +3,9 @@ package com.socks.jiandan.ui.fragment;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -51,7 +54,8 @@ import butterknife.InjectView;
  *
  * @author zhaokaiqiang
  */
-public class JokeFragment extends BaseFragment {
+public class JokeFragmentWithCache extends BaseFragment implements LoaderManager
+		.LoaderCallbacks<Joke> {
 
 	@InjectView(R.id.recycler_view)
 	AutoLoadRecyclerView mRecyclerView;
@@ -63,7 +67,7 @@ public class JokeFragment extends BaseFragment {
 	private JokeAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
 
-	public JokeFragment() {
+	public JokeFragmentWithCache() {
 	}
 
 	@Override
@@ -107,9 +111,30 @@ public class JokeFragment extends BaseFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
+		getLoaderManager().initLoader(0, null, this);
+
 		mAdapter = new JokeAdapter();
 		mRecyclerView.setAdapter(mAdapter);
 		mAdapter.loadFirst();
+	}
+
+
+	@Override
+	public Loader onCreateLoader(int id, Bundle args) {
+
+		return new CursorLoader(getActivity());
+
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Joke> loader, Joke data) {
+
+	}
+
+	@Override
+	public void onLoaderReset(Loader loader) {
+
 	}
 
 	@Override
@@ -135,6 +160,7 @@ public class JokeFragment extends BaseFragment {
 			mRecyclerView.scrollToPosition(0);
 		}
 	}
+
 
 	public class JokeAdapter extends RecyclerView.Adapter<ViewHolder> {
 

@@ -24,11 +24,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'],dir: 'libs')
-
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:cardview-v7:22.0.+'
     compile 'com.android.support:recyclerview-v7:22.0.+'
     compile 'com.afollestad:material-dialogs:0.7.3.1'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile files('libs/greendao-1.3.0-beta-1.jar')
 }
