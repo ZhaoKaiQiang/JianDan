@@ -25,15 +25,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.cache.JokeCacheUtil;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.Joke;
 import com.socks.jiandan.model.Vote;
+import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Joke;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
+import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
@@ -337,12 +340,25 @@ public class JokeFragment extends BaseFragment {
 
 		public void loadFirst() {
 			page = 1;
-			loadData();
+			loadDataByNetworkType();
 		}
 
 		public void loadNextPage() {
 			page++;
-			loadData();
+			loadDataByNetworkType();
+		}
+
+		/**
+		 * 根据不同的网络状态选择不同的加载策略
+		 */
+		private void loadDataByNetworkType() {
+
+			if (NetWorkUtil.isNetWorkConnected(getActivity())) {
+				loadData();
+			} else {
+				loadCache();
+			}
+
 		}
 
 		private void loadData() {
@@ -366,6 +382,27 @@ public class JokeFragment extends BaseFragment {
 					}
 				}
 			}));
+		}
+
+		/**
+		 * 从缓存中加载
+		 */
+		private void loadCache() {
+
+			google_progress.setVisibility(View.GONE);
+			mLoadFinisCallBack.loadFinish(null);
+			if (mSwipeRefreshLayout.isRefreshing()) {
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+
+			JokeCacheUtil jokeCacheUtil = JokeCacheUtil.getInstance(getActivity());
+			if (page == 1) {
+				mJokes.clear();
+				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+			}
+			mJokes.addAll(jokeCacheUtil.getJokesByPage(page));
+			notifyDataSetChanged();
+
 		}
 
 		/**
@@ -400,15 +437,21 @@ public class JokeFragment extends BaseFragment {
 
 					if (page == 1) {
 						mJokes.clear();
+						JokeCacheUtil.getInstance(getActivity()).clearAllCache();
 					}
 
 					mJokes.addAll(jokes);
 					notifyDataSetChanged();
 
+					//加载完毕后缓存
+					JokeCacheUtil.getInstance(getActivity()).addJokes(JSONParser.toString(jokes),
+							page);
+
 				}
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+
 					ShowToast.Short(ToastMsg.LOAD_FAILED);
 					mLoadFinisCallBack.loadFinish(null);
 					google_progress.setVisibility(View.GONE);

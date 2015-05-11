@@ -18,12 +18,12 @@ import java.util.ArrayList;
  */
 public class Request4Joke extends Request<ArrayList<Joke>> {
 
-	private Response.Listener<ArrayList<Joke>> listener;
+	private Response.Listener<ArrayList<Joke>> mListener;
 
 	public Request4Joke(String url, Response.Listener<ArrayList<Joke>> listener,
 	                    Response.ErrorListener errorListener) {
 		super(Method.GET, url, errorListener);
-		this.listener = listener;
+		this.mListener = listener;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class Request4Joke extends Request<ArrayList<Joke>> {
 
 	@Override
 	protected void deliverResponse(ArrayList<Joke> response) {
-		listener.onResponse(response);
+		mListener.onResponse(response);
 	}
 
 }

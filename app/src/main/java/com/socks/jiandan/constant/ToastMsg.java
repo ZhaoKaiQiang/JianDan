@@ -33,4 +33,6 @@ public class ToastMsg {
 
 	public static final String WHAT_HAPPEN = "卧槽，发生了什么！";
 
+	public static final String LOAD_NO_NETWORK = "无网络，当前为缓存数据";
+
 }
