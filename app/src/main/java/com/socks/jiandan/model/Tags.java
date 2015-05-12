@@ -23,7 +23,7 @@ public class Tags implements Serializable {
 			tags = null;
 		} else {
 			tags = new Tags();
-			final JSONObject optJSONObject = jsonArray.optJSONObject(0);
+			JSONObject optJSONObject = jsonArray.optJSONObject(0);
 			if (optJSONObject != null) {
 				tags.id = optJSONObject.optInt("id");
 				tags.slug = optJSONObject.optString("slug");
@@ -31,6 +31,21 @@ public class Tags implements Serializable {
 				tags.description = optJSONObject.optString("description");
 				tags.post_count = optJSONObject.optInt("post_count");
 			}
+		}
+		return tags;
+	}
+
+	public static Tags parseCache(final JSONObject jsonObject) {
+		Tags tags;
+		if (jsonObject == null) {
+			tags = null;
+		} else {
+			tags = new Tags();
+			tags.id = jsonObject.optInt("id");
+			tags.slug = jsonObject.optString("slug");
+			tags.title = jsonObject.optString("title");
+			tags.description = jsonObject.optString("description");
+			tags.post_count = jsonObject.optInt("post_count");
 		}
 		return tags;
 	}

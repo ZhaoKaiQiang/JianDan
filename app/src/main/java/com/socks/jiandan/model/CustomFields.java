@@ -39,6 +39,30 @@ public class CustomFields implements Serializable {
 		return customFields;
 	}
 
+
+	/**
+	 * 从本地缓存解析
+	 *
+	 * @param jsonObject
+	 * @return
+	 */
+	public static CustomFields parseCache(final JSONObject jsonObject) {
+		CustomFields customFields;
+		if (jsonObject == null) {
+			customFields = null;
+		} else {
+			customFields = new CustomFields();
+			if ((jsonObject.optString("thumb_c") != null)) {
+				customFields.thumb_c = jsonObject.optString("thumb_c");
+				if (customFields.thumb_c.contains("custom")) {
+					customFields.thumb_m = customFields.thumb_c.replace("custom", "medium");
+				}
+			}
+			customFields.views = jsonObject.optString("views");
+		}
+		return customFields;
+	}
+
 	public String getThumb_c() {
 		return thumb_c;
 	}

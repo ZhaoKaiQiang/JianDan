@@ -400,7 +400,7 @@ public class JokeFragment extends BaseFragment {
 				mJokes.clear();
 				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
 			}
-			mJokes.addAll(jokeCacheUtil.getJokesByPage(page));
+			mJokes.addAll(jokeCacheUtil.getCacheByPage(page));
 			notifyDataSetChanged();
 
 		}
@@ -437,6 +437,7 @@ public class JokeFragment extends BaseFragment {
 
 					if (page == 1) {
 						mJokes.clear();
+						//首次正常加载之后，清空之前的缓存
 						JokeCacheUtil.getInstance(getActivity()).clearAllCache();
 					}
 
@@ -444,7 +445,7 @@ public class JokeFragment extends BaseFragment {
 					notifyDataSetChanged();
 
 					//加载完毕后缓存
-					JokeCacheUtil.getInstance(getActivity()).addJokes(JSONParser.toString(jokes),
+					JokeCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString(jokes),
 							page);
 
 				}
