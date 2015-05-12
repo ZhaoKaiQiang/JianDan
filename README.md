@@ -27,6 +27,10 @@
 
 主要功能基本完工~但是还有本地离线缓存哦~
 
+2015-5-12
+
+缓存已完成，使用的是GreenDao，论文也写完了,总算完工~
+
 ##已完成的功能
 - 新鲜事的列表、详情、分享、吐槽、回复
 - 无聊图的列表、详情、保存、分享、吐槽、回复、投票
@@ -36,9 +40,7 @@
 - 设置界面
 - 所有列表界面的加载动画(我想抽取父类Adapter，但是没成功呢，要不你帮我看看？)
 - 新鲜事大小图模式切换
-
-##未完成功能
-- 本地离线缓存
+- 所有模块的本地缓存功能
 
 ##优化的功能
 - 添加加载等待动画
@@ -64,6 +66,7 @@
 - [EventBus](https://github.com/greenrobot/EventBus)
 - [material-dialogs](https://github.com/afollestad/material-dialogs)
 - [gson](https://code.google.com/p/google-gson/)
+- [GreenDao](http://greendao-orm.com/)
 
 ##关于我
 - [青岛科技大学](http://www.qust.edu.cn/)信息学院大四学生,信息113班长

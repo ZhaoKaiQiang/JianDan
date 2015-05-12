@@ -31,16 +31,19 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.cache.VideoCacheUtil;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.Video;
 import com.socks.jiandan.model.Vote;
+import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Video;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.ui.VideoDetailActivity;
+import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
@@ -378,12 +381,22 @@ public class VideoFragment extends BaseFragment {
 
 		public void loadFirst() {
 			page = 1;
-			loadData();
+			loadDataByNetworkType();
 		}
 
 		public void loadNextPage() {
 			page++;
-			loadData();
+			loadDataByNetworkType();
+		}
+
+		private void loadDataByNetworkType() {
+
+			if (NetWorkUtil.isNetWorkConnected(getActivity())) {
+				loadData();
+			} else {
+				loadCache();
+			}
+
 		}
 
 		private void loadData() {
@@ -409,6 +422,24 @@ public class VideoFragment extends BaseFragment {
 			}));
 		}
 
+		private void loadCache() {
+
+			google_progress.setVisibility(View.GONE);
+			mLoadFinisCallBack.loadFinish(null);
+			if (mSwipeRefreshLayout.isRefreshing()) {
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+
+			VideoCacheUtil videoCacheUtil = VideoCacheUtil.getInstance(getActivity());
+			if (page == 1) {
+				mVideos.clear();
+				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+			}
+			mVideos.addAll(videoCacheUtil.getCacheByPage(page));
+			notifyDataSetChanged();
+
+		}
+
 		//获取评论数量
 		private void getCommentCounts(final ArrayList<Video> videos) {
 
@@ -424,6 +455,10 @@ public class VideoFragment extends BaseFragment {
 				public void onResponse(ArrayList<CommentNumber> response) {
 
 					google_progress.setVisibility(View.GONE);
+					mLoadFinisCallBack.loadFinish(null);
+					if (mSwipeRefreshLayout.isRefreshing()) {
+						mSwipeRefreshLayout.setRefreshing(false);
+					}
 
 					for (int i = 0; i < videos.size(); i++) {
 						videos.get(i).setComment_count(response.get(i).getComments() + "");
@@ -431,18 +466,14 @@ public class VideoFragment extends BaseFragment {
 
 					if (page == 1) {
 						mVideos.clear();
-						mVideos.addAll(videos);
-					} else {
-						mVideos.addAll(videos);
+						VideoCacheUtil.getInstance(getActivity()).clearAllCache();
 					}
 
+					mVideos.addAll(videos);
 					notifyDataSetChanged();
 
-					if (mSwipeRefreshLayout.isRefreshing()) {
-						mSwipeRefreshLayout.setRefreshing(false);
-					}
-
-					mLoadFinisCallBack.loadFinish(null);
+					VideoCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString
+							(videos), page);
 
 					//防止加载不慢一页的情况
 					if (mVideos.size() < 10) {

@@ -32,12 +32,14 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.cache.SisterCacheUtil;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.model.Picture;
 import com.socks.jiandan.model.Vote;
+import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4CommentCounts;
 import com.socks.jiandan.net.Request4Picture;
 import com.socks.jiandan.net.Request4Vote;
@@ -467,12 +469,22 @@ public class SisterFragment extends BaseFragment {
 
 		public void loadFirst() {
 			page = 1;
-			loadData();
+			loadDataByNetworkType();
 		}
 
 		public void loadNextPage() {
 			page++;
-			loadData();
+			loadDataByNetworkType();
+		}
+
+		private void loadDataByNetworkType() {
+
+			if (NetWorkUtil.isNetWorkConnected(getActivity())) {
+				loadData();
+			} else {
+				loadCache();
+			}
+
 		}
 
 		private void loadData() {
@@ -498,6 +510,28 @@ public class SisterFragment extends BaseFragment {
 			}));
 		}
 
+		/**
+		 * 从缓存中加载
+		 */
+		private void loadCache() {
+
+			google_progress.setVisibility(View.GONE);
+			mLoadFinisCallBack.loadFinish(null);
+			if (mSwipeRefreshLayout.isRefreshing()) {
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+
+			SisterCacheUtil sisterCacheUtil = SisterCacheUtil.getInstance(getActivity());
+			if (page == 1) {
+				pictures.clear();
+				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+			}
+
+			pictures.addAll(sisterCacheUtil.getCacheByPage(page));
+			notifyDataSetChanged();
+
+		}
+
 		//获取评论数量
 		private void getCommentCounts(final ArrayList<Picture> pictures) {
 
@@ -514,6 +548,10 @@ public class SisterFragment extends BaseFragment {
 
 					google_progress.setVisibility(View.GONE);
 					tv_error.setVisibility(View.GONE);
+					mLoadFinisCallBack.loadFinish(null);
+					if (mSwipeRefreshLayout.isRefreshing()) {
+						mSwipeRefreshLayout.setRefreshing(false);
+					}
 
 					for (int i = 0; i < pictures.size(); i++) {
 						pictures.get(i).setComment_counts(response.get(i).getComments() + "");
@@ -521,18 +559,15 @@ public class SisterFragment extends BaseFragment {
 
 					if (page == 1) {
 						PictureAdapter.this.pictures.clear();
-						PictureAdapter.this.pictures.addAll(pictures);
-					} else {
-						PictureAdapter.this.pictures.addAll(pictures);
+						SisterCacheUtil.getInstance(getActivity()).clearAllCache();
 					}
 
+					PictureAdapter.this.pictures.addAll(pictures);
 					notifyDataSetChanged();
 
-					if (mSwipeRefreshLayout.isRefreshing()) {
-						mSwipeRefreshLayout.setRefreshing(false);
-					}
-
-					mLoadFinisCallBack.loadFinish(null);
+					//加载完毕后缓存
+					SisterCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString
+							(pictures), page);
 				}
 			}, new Response.ErrorListener() {
 				@Override

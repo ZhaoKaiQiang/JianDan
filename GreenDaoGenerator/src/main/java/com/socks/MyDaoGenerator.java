@@ -23,6 +23,7 @@ public class MyDaoGenerator {
 		addCache(schema, "JokeCache");
 		addCache(schema, "FreshNewsCache");
 		addCache(schema, "PictureCache");
+		addCache(schema, "SisterCache");
 		addCache(schema, "VideoCache");
 		//生成Dao文件路径
 		new DaoGenerator().generateAll(schema, DAO_PATH);
