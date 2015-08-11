@@ -13,8 +13,11 @@ import de.greenrobot.daogenerator.Schema;
  */
 public class MyDaoGenerator {
 
+	//辅助文件生成的相对路径
 	public static final String DAO_PATH = "../app/src/main/java-gen";
+	//辅助文件的包名
 	public static final String PACKAGE_NAME = "com.socks.greendao";
+	//数据库的版本号
 	public static final int DATA_VERSION_CODE = 1;
 
 	public static void main(String[] args) throws Exception {
@@ -30,6 +33,11 @@ public class MyDaoGenerator {
 
 	}
 
+	/**
+	 * 添加不同的缓存表
+	 * @param schema
+	 * @param tableName
+	 */
 	private static void addCache(Schema schema, String tableName) {
 
 		Entity joke = schema.addEntity(tableName);

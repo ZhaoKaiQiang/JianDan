@@ -69,10 +69,8 @@
 - [GreenDao](http://greendao-orm.com/)
 
 ##关于我
-- [青岛科技大学](http://www.qust.edu.cn/)信息学院大四学生,信息113班长
-- 有追求的Android开发工程师
+- Android开发工程师
 - [CSDN博客专家](http://blog.csdn.net/zhaokaiqiang1992)
-- 慕课网Android讲师
 
 ##效果图
 ![](http://i2.tietuku.com/3644113fbf848270.png)
