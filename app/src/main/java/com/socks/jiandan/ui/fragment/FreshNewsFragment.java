@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import com.socks.jiandan.R;
 import com.socks.jiandan.adapter.FreshNewsAdapter;
 import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
-import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
@@ -101,7 +101,7 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
     }
 
     @Override
-    public void onSuccess() {
+    public void onSuccess(int result, Object object) {
         google_progress.setVisibility(View.GONE);
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -109,8 +109,8 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
     }
 
     @Override
-    public void onError(String msg) {
-        ShowToast.Short(ToastMsg.LOAD_FAILED);
+    public void onError(int code, String msg) {
+        ShowToast.Short(ConstantString.LOAD_FAILED);
         google_progress.setVisibility(View.GONE);
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);

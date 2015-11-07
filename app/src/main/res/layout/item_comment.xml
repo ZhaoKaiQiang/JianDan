@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:paddingTop="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:paddingTop="16dp">
 
     <LinearLayout
         android:id="@+id/ll_left"
         android:layout_width="56.0dip"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16.0dip"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/img_header"
@@ -19,8 +17,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_loading_small"
-            />
+            android:src="@drawable/ic_loading_small" />
 
     </LinearLayout>
 
@@ -39,7 +36,7 @@
             android:id="@+id/left_placeholder"
             android:layout_width="16.0dip"
             android:layout_height="1.0dip"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -52,7 +49,7 @@
             android:text="AAAAAAAAAA"
             android:textColor="@color/primary_text_default_material_light"
             android:textSize="15.0sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_time"
@@ -64,7 +61,7 @@
             android:text="2 mins ago"
             android:textColor="@color/secondary_text_default_material_light"
             android:textSize="13.0sp"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
         <com.socks.jiandan.view.floorview.FloorView
             android:id="@+id/floors_parent"
@@ -73,8 +70,7 @@
             android:layout_below="@id/tv_name"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/left_placeholder"
-            android:background="@drawable/bg_floor"
-            />
+            android:background="@drawable/bg_floor" />
 
         <TextView
             android:id="@+id/tv_content"
@@ -86,7 +82,7 @@
             android:lineSpacingExtra="4dp"
             android:text="aaa"
             android:textColor="@color/primary_text_default_material_light"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <LinearLayout
             android:id="@+id/ll_vote"
@@ -111,7 +107,7 @@
                     android:gravity="center"
                     android:text="OO "
                     android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp"/>
+                    android:textSize="13.0sp" />
 
                 <TextView
                     android:id="@+id/tv_like"
@@ -120,7 +116,7 @@
                     android:gravity="center"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="13.0sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,7 +132,7 @@
                     android:gravity="center"
                     android:text="   XX "
                     android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp"/>
+                    android:textSize="13.0sp" />
 
                 <TextView
                     android:id="@+id/tv_unlike"
@@ -145,7 +141,7 @@
                     android:gravity="center"
                     android:textColor="@color/secondary_text_default_material_light"
                     android:textSize="13.0sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -157,7 +153,7 @@
         android:layout_marginTop="16.0dip"
         android:layout_toEndOf="@id/ll_left"
         android:layout_toRightOf="@id/ll_left"
-        android:background="#ffd9d9d9"/>
+        android:background="#ffd9d9d9" />
 
 </RelativeLayout>
 

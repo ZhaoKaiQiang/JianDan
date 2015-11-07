@@ -17,10 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.socks.jiandan.R;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.cache.FreshNewsCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
-import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
 import com.socks.jiandan.net.JSONParser;
 import com.socks.jiandan.net.Request4FreshNews;
@@ -108,10 +108,7 @@ public class FreshNewsAdapter extends RecyclerView.Adapter<FreshNewsAdapter.View
             holder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mActivity, FreshNewsDetailActivity.class);
-                    intent.putExtra("FreshNews", mFreshNews);
-                    intent.putExtra("position", position);
-                    mActivity.startActivity(intent);
+                    toDetailActivity(position);
                 }
             });
 
@@ -120,15 +117,19 @@ public class FreshNewsAdapter extends RecyclerView.Adapter<FreshNewsAdapter.View
             holder.ll_content.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mActivity, FreshNewsDetailActivity.class);
-                    intent.putExtra("FreshNews", mFreshNews);
-                    intent.putExtra("position", position);
-                    mActivity.startActivity(intent);
+                    toDetailActivity(position);
                 }
             });
             setAnimation(holder.ll_content, position);
         }
 
+    }
+
+    private void toDetailActivity(int position) {
+        Intent intent = new Intent(mActivity, FreshNewsDetailActivity.class);
+        intent.putExtra(FreshNewsDetailActivity.DATA_FRESH_NEWS, mFreshNews);
+        intent.putExtra(FreshNewsDetailActivity.DATA_POSITION, position);
+        mActivity.startActivity(intent);
     }
 
     @Override
@@ -154,7 +155,7 @@ public class FreshNewsAdapter extends RecyclerView.Adapter<FreshNewsAdapter.View
                         @Override
                         public void onResponse(ArrayList<FreshNews> response) {
 
-                            mLoadResultCallBack.onSuccess();
+                            mLoadResultCallBack.onSuccess(LoadResultCallBack.SUCCESS_OK, null);
                             mLoadFinisCallBack.loadFinish(null);
 
                             if (page == 1) {
@@ -171,18 +172,17 @@ public class FreshNewsAdapter extends RecyclerView.Adapter<FreshNewsAdapter.View
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    mLoadResultCallBack.onError(error.getMessage());
+                    mLoadResultCallBack.onError(LoadResultCallBack.ERROR_NET, error.getMessage());
                     mLoadFinisCallBack.loadFinish(null);
                 }
             }), mActivity);
         } else {
-
-            mLoadResultCallBack.onSuccess();
+            mLoadResultCallBack.onSuccess(LoadResultCallBack.SUCCESS_OK, null);
             mLoadFinisCallBack.loadFinish(null);
 
             if (page == 1) {
                 mFreshNews.clear();
-                ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+                ShowToast.Short(ConstantString.LOAD_NO_NETWORK);
             }
 
             mFreshNews.addAll(FreshNewsCache.getInstance(mActivity).getCacheByPage(page));

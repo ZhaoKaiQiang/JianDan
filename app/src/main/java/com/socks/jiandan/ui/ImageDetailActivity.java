@@ -27,7 +27,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.utils.FileUtil;
@@ -321,17 +321,17 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 						String result = response.getResult();
 
 						if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-							ShowToast.Short(ToastMsg.VOTE_OO);
+							ShowToast.Short(ConstantString.VOTE_OO);
 							tv_like.setTypeface(Typeface.DEFAULT_BOLD);
 							tv_like.setTextColor(getResources().getColor
 									(android.R.color.holo_red_light));
 						} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-							ShowToast.Short(ToastMsg.VOTE_XX);
+							ShowToast.Short(ConstantString.VOTE_XX);
 							tv_unlike.setTypeface(Typeface.DEFAULT_BOLD);
 							tv_unlike.setTextColor(getResources().getColor
 									(android.R.color.holo_green_light));
 						} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-							ShowToast.Short(ToastMsg.VOTE_REPEAT);
+							ShowToast.Short(ConstantString.VOTE_REPEAT);
 						} else {
 							ShowToast.Short("卧槽，发生了什么！");
 						}
@@ -340,7 +340,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 				}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
-				ShowToast.Short(ToastMsg.VOTE_FAILED);
+				ShowToast.Short(ConstantString.VOTE_FAILED);
 			}
 		}));
 	}
@@ -362,7 +362,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 				}
 			});
 		}

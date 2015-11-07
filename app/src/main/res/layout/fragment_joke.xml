@@ -18,8 +18,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <include layout="@layout/comment_nothing_error" />
-
     <com.socks.jiandan.view.googleprogressbar.GoogleProgressBar
         android:id="@+id/google_progress"
         android:layout_width="50dp"

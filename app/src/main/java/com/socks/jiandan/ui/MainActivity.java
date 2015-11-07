@@ -56,7 +56,6 @@ public class MainActivity extends BaseActivity {
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);
-
         mToolbar.setTitle("");
         mToolbar.setLogo(R.mipmap.ic_launcher);
 

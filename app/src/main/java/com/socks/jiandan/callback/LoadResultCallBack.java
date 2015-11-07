@@ -5,7 +5,11 @@ package com.socks.jiandan.callback;
  */
 public interface LoadResultCallBack {
 
-    void onSuccess();
+    int SUCCESS_OK = 1001;
+    int SUCCESS_NONE = 1002;
+    int ERROR_NET = 1003;
 
-    void onError(String msg);
+    void onSuccess(int result, Object object);
+
+    void onError(int code, String msg);
 }

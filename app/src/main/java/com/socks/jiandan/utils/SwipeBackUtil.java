@@ -11,7 +11,6 @@ import android.view.ViewConfiguration;
  * Created by lucas on 2/26/15.
  */
 public class SwipeBackUtil {
-    private static final String TAG = SwipeBackUtil.class.getName();
     private boolean mIsTrackingSwipeBackGesture;
     private float mLastX;
     private float mTouchSlop;

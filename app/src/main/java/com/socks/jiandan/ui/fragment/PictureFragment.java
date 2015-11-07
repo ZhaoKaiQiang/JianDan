@@ -34,7 +34,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.cache.PictureCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadMoreListener;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.model.Picture;
@@ -54,7 +54,6 @@ import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
-import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
 
@@ -75,8 +74,6 @@ public class PictureFragment extends BaseFragment {
 	SwipeRefreshLayout mSwipeRefreshLayout;
 	@InjectView(R.id.google_progress)
 	GoogleProgressBar google_progress;
-	@InjectView(R.id.tv_error)
-	MatchTextView tv_error;
 
 	private PictureAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
@@ -461,7 +458,7 @@ public class PictureFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short(ToastMsg.VOTE_FAILED);
+					ShowToast.Short(ConstantString.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -505,7 +502,7 @@ public class PictureFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
@@ -529,7 +526,7 @@ public class PictureFragment extends BaseFragment {
 			PictureCache pictureCacheUtil = PictureCache.getInstance(getActivity());
 			if (page == 1) {
 				pictures.clear();
-				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+				ShowToast.Short(ConstantString.LOAD_NO_NETWORK);
 			}
 
 			pictures.addAll(pictureCacheUtil.getCacheByPage(page));
@@ -554,7 +551,6 @@ public class PictureFragment extends BaseFragment {
 
 					mLoadFinisCallBack.loadFinish(null);
 					google_progress.setVisibility(View.GONE);
-					tv_error.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
 					}
@@ -580,7 +576,7 @@ public class PictureFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					mLoadFinisCallBack.loadFinish(null);
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);

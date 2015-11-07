@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Looper;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,7 +78,7 @@ public class FileUtil {
 					.getAbsolutePath()}, null, new MyMediaScannerConnectionClient(isSmallPic,
 					newFile));
 		} else {
-			ShowToast.Short(ToastMsg.SAVE_FAILED);
+			ShowToast.Short(ConstantString.SAVE_FAILED);
 		}
 
 	}
@@ -106,10 +106,10 @@ public class FileUtil {
 		public void onScanCompleted(String path, Uri uri) {
 			Looper.prepare();
 			if (isSmallPic) {
-				ShowToast.Short(ToastMsg.SAVE_SMALL_SUCCESS + " \n相册" + File.separator + CacheUtil
+				ShowToast.Short(ConstantString.SAVE_SMALL_SUCCESS + " \n相册" + File.separator + CacheUtil
 						.FILE_SAVE + File.separator + newFile.getName());
 			} else {
-				ShowToast.Short(ToastMsg.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
+				ShowToast.Short(ConstantString.SAVE_SUCCESS + " \n相册" + File.separator + CacheUtil
 						.FILE_SAVE + File.separator + newFile.getName());
 			}
 			Looper.loop();

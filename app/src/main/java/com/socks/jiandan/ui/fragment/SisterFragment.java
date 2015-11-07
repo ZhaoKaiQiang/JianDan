@@ -35,7 +35,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.cache.SisterCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadMoreListener;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.model.Picture;
@@ -55,7 +55,6 @@ import com.socks.jiandan.utils.TextUtil;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.ShowMaxImageView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
-import com.socks.jiandan.view.matchview.MatchTextView;
 
 import java.util.ArrayList;
 
@@ -76,8 +75,6 @@ public class SisterFragment extends BaseFragment {
 	SwipeRefreshLayout mSwipeRefreshLayout;
 	@InjectView(R.id.google_progress)
 	GoogleProgressBar google_progress;
-	@InjectView(R.id.tv_error)
-	MatchTextView tv_error;
 
 	private PictureAdapter mAdapter;
 	private LoadFinishCallBack mLoadFinisCallBack;
@@ -354,7 +351,7 @@ public class SisterFragment extends BaseFragment {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(), CommentListActivity.class);
-					intent.putExtra("thread_key", "comment-" + picture.getComment_ID());
+					intent.putExtra(DATA_THREAD_KEY, "comment-" + picture.getComment_ID());
 					startActivity(intent);
 				}
 			});
@@ -416,7 +413,7 @@ public class SisterFragment extends BaseFragment {
 							String result = response.getResult();
 
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_OO);
+								ShowToast.Short(ConstantString.VOTE_OO);
 								//变红+1
 								int vote = Integer.valueOf(picture.getVote_positive());
 								picture.setVote_positive((vote + 1) + "");
@@ -428,7 +425,7 @@ public class SisterFragment extends BaseFragment {
 										(android.R.color.holo_red_light));
 
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_XX);
+								ShowToast.Short(ConstantString.VOTE_XX);
 								//变绿+1
 								int vote = Integer.valueOf(picture.getVote_negative());
 								picture.setVote_negative((vote + 1) + "");
@@ -440,7 +437,7 @@ public class SisterFragment extends BaseFragment {
 										(android.R.color.holo_green_light));
 
 							} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-								ShowToast.Short(ToastMsg.VOTE_REPEAT);
+								ShowToast.Short(ConstantString.VOTE_REPEAT);
 							} else {
 								ShowToast.Short("卧槽，发生了什么！");
 							}
@@ -449,7 +446,7 @@ public class SisterFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short(ToastMsg.VOTE_FAILED);
+					ShowToast.Short(ConstantString.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -494,7 +491,7 @@ public class SisterFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
@@ -518,7 +515,7 @@ public class SisterFragment extends BaseFragment {
 			SisterCache sisterCacheUtil = SisterCache.getInstance(getActivity());
 			if (page == 1) {
 				pictures.clear();
-				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+				ShowToast.Short(ConstantString.LOAD_NO_NETWORK);
 			}
 
 			pictures.addAll(sisterCacheUtil.getCacheByPage(page));
@@ -541,7 +538,6 @@ public class SisterFragment extends BaseFragment {
 				public void onResponse(ArrayList<CommentNumber> response) {
 
 					google_progress.setVisibility(View.GONE);
-					tv_error.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);
@@ -567,7 +563,7 @@ public class SisterFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					mLoadFinisCallBack.loadFinish(null);
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {
 						mSwipeRefreshLayout.setRefreshing(false);

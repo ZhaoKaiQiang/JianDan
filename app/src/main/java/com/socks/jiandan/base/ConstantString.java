@@ -18,7 +18,13 @@ public interface ConstantString {
     String VOTE_REPEAT = "投过票了";
     String WHAT_HAPPEN = "卧槽，发生了什么！";
     String LOAD_NO_NETWORK = "无网络，当前为缓存数据";
+    String FORBID_COMMENTS = "禁止评论";
+    String NO_COMMENTS = "暂无评论";
 
-    String DATA_FRESHNEWS = "FreshNews";
+    String DATA_FRESH_NEWS = "FreshNews";
+    String DATA_POSITION = "position";
+    String DATA_THREAD_ID = "thread_id";
+    String DATA_THREAD_KEY = "thread_key";
+    String DATA_IS_FROM_FRESH_NEWS = "is_from_fresh_news";
 
 }

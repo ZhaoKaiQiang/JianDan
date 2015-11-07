@@ -14,7 +14,6 @@ public class Picture implements Serializable {
 		Duanzi, Syster;
 	}
 
-
 	private String comment_ID;
 	private String comment_post_ID;
 	private String comment_author;
@@ -33,31 +32,6 @@ public class Picture implements Serializable {
 	private String comment_counts;
 
 	public Picture() {
-	}
-
-	public Picture(String comment_ID, String comment_post_ID,
-	               String comment_author, String comment_author_email,
-	               String comment_author_url, String comment_author_IP,
-	               String comment_date, String comment_date_gmt,
-	               String comment_content, String text_content, String comment_agent,
-	               String vote_positive, String vote_negative, String comment_counts, String[]
-			               pics) {
-		super();
-		this.comment_ID = comment_ID;
-		this.comment_post_ID = comment_post_ID;
-		this.comment_author = comment_author;
-		this.comment_author_email = comment_author_email;
-		this.comment_author_url = comment_author_url;
-		this.comment_author_IP = comment_author_IP;
-		this.comment_date = comment_date;
-		this.comment_date_gmt = comment_date_gmt;
-		this.comment_content = comment_content;
-		this.text_content = text_content;
-		this.comment_agent = comment_agent;
-		this.vote_positive = vote_positive;
-		this.vote_negative = vote_negative;
-		this.comment_counts = comment_counts;
-		this.pics = pics;
 	}
 
 	public static String getRequestUrl(PictureType type, int page) {

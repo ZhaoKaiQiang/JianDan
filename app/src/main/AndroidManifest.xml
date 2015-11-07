@@ -46,9 +46,6 @@
             android:label="@string/title_activity_fresh_news_detail"
             android:theme="@style/FreshNewsDetailActivityTheme" />
         <activity
-            android:name=".ui.CommentList4FreshNewsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ui.VideoDetailActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -24,12 +24,10 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
         ButterKnife.inject(this);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.title_activity_setting);
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);
-
     }
 
     @Override

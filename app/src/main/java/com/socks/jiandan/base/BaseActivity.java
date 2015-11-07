@@ -23,7 +23,7 @@ import com.socks.jiandan.utils.ActivityManager;
 import com.socks.jiandan.utils.logger.LogLevel;
 import com.socks.jiandan.utils.logger.Logger;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements ConstantString {
 
     protected Context mContext;
 

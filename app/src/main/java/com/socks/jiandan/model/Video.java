@@ -22,19 +22,6 @@ public class Video {
 	public Video() {
 	}
 
-	public Video(String title, String video_source, String url, String desc, String imgUrl, String imgUrl4Big, String comment_ID, String vote_positive, String vote_negative, String comment_count) {
-		this.title = title;
-		this.video_source = video_source;
-		this.url = url;
-		this.desc = desc;
-		this.imgUrl = imgUrl;
-		this.imgUrl4Big = imgUrl4Big;
-		this.comment_ID = comment_ID;
-		this.vote_positive = vote_positive;
-		this.vote_negative = vote_negative;
-		this.comment_count = comment_count;
-	}
-
 	public static String getUrlVideos(int page) {
 		return URL_VIDEOS + page;
 	}

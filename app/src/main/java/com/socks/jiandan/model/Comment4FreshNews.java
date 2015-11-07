@@ -12,236 +12,144 @@ import java.util.TimeZone;
  * 新鲜事评论
  * Created by zhaokaiqiang on 15/4/27.
  */
-public class Comment4FreshNews implements Comparable ,Commentable {
+public class Comment4FreshNews extends Commentator implements Comparable, Commentable {
 
-	//评论列表
-	public static final String URL_COMMENTS = "http://jandan.net/?oxwlxojflwblxbsapi=get_post&include=comments&id=";
-	//对新鲜事发表评论
-	public static final String URL_PUSH_COMMENT ="http://jandan.net/?oxwlxojflwblxbsapi=respond.submit_comment";
+    //评论列表
+    public static final String URL_COMMENTS = "http://jandan.net/?oxwlxojflwblxbsapi=get_post&include=comments&id=";
+    //对新鲜事发表评论
+    public static final String URL_PUSH_COMMENT = "http://jandan.net/?oxwlxojflwblxbsapi=respond.submit_comment";
 
-	//评论布局类型
-	public static final int TYPE_HOT = 0;
-	public static final int TYPE_NEW = 1;
-	public static final int TYPE_NORMAL = 2;
+    private int id;
+    private String url;
+    private String date;
+    private String content;
+    //没有用到
+    private String parent;
+    private int parentId;
+    private ArrayList<Comment4FreshNews> parentComments;
+    private int vote_positive;
+    private int vote_negative;
 
-	//评论内容标签
-	public static final String TAG_HOT = "hot";
-	public static final String TAG_NORMAL = "normal";
+    public Comment4FreshNews() {
+    }
 
-	private int id;
-	private String name;
-	private String url;
-	private String date;
-	private String content;
-	//没有用到
-	private String parent;
-	private int parentId;
-	private ArrayList<Comment4FreshNews> parentComments;
-	private int vote_positive;
-	private int vote_negative;
-	private int index;
+    /**
+     * 获取评论地址
+     */
+    public static String getUrlComments(String id) {
+        return URL_COMMENTS + id;
+    }
 
-	//用于区别布局类型：热门评论、最新评论、普通评论
-	private int type=TYPE_NORMAL;
-	//所属楼层
-	private int floorNum=1;
-	//用于标示是否是热门评论
-	private String tag=TAG_NORMAL;
+    public int getId() {
+        return id;
+    }
 
-	public Comment4FreshNews() {
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public Comment4FreshNews(int id, String name, String url, String date, String content, String parent, int vote_positive, int vote_negative, int index, int type, int floorNum, String tag) {
-		this.id = id;
-		this.name = name;
-		this.url = url;
-		this.date = date;
-		this.content = content;
-		this.parent = parent;
-		this.vote_positive = vote_positive;
-		this.vote_negative = vote_negative;
-		this.index = index;
-		this.type = type;
-		this.floorNum = floorNum;
-		this.tag = tag;
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * 获取评论地址
-	 *
-	 * @param id
-	 * @return
-	 */
-	public static String getUrlComments(String id) {
-		return URL_COMMENTS + id;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getParent() {
+        return parent;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public int getVote_positive() {
+        return vote_positive;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setVote_positive(int vote_positive) {
+        this.vote_positive = vote_positive;
+    }
 
-	public static String getURL_COMMENTS() {
-		return URL_COMMENTS;
-	}
+    public int getVote_negative() {
+        return vote_negative;
+    }
 
-	public String getParent() {
-		return parent;
-	}
+    public void setVote_negative(int vote_negative) {
+        this.vote_negative = vote_negative;
+    }
 
-	public void setParent(String parent) {
-		this.parent = parent;
-	}
+    public ArrayList<Comment4FreshNews> getParentComments() {
+        return parentComments;
+    }
 
-	public int getVote_positive() {
-		return vote_positive;
-	}
+    public void setParentComments(ArrayList<Comment4FreshNews> parentComments) {
+        this.parentComments = parentComments;
+    }
 
-	public void setVote_positive(int vote_positive) {
-		this.vote_positive = vote_positive;
-	}
+    public int getParentId() {
+        return parentId;
+    }
 
-	public int getVote_negative() {
-		return vote_negative;
-	}
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
 
-	public void setVote_negative(int vote_negative) {
-		this.vote_negative = vote_negative;
-	}
+    @Override
+    public int compareTo(Object another) {
+        String anotherTimeString = ((Comment4FreshNews) another).getDate();
+        String thisTimeString = getDate();
 
-	public int getIndex() {
-		return index;
-	}
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+08"));
 
-	public void setIndex(int index) {
-		this.index = index;
-	}
+        try {
+            Date anotherDate = simpleDateFormat.parse(anotherTimeString);
+            Date thisDate = simpleDateFormat.parse(thisTimeString);
+            return -thisDate.compareTo(anotherDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 
-	public int getType() {
-		return type;
-	}
+    @Override
+    public int getCommentFloorNum() {
+        return getFloorNum();
+    }
 
-	public void setType(int type) {
-		this.type = type;
-	}
+    @Override
+    public String getCommentContent() {
+        return getContent();
+    }
 
-	public int getFloorNum() {
-		return floorNum;
-	}
-
-	public void setFloorNum(int floorNum) {
-		this.floorNum = floorNum;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public ArrayList<Comment4FreshNews> getParentComments() {
-		return parentComments;
-	}
-
-	public void setParentComments(ArrayList<Comment4FreshNews> parentComments) {
-		this.parentComments = parentComments;
-	}
-
-	public int getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
-	}
-
-
-
-	@Override
-	public String toString() {
-		return "Comment4FreshNews{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", url='" + url + '\'' +
-				", date='" + date + '\'' +
-				", content='" + content + '\'' +
-				", parent='" + parent + '\'' +
-				", vote_positive=" + vote_positive +
-				", vote_negative=" + vote_negative +
-				", index=" + index +
-				", type=" + type +
-				", floorNum=" + floorNum +
-				", tag='" + tag + '\'' +
-				'}';
-	}
-
-	@Override
-	public int compareTo(Object another) {
-		String anotherTimeString = ((Comment4FreshNews) another).getDate();
-		String thisTimeString = getDate();
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT+08"));
-
-		try {
-			Date anotherDate = simpleDateFormat.parse(anotherTimeString);
-			Date thisDate = simpleDateFormat.parse(thisTimeString);
-			return -thisDate.compareTo(anotherDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-	@Override
-	public int getCommentFloorNum() {
-		return getFloorNum();
-	}
-
-	@Override
-	public String getCommentContent() {
-		return getContent();
-	}
-
-	@Override
-	public String getAuthorName() {
-		return getName();
-	}
+    @Override
+    public String getAuthorName() {
+        return getName();
+    }
 }

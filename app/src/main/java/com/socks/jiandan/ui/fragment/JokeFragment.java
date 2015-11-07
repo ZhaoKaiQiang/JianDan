@@ -28,7 +28,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.cache.JokeCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadMoreListener;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.Joke;
 import com.socks.jiandan.model.Vote;
@@ -202,7 +202,7 @@ public class JokeFragment extends BaseFragment {
 										//分享
 										case 0:
 											ShareUtil.shareText(getActivity(), joke
-													.getComment_content().trim() + ToastMsg.SHARE_TAIL);
+													.getComment_content().trim() + ConstantString.SHARE_TAIL);
 											break;
 										//复制
 										case 1:
@@ -286,7 +286,7 @@ public class JokeFragment extends BaseFragment {
 							String result = response.getResult();
 
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_OO);
+								ShowToast.Short(ConstantString.VOTE_OO);
 								//变红+1
 								int vote = Integer.valueOf(joke.getVote_positive());
 								joke.setVote_positive((vote + 1) + "");
@@ -298,7 +298,7 @@ public class JokeFragment extends BaseFragment {
 										(android.R.color.holo_red_light));
 
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_XX);
+								ShowToast.Short(ConstantString.VOTE_XX);
 								//变绿+1
 								int vote = Integer.valueOf(joke.getVote_negative());
 								joke.setVote_negative((vote + 1) + "");
@@ -310,16 +310,16 @@ public class JokeFragment extends BaseFragment {
 										(android.R.color.holo_green_light));
 
 							} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-								ShowToast.Short(ToastMsg.VOTE_REPEAT);
+								ShowToast.Short(ConstantString.VOTE_REPEAT);
 							} else {
-								ShowToast.Short(ToastMsg.WHAT_HAPPEN);
+								ShowToast.Short(ConstantString.WHAT_HAPPEN);
 							}
 
 						}
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short(ToastMsg.VOTE_FAILED);
+					ShowToast.Short(ConstantString.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -366,7 +366,7 @@ public class JokeFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
@@ -391,7 +391,7 @@ public class JokeFragment extends BaseFragment {
 			JokeCache jokeCacheUtil = JokeCache.getInstance(getActivity());
 			if (page == 1) {
 				mJokes.clear();
-				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+				ShowToast.Short(ConstantString.LOAD_NO_NETWORK);
 			}
 			mJokes.addAll(jokeCacheUtil.getCacheByPage(page));
 			notifyDataSetChanged();
@@ -446,7 +446,7 @@ public class JokeFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					mLoadFinisCallBack.loadFinish(null);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {

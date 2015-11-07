@@ -34,7 +34,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.cache.VideoCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadMoreListener;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.Video;
 import com.socks.jiandan.model.Vote;
@@ -241,7 +241,7 @@ public class VideoFragment extends BaseFragment {
 										case 0:
 											ShareUtil.shareText(getActivity(), video
 													.getTitle().trim() + " " + video.getUrl() +
-													ToastMsg
+													ConstantString
 															.SHARE_TAIL);
 											break;
 										//复制
@@ -251,7 +251,7 @@ public class VideoFragment extends BaseFragment {
 															.CLIPBOARD_SERVICE);
 											clip.setPrimaryClip(ClipData.newPlainText
 													(null, video.getUrl()));
-											ShowToast.Short(ToastMsg.COPY_SUCCESS);
+											ShowToast.Short(ConstantString.COPY_SUCCESS);
 											break;
 									}
 
@@ -328,7 +328,7 @@ public class VideoFragment extends BaseFragment {
 							String result = response.getResult();
 
 							if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_OO);
+								ShowToast.Short(ConstantString.VOTE_OO);
 								//变红+1
 								int vote = Integer.valueOf(video.getVote_positive());
 								video.setVote_positive((vote + 1) + "");
@@ -340,7 +340,7 @@ public class VideoFragment extends BaseFragment {
 										(android.R.color.holo_red_light));
 
 							} else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-								ShowToast.Short(ToastMsg.VOTE_XX);
+								ShowToast.Short(ConstantString.VOTE_XX);
 								//变绿+1
 								int vote = Integer.valueOf(video.getVote_negative());
 								video.setVote_negative((vote + 1) + "");
@@ -352,7 +352,7 @@ public class VideoFragment extends BaseFragment {
 										(android.R.color.holo_green_light));
 
 							} else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-								ShowToast.Short(ToastMsg.VOTE_REPEAT);
+								ShowToast.Short(ConstantString.VOTE_REPEAT);
 							} else {
 								ShowToast.Short("卧槽，发生了什么！");
 							}
@@ -361,7 +361,7 @@ public class VideoFragment extends BaseFragment {
 					}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
-					ShowToast.Short(ToastMsg.VOTE_FAILED);
+					ShowToast.Short(ConstantString.VOTE_FAILED);
 					holder.isClickFinish = true;
 				}
 			}));
@@ -405,7 +405,7 @@ public class VideoFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 
 					google_progress.setVisibility(View.GONE);
 					mLoadFinisCallBack.loadFinish(null);
@@ -427,7 +427,7 @@ public class VideoFragment extends BaseFragment {
 			VideoCache videoCacheUtil = VideoCache.getInstance(getActivity());
 			if (page == 1) {
 				mVideos.clear();
-				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
+				ShowToast.Short(ConstantString.LOAD_NO_NETWORK);
 			}
 			mVideos.addAll(videoCacheUtil.getCacheByPage(page));
 			notifyDataSetChanged();
@@ -479,7 +479,7 @@ public class VideoFragment extends BaseFragment {
 				@Override
 				public void onErrorResponse(VolleyError error) {
 					Logger.e(error.getMessage());
-					ShowToast.Short(ToastMsg.LOAD_FAILED);
+					ShowToast.Short(ConstantString.LOAD_FAILED);
 					mLoadFinisCallBack.loadFinish(null);
 					google_progress.setVisibility(View.GONE);
 					if (mSwipeRefreshLayout.isRefreshing()) {

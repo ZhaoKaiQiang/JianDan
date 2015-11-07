@@ -12,187 +12,174 @@ import java.util.ArrayList;
  */
 public class FreshNews implements Serializable {
 
-	public static final String URL_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
+    public static final String URL_FRESH_NEWS = "http://jandan.net/?oxwlxojflwblxbsapi=get_recent_posts&include=url,date,tags,author,title,comment_count,custom_fields&custom_fields=thumb_c,views&dev=1&page=";
 
-	public static final String URL_DRESH_NEWS_DETAIL = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_post&include=content&id=";
+    public static final String URL_FRESH_NEWS_DETAIL = "http://i.jandan.net/?oxwlxojflwblxbsapi=get_post&include=content&id=";
 
-	//文章id
-	private String id;
-	//文章标题
-	private String title;
-	//文章地址
-	private String url;
-	//发布日期
-	private String date;
-	//缩略图
-	private String thumb_c;
-	//评论数
-	private String comment_count;
-	//作者
-	private Author author;
-	//自定义字段
-	private CustomFields custom_fields;
-	//标签
-	private Tags tags;
+    //文章id
+    private String id;
+    //文章标题
+    private String title;
+    //文章地址
+    private String url;
+    //发布日期
+    private String date;
+    //缩略图
+    private String thumb_c;
+    //评论数
+    private String comment_count;
+    //作者
+    private Author author;
+    //自定义字段
+    private CustomFields custom_fields;
+    //标签
+    private Tags tags;
 
-	public FreshNews() {
-	}
+    public FreshNews() {
+    }
 
-	public FreshNews(String id, String title, String url, String date, String thumb_c, String
-			comment_count, Author author, CustomFields customFields, Tags tags) {
-		this.id = id;
-		this.title = title;
-		this.url = url;
-		this.date = date;
-		this.thumb_c = thumb_c;
-		this.comment_count = comment_count;
-		this.author = author;
-		this.custom_fields = customFields;
-		this.tags = tags;
-	}
+    public static String getUrlFreshNews(int page) {
+        return URL_FRESH_NEWS + page;
+    }
 
-	public static String getUrlFreshNews(int page) {
-		return URL_FRESH_NEWS + page;
-	}
-
-	public static String getUrlFreshNewsDetail(String id) {
-		return URL_DRESH_NEWS_DETAIL + id;
-	}
+    public static String getUrlFreshNewsDetail(String id) {
+        return URL_FRESH_NEWS_DETAIL + id;
+    }
 
 
-	public static ArrayList<FreshNews> parse(JSONArray postsArray) {
+    public static ArrayList<FreshNews> parse(JSONArray postsArray) {
 
-		ArrayList<FreshNews> freshNewses = new ArrayList<>();
+        ArrayList<FreshNews> freshNewses = new ArrayList<>();
 
-		for (int i = 0; i < postsArray.length(); i++) {
+        for (int i = 0; i < postsArray.length(); i++) {
 
-			FreshNews freshNews = new FreshNews();
-			JSONObject jsonObject = postsArray.optJSONObject(i);
+            FreshNews freshNews = new FreshNews();
+            JSONObject jsonObject = postsArray.optJSONObject(i);
 
-			freshNews.setId(jsonObject.optString("id"));
-			freshNews.setUrl(jsonObject.optString("url"));
-			freshNews.setTitle(jsonObject.optString("title"));
-			freshNews.setDate(jsonObject.optString("date"));
-			freshNews.setComment_count(jsonObject.optString("comment_count"));
-			freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
-			freshNews.setCustomFields(CustomFields.parse(jsonObject.optJSONObject("custom_fields")));
-			freshNews.setTags(Tags.parse(jsonObject.optJSONArray("tags")));
+            freshNews.setId(jsonObject.optString("id"));
+            freshNews.setUrl(jsonObject.optString("url"));
+            freshNews.setTitle(jsonObject.optString("title"));
+            freshNews.setDate(jsonObject.optString("date"));
+            freshNews.setComment_count(jsonObject.optString("comment_count"));
+            freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
+            freshNews.setCustomFields(CustomFields.parse(jsonObject.optJSONObject("custom_fields")));
+            freshNews.setTags(Tags.parse(jsonObject.optJSONArray("tags")));
 
-			freshNewses.add(freshNews);
+            freshNewses.add(freshNews);
 
-		}
-		return freshNewses;
-	}
+        }
+        return freshNewses;
+    }
 
 
-	public static ArrayList<FreshNews> parseCache(JSONArray postsArray) {
+    public static ArrayList<FreshNews> parseCache(JSONArray postsArray) {
 
-		ArrayList<FreshNews> freshNewses = new ArrayList<>();
+        ArrayList<FreshNews> freshNewses = new ArrayList<>();
 
-		for (int i = 0; i < postsArray.length(); i++) {
+        for (int i = 0; i < postsArray.length(); i++) {
 
-			FreshNews freshNews = new FreshNews();
-			JSONObject jsonObject = postsArray.optJSONObject(i);
+            FreshNews freshNews = new FreshNews();
+            JSONObject jsonObject = postsArray.optJSONObject(i);
 
-			freshNews.setId(jsonObject.optString("id"));
-			freshNews.setUrl(jsonObject.optString("url"));
-			freshNews.setTitle(jsonObject.optString("title"));
-			freshNews.setDate(jsonObject.optString("date"));
-			freshNews.setComment_count(jsonObject.optString("comment_count"));
-			freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
-			freshNews.setCustomFields(CustomFields.parseCache(jsonObject.optJSONObject("custom_fields")));
-			freshNews.setTags(Tags.parseCache(jsonObject.optJSONObject("tags")));
+            freshNews.setId(jsonObject.optString("id"));
+            freshNews.setUrl(jsonObject.optString("url"));
+            freshNews.setTitle(jsonObject.optString("title"));
+            freshNews.setDate(jsonObject.optString("date"));
+            freshNews.setComment_count(jsonObject.optString("comment_count"));
+            freshNews.setAuthor(Author.parse(jsonObject.optJSONObject("author")));
+            freshNews.setCustomFields(CustomFields.parseCache(jsonObject.optJSONObject("custom_fields")));
+            freshNews.setTags(Tags.parseCache(jsonObject.optJSONObject("tags")));
 
-			freshNewses.add(freshNews);
+            freshNewses.add(freshNews);
 
-		}
-		return freshNewses;
-	}
+        }
+        return freshNewses;
+    }
 
-	@Override
-	public String toString() {
-		return "FreshNews{" +
-				"tags=" + tags +
-				", customFields=" + custom_fields +
-				", author=" + author +
-				", comment_count='" + comment_count + '\'' +
-				", thumb_c='" + thumb_c + '\'' +
-				", date='" + date + '\'' +
-				", url='" + url + '\'' +
-				", title='" + title + '\'' +
-				", id='" + id + '\'' +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "FreshNews{" +
+                "tags=" + tags +
+                ", customFields=" + custom_fields +
+                ", author=" + author +
+                ", comment_count='" + comment_count + '\'' +
+                ", thumb_c='" + thumb_c + '\'' +
+                ", date='" + date + '\'' +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public void setDate(String date) {
-		this.date = date;
-	}
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-	public String getThumb_c() {
-		return thumb_c;
-	}
+    public String getThumb_c() {
+        return thumb_c;
+    }
 
-	public void setThumb_c(String thumb_c) {
-		this.thumb_c = thumb_c;
-	}
+    public void setThumb_c(String thumb_c) {
+        this.thumb_c = thumb_c;
+    }
 
-	public String getComment_count() {
-		return comment_count;
-	}
+    public String getComment_count() {
+        return comment_count;
+    }
 
-	public void setComment_count(String comment_count) {
-		this.comment_count = comment_count;
-	}
+    public void setComment_count(String comment_count) {
+        this.comment_count = comment_count;
+    }
 
-	public Author getAuthor() {
-		return author;
-	}
+    public Author getAuthor() {
+        return author;
+    }
 
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
 
-	public CustomFields getCustomFields() {
-		return custom_fields;
-	}
+    public CustomFields getCustomFields() {
+        return custom_fields;
+    }
 
-	public void setCustomFields(CustomFields customFields) {
-		this.custom_fields = customFields;
-	}
+    public void setCustomFields(CustomFields customFields) {
+        this.custom_fields = customFields;
+    }
 
-	public Tags getTags() {
-		return tags;
-	}
+    public Tags getTags() {
+        return tags;
+    }
 
-	public void setTags(Tags tags) {
-		this.tags = tags;
-	}
+    public void setTags(Tags tags) {
+        this.tags = tags;
+    }
 }

@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
-import com.socks.jiandan.constant.ToastMsg;
+import com.socks.jiandan.base.ConstantString;
 
 import java.io.File;
 
@@ -41,7 +41,7 @@ public class ShareUtil {
 			ShareUtil.sharePicture(activity, newFile.getAbsolutePath(),
 					"分享自煎蛋增强版 " + url);
 		} else {
-			ShowToast.Short(ToastMsg.LOAD_SHARE);
+			ShowToast.Short(ConstantString.LOAD_SHARE);
 		}
 	}
 
@@ -73,7 +73,7 @@ public class ShareUtil {
 		if (imgPath.endsWith(".gif")) {
 			intent.putExtra(Intent.EXTRA_TEXT, shareText);
 		} else {
-			intent.putExtra(Intent.EXTRA_TEXT, ToastMsg.SHARE_TAIL);
+			intent.putExtra(Intent.EXTRA_TEXT, ConstantString.SHARE_TAIL);
 		}
 
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
