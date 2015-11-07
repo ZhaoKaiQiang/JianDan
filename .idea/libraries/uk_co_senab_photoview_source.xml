@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="uk-co-senab-photoview-source">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/uk-co-senab-photoview-source.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
