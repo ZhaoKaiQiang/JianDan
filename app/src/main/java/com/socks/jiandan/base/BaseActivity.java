@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityManager.getAppManager().addActivity(this);
 
         if (BuildConfig.DEBUG) {
-            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.FULL);
+            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.FULL).hideThreadInfo();
         } else {
             Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.NONE);
         }

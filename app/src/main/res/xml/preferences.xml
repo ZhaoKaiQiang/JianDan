@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="基本设置">
-        <Preference android:key="clear_cache" android:title="清除缓存"/>
-        <CheckBoxPreference android:defaultValue="true" android:key="enable_fresh_big"
-                            android:title="新鲜事大图模式"/>
-        <CheckBoxPreference android:defaultValue="false" android:key="enable_sister"
-                            android:title="开启妹子图"/>
+        <Preference
+            android:key="clear_cache"
+            android:title="清除缓存" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enable_fresh_big"
+            android:title="新鲜事大图模式" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enable_sister"
+            android:title="开启妹子图" />
     </PreferenceCategory>
     <PreferenceCategory android:title="其他设置">
-        <Preference android:key="about_app" android:title="关于开发者"/>
-        <Preference android:key="app_version" android:title="软件版本"/>
+        <Preference
+            android:key="about_app"
+            android:title="关于开发者" />
+        <Preference
+            android:key="app_version"
+            android:title="软件版本" />
     </PreferenceCategory>
 </PreferenceScreen>
