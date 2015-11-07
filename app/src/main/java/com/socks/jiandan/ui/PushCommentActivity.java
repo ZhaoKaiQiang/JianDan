@@ -1,7 +1,6 @@
 package com.socks.jiandan.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -67,14 +66,19 @@ public class PushCommentActivity extends BaseActivity {
 
 		ButterKnife.inject(this);
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
+//		ActionBar actionBar = getSupportActionBar();
+//		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		parent_name = getIntent().getStringExtra("parent_name");
 		tv_title.setText(TextUtil.isNull(parent_name) ? "回复:" : "回复:" + parent_name);
 		/*新鲜事中 文章id=当前的thread_id=接口参数中的post_id*/
 		thread_id = getIntent().getStringExtra("thread_id");
 		parent_id = getIntent().getStringExtra("parent_id");
+	}
+
+	@Override
+	protected void initData() {
+
 	}
 
 	@Override

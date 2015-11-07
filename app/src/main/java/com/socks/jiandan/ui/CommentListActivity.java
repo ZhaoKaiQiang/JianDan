@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,9 +84,9 @@ public class CommentListActivity extends BaseActivity {
 
 		ButterKnife.inject(this);
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(true);
+//		ActionBar actionBar = getSupportActionBar();
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setDisplayShowHomeEnabled(true);
 
 		mSwipeBackUtil = new SwipeBackUtil(this);
 

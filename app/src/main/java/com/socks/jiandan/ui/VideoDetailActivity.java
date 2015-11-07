@@ -3,7 +3,6 @@ package com.socks.jiandan.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,11 +53,11 @@ public class VideoDetailActivity extends BaseActivity implements View.OnClickLis
 	@Override
 	public void initView() {
 
-		final ActionBar actionBar = getSupportActionBar();
-
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle("加载中...");
+//		final ActionBar actionBar = getSupportActionBar();
+//
+//		actionBar.setDisplayShowHomeEnabled(true);
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setTitle("加载中...");
 
 		imgBtn_back.setOnClickListener(this);
 		imgBtn_forward.setOnClickListener(this);
@@ -94,7 +93,7 @@ public class VideoDetailActivity extends BaseActivity implements View.OnClickLis
 				super.onPageFinished(view, url);
 				imgBtn_control.setImageResource(R.drawable.ic_action_refresh);
 				isLoadFinish = true;
-				actionBar.setTitle(view.getTitle());
+//				actionBar.setTitle(view.getTitle());
 			}
 		});
 

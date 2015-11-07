@@ -3,7 +3,7 @@ package com.socks.jiandan.net;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.socks.jiandan.base.AppAplication;
+import com.socks.jiandan.base.JDApplication;
 
 
 /**
@@ -11,7 +11,7 @@ import com.socks.jiandan.base.AppAplication;
  */
 public class RequestManager {
 
-	public static RequestQueue mRequestQueue = Volley.newRequestQueue(AppAplication.getContext());
+	public static RequestQueue mRequestQueue = Volley.newRequestQueue(JDApplication.getContext());
 
 	private RequestManager() {
 	}

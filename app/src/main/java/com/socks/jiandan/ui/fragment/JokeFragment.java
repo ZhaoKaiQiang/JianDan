@@ -25,7 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
-import com.socks.jiandan.cache.JokeCacheUtil;
+import com.socks.jiandan.cache.JokeCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
@@ -73,7 +73,6 @@ public class JokeFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle(getString(R.string.title_activity_joke));
 	}
 
 	@Override
@@ -132,13 +131,6 @@ public class JokeFragment extends BaseFragment {
 		return false;
 	}
 
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.mJokes.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
-	}
-
 	public class JokeAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
@@ -146,7 +138,7 @@ public class JokeFragment extends BaseFragment {
 		private int lastPosition = -1;
 
 		public JokeAdapter() {
-			mJokes = new ArrayList<Joke>();
+			mJokes = new ArrayList<>();
 		}
 
 		protected void setAnimation(View viewToAnimate, int position) {
@@ -395,7 +387,7 @@ public class JokeFragment extends BaseFragment {
 				mSwipeRefreshLayout.setRefreshing(false);
 			}
 
-			JokeCacheUtil jokeCacheUtil = JokeCacheUtil.getInstance(getActivity());
+			JokeCache jokeCacheUtil = JokeCache.getInstance(getActivity());
 			if (page == 1) {
 				mJokes.clear();
 				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
@@ -438,14 +430,14 @@ public class JokeFragment extends BaseFragment {
 					if (page == 1) {
 						mJokes.clear();
 						//首次正常加载之后，清空之前的缓存
-						JokeCacheUtil.getInstance(getActivity()).clearAllCache();
+						JokeCache.getInstance(getActivity()).clearAllCache();
 					}
 
 					mJokes.addAll(jokes);
 					notifyDataSetChanged();
 
 					//加载完毕后缓存
-					JokeCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString(jokes),
+					JokeCache.getInstance(getActivity()).addResultCache(JSONParser.toString(jokes),
 							page);
 
 				}

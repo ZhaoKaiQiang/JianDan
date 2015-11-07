@@ -1,7 +1,6 @@
 package com.socks.jiandan.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.socks.jiandan.R;
@@ -19,15 +18,25 @@ public class SettingActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setting);
 
-		ActionBar actionBar = getSupportActionBar();
-
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(false);
+//		ActionBar actionBar = getSupportActionBar();
+//
+//		actionBar.setDisplayShowHomeEnabled(true);
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setDisplayShowTitleEnabled(false);
 
 		getFragmentManager().beginTransaction()
 				.replace(android.R.id.content, new SettingFragment())
 				.commit();
+	}
+
+	@Override
+	protected void initView() {
+
+	}
+
+	@Override
+	protected void initData() {
+
 	}
 
 	@Override

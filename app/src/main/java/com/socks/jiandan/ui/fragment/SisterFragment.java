@@ -32,7 +32,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
-import com.socks.jiandan.cache.SisterCacheUtil;
+import com.socks.jiandan.cache.SisterCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
@@ -96,7 +96,7 @@ public class SisterFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("妹子图");
+//		mActionBar.setTitle("妹子图");
 		isFirstChange = true;
 	}
 
@@ -215,13 +215,6 @@ public class SisterFragment extends BaseFragment {
 		return false;
 	}
 
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.pictures.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
-	}
-
 	public class PictureAdapter extends RecyclerView.Adapter<ViewHolder> {
 
 		private int page;
@@ -229,7 +222,7 @@ public class SisterFragment extends BaseFragment {
 		private int lastPosition = -1;
 
 		public PictureAdapter() {
-			pictures = new ArrayList<Picture>();
+			pictures = new ArrayList<>();
 		}
 
 		private void setAnimation(View viewToAnimate, int position) {
@@ -521,7 +514,7 @@ public class SisterFragment extends BaseFragment {
 				mSwipeRefreshLayout.setRefreshing(false);
 			}
 
-			SisterCacheUtil sisterCacheUtil = SisterCacheUtil.getInstance(getActivity());
+			SisterCache sisterCacheUtil = SisterCache.getInstance(getActivity());
 			if (page == 1) {
 				pictures.clear();
 				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
@@ -559,14 +552,14 @@ public class SisterFragment extends BaseFragment {
 
 					if (page == 1) {
 						PictureAdapter.this.pictures.clear();
-						SisterCacheUtil.getInstance(getActivity()).clearAllCache();
+						SisterCache.getInstance(getActivity()).clearAllCache();
 					}
 
 					PictureAdapter.this.pictures.addAll(pictures);
 					notifyDataSetChanged();
 
 					//加载完毕后缓存
-					SisterCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString
+					SisterCache.getInstance(getActivity()).addResultCache(JSONParser.toString
 							(pictures), page);
 				}
 			}, new Response.ErrorListener() {

@@ -9,65 +9,66 @@ package com.socks.jiandan.base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.net.RequestManager;
-import com.socks.jiandan.utils.AppManager;
-import com.socks.jiandan.utils.ShowToast;
+import com.socks.jiandan.net.ResponseFactory;
+import com.socks.jiandan.utils.ActivityManager;
 
-/**
- * @author zhaokaiqiang
- * @date 2014-8-6 下午5:49:10
- */
-public class BaseActivity extends AppCompatActivity implements Initialable {
+public abstract class BaseActivity extends AppCompatActivity {
 
-	protected Context context;
+    protected Context mContext;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		context = this;
-		AppManager.getAppManager().addActivity(this);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+        ActivityManager.getAppManager().addActivity(this);
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		AppManager.getAppManager().finishActivity(this);
-		RequestManager.cancelAll(this);
-	}
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.anim_none, R.anim.trans_center_2_right);
+    }
 
-	@Override
-	public void initView() {
-	}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityManager.getAppManager().finishActivity(this);
+        RequestManager.cancelAll(this);
+    }
 
-	@Override
-	public void initData() {
-	}
+    ///////////////////////////////////////////////////////////////////////////
+    // Abstract Method In Activity
+    ///////////////////////////////////////////////////////////////////////////
 
-	protected void executeRequest(Request<?> request) {
-		RequestManager.addRequest(request, this);
-	}
+    protected abstract void initView();
 
-	protected Response.ErrorListener errorListener() {
-		return new Response.ErrorListener() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				ShowToast.Short(error.getMessage());
-			}
-		};
-	}
+    protected abstract void initData();
 
-	/**
-	 * 设置默认的退出效果
-	 */
-	@Override
-	public void finish() {
-		super.finish();
-		overridePendingTransition(R.anim.anim_none, R.anim.trans_center_2_right);
-	}
+    ///////////////////////////////////////////////////////////////////////////
+    // Common Operation
+    ///////////////////////////////////////////////////////////////////////////
+
+    public void replaceFragment(int id_content, Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(id_content, fragment);
+        transaction.commit();
+    }
+
+    protected void executeRequest(Request<?> request) {
+        RequestManager.addRequest(request, this);
+    }
+
+    protected Response.ErrorListener errorListener() {
+        return ResponseFactory.getErrorListener();
+    }
+
+
 }

@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.socks.jiandan.R;
@@ -29,15 +28,25 @@ public class FreshNewsDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_fresh_news_detail);
 		ButterKnife.inject(this);
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(true);
+//		ActionBar actionBar = getSupportActionBar();
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setDisplayShowTitleEnabled(true);
 		ArrayList<FreshNews> FreshNews = (ArrayList<FreshNews>) getIntent().getSerializableExtra
 				("FreshNews");
 
 		int position = getIntent().getIntExtra("position", 0);
 		vp.setAdapter(new FreshNewsDetailAdapter(getSupportFragmentManager(), FreshNews));
 		vp.setCurrentItem(position);
+
+	}
+
+	@Override
+	protected void initView() {
+
+	}
+
+	@Override
+	protected void initData() {
 
 	}
 

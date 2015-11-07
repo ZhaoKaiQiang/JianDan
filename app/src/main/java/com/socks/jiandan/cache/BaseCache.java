@@ -7,7 +7,9 @@ import java.util.ArrayList;
 /**
  * Created by zhaokaiqiang on 15/5/12.
  */
-public abstract class BaseCacheUtil<T> {
+public abstract class BaseCache<T> {
+
+	public static final String DB_NAME = "jiandan-db";
 
 	protected static DaoSession mDaoSession;
 

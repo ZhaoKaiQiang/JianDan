@@ -3,7 +3,7 @@ package com.socks.jiandan.base;
 /**
  * Created by zhaokaiqiang on 15/4/8.
  */
-public interface Initialable {
+public interface Initializedable {
 
 	void initView();
 

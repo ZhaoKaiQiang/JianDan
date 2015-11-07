@@ -31,7 +31,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListe
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
-import com.socks.jiandan.cache.PictureCacheUtil;
+import com.socks.jiandan.cache.PictureCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
@@ -95,7 +95,7 @@ public class PictureFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("无聊图");
+//		mActionBar.setTitle("无聊图");
 		isFirstChange = true;
 	}
 
@@ -210,13 +210,6 @@ public class PictureFragment extends BaseFragment {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.pictures.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
 	}
 
 	public class PictureAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -532,7 +525,7 @@ public class PictureFragment extends BaseFragment {
 				mSwipeRefreshLayout.setRefreshing(false);
 			}
 
-			PictureCacheUtil pictureCacheUtil = PictureCacheUtil.getInstance(getActivity());
+			PictureCache pictureCacheUtil = PictureCache.getInstance(getActivity());
 			if (page == 1) {
 				pictures.clear();
 				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
@@ -571,14 +564,14 @@ public class PictureFragment extends BaseFragment {
 
 					if (page == 1) {
 						PictureAdapter.this.pictures.clear();
-						PictureCacheUtil.getInstance(getActivity()).clearAllCache();
+						PictureCache.getInstance(getActivity()).clearAllCache();
 					}
 
 					PictureAdapter.this.pictures.addAll(pictures);
 					notifyDataSetChanged();
 
 					//加载完毕后缓存
-					PictureCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString
+					PictureCache.getInstance(getActivity()).addResultCache(JSONParser.toString
 									(pictures),page);
 
 				}

@@ -28,7 +28,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
-import com.socks.jiandan.cache.FreshNewsCacheUtil;
+import com.socks.jiandan.cache.FreshNewsCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.FreshNews;
@@ -74,7 +74,7 @@ public class FreshNewsFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("新鲜事");
+//		mActionBar.setTitle("新鲜事");
 	}
 
 	@Override
@@ -158,13 +158,6 @@ public class FreshNewsFragment extends BaseFragment {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.mFreshNews.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
 	}
 
 	/**
@@ -291,13 +284,13 @@ public class FreshNewsFragment extends BaseFragment {
 
 								if (page == 1) {
 									mAdapter.mFreshNews.clear();
-									FreshNewsCacheUtil.getInstance(getActivity()).clearAllCache();
+									FreshNewsCache.getInstance(getActivity()).clearAllCache();
 								}
 
 								mAdapter.mFreshNews.addAll(response);
 								notifyDataSetChanged();
 
-								FreshNewsCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString(response),
+								FreshNewsCache.getInstance(getActivity()).addResultCache(JSONParser.toString(response),
 										page);
 
 							}
@@ -325,7 +318,7 @@ public class FreshNewsFragment extends BaseFragment {
 					ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
 				}
 
-				mFreshNews.addAll(FreshNewsCacheUtil.getInstance(getActivity()).getCacheByPage(page));
+				mFreshNews.addAll(FreshNewsCache.getInstance(getActivity()).getCacheByPage(page));
 				notifyDataSetChanged();
 			}
 

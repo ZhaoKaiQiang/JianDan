@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -85,10 +84,10 @@ public class CommentList4FreshNewsActivity extends BaseActivity {
 
 		ButterKnife.inject(this);
 
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setDisplayShowHomeEnabled(true);
-		actionBar.setDisplayShowTitleEnabled(false);
+//		ActionBar actionBar = getSupportActionBar();
+//		actionBar.setDisplayHomeAsUpEnabled(true);
+//		actionBar.setDisplayShowHomeEnabled(true);
+//		actionBar.setDisplayShowTitleEnabled(false);
 
 		mSwipeBackUtil = new SwipeBackUtil(this);
 

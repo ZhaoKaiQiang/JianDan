@@ -3,9 +3,8 @@ package com.socks.jiandan.cache;
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
-import com.socks.greendao.PictureCache;
 import com.socks.greendao.PictureCacheDao;
-import com.socks.jiandan.base.AppAplication;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.model.Picture;
 import com.socks.jiandan.net.JSONParser;
 
@@ -16,25 +15,25 @@ import de.greenrobot.dao.query.QueryBuilder;
 /**
  * Created by zhaokaiqiang on 15/5/11.
  */
-public class PictureCacheUtil extends BaseCacheUtil {
+public class PictureCache extends BaseCache {
 
-	private static PictureCacheUtil instance;
+	private static PictureCache instance;
 	private static PictureCacheDao mPictureCacheDao;
 
-	private PictureCacheUtil() {
+	private PictureCache() {
 	}
 
-	public static PictureCacheUtil getInstance(Context context) {
+	public static PictureCache getInstance(Context context) {
 
 		if (instance == null) {
 
-			synchronized (PictureCacheUtil.class) {
+			synchronized (PictureCache.class) {
 				if (instance == null) {
-					instance = new PictureCacheUtil();
+					instance = new PictureCache();
 				}
 			}
 
-			mDaoSession = AppAplication.getDaoSession(context);
+			mDaoSession = JDApplication.getDaoSession(context);
 			mPictureCacheDao = mDaoSession.getPictureCacheDao();
 		}
 		return instance;
@@ -56,7 +55,7 @@ public class PictureCacheUtil extends BaseCacheUtil {
 	@Override
 	public ArrayList<Picture> getCacheByPage(int page) {
 
-		QueryBuilder<PictureCache> query = mPictureCacheDao.queryBuilder().where(PictureCacheDao
+		QueryBuilder<com.socks.greendao.PictureCache> query = mPictureCacheDao.queryBuilder().where(PictureCacheDao
 				.Properties.Page.eq("" + page));
 
 		if (query.list().size() > 0) {
@@ -77,7 +76,7 @@ public class PictureCacheUtil extends BaseCacheUtil {
 	 */
 	@Override
 	public void addResultCache(String result, int page) {
-		PictureCache pictureCache = new PictureCache();
+		com.socks.greendao.PictureCache pictureCache = new com.socks.greendao.PictureCache();
 		pictureCache.setResult(result);
 		pictureCache.setPage(page);
 		pictureCache.setTime(System.currentTimeMillis());

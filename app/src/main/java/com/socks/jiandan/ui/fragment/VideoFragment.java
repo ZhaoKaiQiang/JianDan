@@ -31,7 +31,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
-import com.socks.jiandan.cache.VideoCacheUtil;
+import com.socks.jiandan.cache.VideoCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
@@ -46,6 +46,7 @@ import com.socks.jiandan.ui.VideoDetailActivity;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 
@@ -81,7 +82,6 @@ public class VideoFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mActionBar.setTitle("小视频");
 	}
 
 	@Override
@@ -152,13 +152,6 @@ public class VideoFragment extends BaseFragment {
 		}
 
 		return false;
-	}
-
-	@Override
-	public void onActionBarClick() {
-		if (mRecyclerView != null && mAdapter.mVideos.size() > 0) {
-			mRecyclerView.scrollToPosition(0);
-		}
 	}
 
 	public class VideoAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -430,7 +423,7 @@ public class VideoFragment extends BaseFragment {
 				mSwipeRefreshLayout.setRefreshing(false);
 			}
 
-			VideoCacheUtil videoCacheUtil = VideoCacheUtil.getInstance(getActivity());
+			VideoCache videoCacheUtil = VideoCache.getInstance(getActivity());
 			if (page == 1) {
 				mVideos.clear();
 				ShowToast.Short(ToastMsg.LOAD_NO_NETWORK);
@@ -466,13 +459,13 @@ public class VideoFragment extends BaseFragment {
 
 					if (page == 1) {
 						mVideos.clear();
-						VideoCacheUtil.getInstance(getActivity()).clearAllCache();
+						VideoCache.getInstance(getActivity()).clearAllCache();
 					}
 
 					mVideos.addAll(videos);
 					notifyDataSetChanged();
 
-					VideoCacheUtil.getInstance(getActivity()).addResultCache(JSONParser.toString
+					VideoCache.getInstance(getActivity()).addResultCache(JSONParser.toString
 							(videos), page);
 
 					//防止加载不慢一页的情况
@@ -484,6 +477,7 @@ public class VideoFragment extends BaseFragment {
 			}, new Response.ErrorListener() {
 				@Override
 				public void onErrorResponse(VolleyError error) {
+					Logger.e(error.getMessage());
 					ShowToast.Short(ToastMsg.LOAD_FAILED);
 					mLoadFinisCallBack.loadFinish(null);
 					google_progress.setVisibility(View.GONE);

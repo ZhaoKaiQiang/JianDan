@@ -9,7 +9,7 @@ package com.socks.jiandan.utils;
 
 import android.widget.Toast;
 
-import com.socks.jiandan.base.AppAplication;
+import com.socks.jiandan.base.JDApplication;
 
 /**
  * @author zhaokaiqiang
@@ -26,7 +26,7 @@ public class ShowToast {
 	 * @Description: 显示短时间Toast
 	 */
 	public static void Short(CharSequence sequence) {
-		Toast.makeText(AppAplication.getContext(), sequence, Toast.LENGTH_SHORT).show();
+		Toast.makeText(JDApplication.getContext(), sequence, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class ShowToast {
 	 * @Description: 显示长时间Toast
 	 */
 	public static void Long(CharSequence sequence) {
-		Toast.makeText(AppAplication.getContext(), sequence, Toast.LENGTH_SHORT).show();
+		Toast.makeText(JDApplication.getContext(), sequence, Toast.LENGTH_SHORT).show();
 	}
 
 }
