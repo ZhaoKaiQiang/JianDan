@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:id="@+id/content"
-              android:layout_height="match_parent"
-              android:background="@android:color/white">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/comment_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/comment_toolbar"></include>
+
+    <fragment
+        android:id="@+id/fragment_setting"
+        class="com.socks.jiandan.ui.fragment.SettingFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

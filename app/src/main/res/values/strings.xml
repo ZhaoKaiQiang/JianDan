@@ -1,4 +1,5 @@
 <resources>
+    
     <string name="app_name">煎蛋</string>
     <string name="title_activity_comment_list">吐槽</string>
     <string name="title_activity_push_comment">回复</string>
@@ -9,8 +10,6 @@
     <string name="title_activity_fresh_news_detail">新鲜事</string>
     <string name="title_activity_video_detail">VideoDetailActivity</string>
     <string name="title_activity_joke">段子</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_setting">设置</string>
 
 </resources>

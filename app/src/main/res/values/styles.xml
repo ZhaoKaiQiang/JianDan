@@ -1,18 +1,25 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="actionBarStyle">@style/JDActionBarStyle</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+    <!--Base Theme-->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <!--no actionbar and title-->
         <item name="windowActionBar">false</item>
-
+        <item name="windowNoTitle">true</item>
+        <!--action bar color-->
         <item name="colorPrimary">@color/primary</item>
+        <!--status bar color-->
         <item name="colorPrimaryDark">@color/primary_dark</item>
-
-        <item name="android:textColorPrimary">@color/primary_text</item>
+        <!--window background-->
+        <item name="android:windowBackground">@color/comment_bg</item>
+        <!--actionbar text color-->
+        <item name="android:textColorPrimary">@color/actionbar_title</item>
         <item name="android:textColorSecondary">@color/secondary_text</item>
 
+    </style>
+
+    <!-- Normal application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="actionBarStyle">@style/JDActionBarStyle</item>
     </style>
 
     <!-- 设置标题栏样式 -->
@@ -22,7 +29,8 @@
 
     <!-- 标题栏文字样式 -->
     <style name="ActionBarTitleStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/actionbar_title</item>
     </style>
 
     <!--图片详情页 -->
