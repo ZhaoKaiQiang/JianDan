@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
@@ -57,9 +56,9 @@ public class MainActivity extends BaseActivity {
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("");
-        actionBar.setLogo(R.mipmap.ic_launcher);
+
+        mToolbar.setTitle("");
+        mToolbar.setLogo(R.mipmap.ic_launcher);
 
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name,
                 R.string.app_name) {

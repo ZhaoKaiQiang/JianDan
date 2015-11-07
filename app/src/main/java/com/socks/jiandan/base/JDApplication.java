@@ -11,7 +11,6 @@ import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
 import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.cache.BaseCache;
-import com.socks.jiandan.utils.logger.Logger;
 
 public class JDApplication extends Application {
 
@@ -24,7 +23,6 @@ public class JDApplication extends Application {
         super.onCreate();
         mContext = this;
         initImageLoader();
-        Logger.init().hideThreadInfo();
     }
 
     @Nullable

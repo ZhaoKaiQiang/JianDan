@@ -15,10 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.net.ResponseFactory;
 import com.socks.jiandan.utils.ActivityManager;
+import com.socks.jiandan.utils.logger.LogLevel;
+import com.socks.jiandan.utils.logger.Logger;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -29,6 +32,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         ActivityManager.getAppManager().addActivity(this);
+
+        if (BuildConfig.DEBUG) {
+            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.FULL);
+        } else {
+            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.NONE);
+        }
     }
 
     @Override
@@ -62,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    protected void executeRequest(Request<?> request) {
+    public void executeRequest(Request<?> request) {
         RequestManager.addRequest(request, this);
     }
 

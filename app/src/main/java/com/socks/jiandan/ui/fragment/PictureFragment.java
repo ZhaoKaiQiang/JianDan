@@ -33,6 +33,7 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.cache.PictureCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
+import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.constant.ToastMsg;
 import com.socks.jiandan.model.CommentNumber;
 import com.socks.jiandan.model.NetWorkEvent;
@@ -114,7 +115,7 @@ public class PictureFragment extends BaseFragment {
 		mRecyclerView.setHasFixedSize(false);
 		mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 		mLoadFinisCallBack = mRecyclerView;
-		mRecyclerView.setLoadMoreListener(new AutoLoadRecyclerView.onLoadMoreListener() {
+		mRecyclerView.setLoadMoreListener(new LoadMoreListener() {
 			@Override
 			public void loadMore() {
 				mAdapter.loadNextPage();
@@ -143,7 +144,7 @@ public class PictureFragment extends BaseFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		imageLoader = ImageLoader.getInstance();
-		mRecyclerView.setOnPauseListenerParams(imageLoader, false, true);
+		mRecyclerView.setOnPauseListenerParams(false, true);
 		options = new DisplayImageOptions.Builder()
 				.cacheInMemory(true)
 				.cacheOnDisk(true)
