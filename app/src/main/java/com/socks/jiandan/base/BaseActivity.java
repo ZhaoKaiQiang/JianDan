@@ -14,11 +14,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 import com.socks.jiandan.net.RequestManager;
-import com.socks.jiandan.net.ResponseFactory;
 import com.socks.jiandan.utils.ActivityManager;
 import com.socks.jiandan.utils.logger.LogLevel;
 import com.socks.jiandan.utils.logger.Logger;
@@ -74,10 +72,5 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     public void executeRequest(Request<?> request) {
         RequestManager.addRequest(request, this);
     }
-
-    protected Response.ErrorListener errorListener() {
-        return ResponseFactory.getErrorListener();
-    }
-
 
 }

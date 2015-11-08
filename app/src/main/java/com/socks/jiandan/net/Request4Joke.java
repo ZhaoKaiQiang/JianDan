@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 /**
  * 段子数据请求器
- * Created by zhaokaiqiang on 15/4/8.
  */
 public class Request4Joke extends Request<ArrayList<Joke>> {
 

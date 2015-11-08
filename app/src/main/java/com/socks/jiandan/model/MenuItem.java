@@ -2,13 +2,10 @@ package com.socks.jiandan.model;
 
 import android.support.v4.app.Fragment;
 
-/**
- * Created by zhaokaiqiang on 15/4/9.
- */
 public class MenuItem {
 
     public enum FragmentType {
-        XINXIANSHI, WULIAOTU, MEIZITU, DUANZI, XIAODIANYING
+        FreshNews, BoringPicture, Sister, Joke, Video
     }
 
     private String title;
@@ -26,10 +23,6 @@ public class MenuItem {
 
     public int getResourceId() {
         return resourceId;
-    }
-
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
     }
 
     public Class<? extends Fragment> getFragment() {

@@ -36,7 +36,6 @@ public class Request4CommentList extends Request<ArrayList<Commentator>> {
         try {
             //获取到所有的数据
             String jsonStr = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            //解析出所有的thread_id，并去掉非法字符，便与解析
             JSONObject resultJson = new JSONObject(jsonStr);
             String allThreadId = resultJson.getString("response").replace("[", "").replace
                     ("]", "").replace("\"", "");

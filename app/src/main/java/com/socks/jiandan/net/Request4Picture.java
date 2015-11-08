@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 /**
  * 无聊图数据请求器
- * Created by zhaokaiqiang on 15/4/8.
  */
 public class Request4Picture extends Request<ArrayList<Picture>> {
 
@@ -36,9 +35,7 @@ public class Request4Picture extends Request<ArrayList<Picture>> {
 			ArrayList<Picture> pictures = (ArrayList<Picture>) JSONParser.toObject(jsonStr,
 					new TypeToken<ArrayList<Picture>>() {
 					}.getType());
-
 			return Response.success(pictures, HttpHeaderParser.parseCacheHeaders(response));
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Response.error(new ParseError(e));

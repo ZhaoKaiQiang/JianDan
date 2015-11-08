@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * 新鲜事评论
- * Created by zhaokaiqiang on 15/4/27.
- */
 public class Comment4FreshNews extends Commentator implements Comparable, Commentable {
 
     //评论列表
@@ -23,19 +19,14 @@ public class Comment4FreshNews extends Commentator implements Comparable, Commen
     private String url;
     private String date;
     private String content;
-    //没有用到
     private String parent;
     private int parentId;
     private ArrayList<Comment4FreshNews> parentComments;
     private int vote_positive;
-    private int vote_negative;
 
     public Comment4FreshNews() {
     }
 
-    /**
-     * 获取评论地址
-     */
     public static String getUrlComments(String id) {
         return URL_COMMENTS + id;
     }
@@ -90,18 +81,6 @@ public class Comment4FreshNews extends Commentator implements Comparable, Commen
 
     public int getVote_positive() {
         return vote_positive;
-    }
-
-    public void setVote_positive(int vote_positive) {
-        this.vote_positive = vote_positive;
-    }
-
-    public int getVote_negative() {
-        return vote_negative;
-    }
-
-    public void setVote_negative(int vote_negative) {
-        this.vote_negative = vote_negative;
     }
 
     public ArrayList<Comment4FreshNews> getParentComments() {
