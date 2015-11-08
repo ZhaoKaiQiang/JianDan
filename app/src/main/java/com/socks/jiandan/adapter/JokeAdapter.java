@@ -187,14 +187,17 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
             sb.append("comment-" + joke.getComment_ID() + ",");
         }
 
-        RequestManager.addRequest(new Request4CommentCounts(CommentNumber.getCommentCountsURL(sb.toString()), new Response
+        String url = sb.toString();
+        if (url.endsWith(",")) {
+            url = url.substring(0, url.length() - 1);
+        }
+
+        RequestManager.addRequest(new Request4CommentCounts(CommentNumber.getCommentCountsURL(url), new Response
                 .Listener<ArrayList<CommentNumber>>() {
 
             @Override
             public void onResponse(ArrayList<CommentNumber> response) {
 
-                mLoadFinisCallBack.loadFinish(null);
-                mLoadResultCallBack.onSuccess(LoadResultCallBack.SUCCESS_OK, null);
                 for (int i = 0; i < jokes.size(); i++) {
                     jokes.get(i).setComment_counts(response.get(i).getComments() + "");
                 }
@@ -211,6 +214,8 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
                 //加载完毕后缓存
                 JokeCache.getInstance(mActivity).addResultCache(JSONParser.toString(jokes),
                         page);
+                mLoadFinisCallBack.loadFinish(null);
+                mLoadResultCallBack.onSuccess(LoadResultCallBack.SUCCESS_OK, null);
 
             }
         }, new Response.ErrorListener() {
