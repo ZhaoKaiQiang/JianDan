@@ -27,4 +27,9 @@ public interface ConstantString {
     String DATA_THREAD_KEY = "thread_key";
     String DATA_IS_FROM_FRESH_NEWS = "is_from_fresh_news";
 
+    String DATA_IMAGE_URL = "img_url";
+    String DATA_IMAGE_ID = "img_id";
+    String DATA_IMAGE_AUTHOR = "img_author";
+    String DATA_IS_NEED_WEBVIEW = "is_need_webview";
+
 }

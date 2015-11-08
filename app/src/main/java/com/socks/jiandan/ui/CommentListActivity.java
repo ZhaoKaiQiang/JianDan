@@ -138,10 +138,9 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
     public void onSuccess(int result, Object object) {
         if (result == LoadResultCallBack.SUCCESS_NONE) {
             ShowToast.Short(NO_COMMENTS);
-        } else {
-            google_progress.setVisibility(View.GONE);
-            mSwipeRefreshLayout.setRefreshing(false);
         }
+        google_progress.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
