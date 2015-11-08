@@ -2,31 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
     android:paddingTop="16dp">
 
-    <LinearLayout
-        android:id="@+id/ll_left"
-        android:layout_width="56.0dip"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/img_header"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_loading_small" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/img_header"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_loading_small" />
 
     <RelativeLayout
         android:id="@+id/right"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/ll_left"
-        android:layout_toRightOf="@id/ll_left"
+        android:layout_toEndOf="@id/img_header"
+        android:layout_toRightOf="@id/img_header"
         android:paddingEnd="16.0dip"
         android:paddingLeft="0.0dip"
         android:paddingRight="16.0dip"
@@ -83,67 +74,6 @@
             android:text="aaa"
             android:textColor="@color/primary_text_default_material_light"
             android:textSize="14sp" />
-
-        <LinearLayout
-            android:id="@+id/ll_vote"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tv_name"
-            android:layout_alignParentRight="true"
-            android:gravity="right"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <LinearLayout
-                android:id="@+id/ll_support"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_like_descr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:text="OO "
-                    android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp" />
-
-                <TextView
-                    android:id="@+id/tv_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_unsupport"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_unlike_descr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:text="   XX "
-                    android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp" />
-
-                <TextView
-                    android:id="@+id/tv_unlike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="center"
-                    android:textColor="@color/secondary_text_default_material_light"
-                    android:textSize="13.0sp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-        </LinearLayout>
     </RelativeLayout>
 
     <View
@@ -151,8 +81,8 @@
         android:layout_height="1px"
         android:layout_below="@id/right"
         android:layout_marginTop="16.0dip"
-        android:layout_toEndOf="@id/ll_left"
-        android:layout_toRightOf="@id/ll_left"
+        android:layout_toEndOf="@id/img_header"
+        android:layout_toRightOf="@id/img_header"
         android:background="#ffd9d9d9" />
 
 </RelativeLayout>

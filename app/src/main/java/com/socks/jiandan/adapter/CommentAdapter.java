@@ -6,12 +6,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,15 +21,12 @@ import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.model.Comment4FreshNews;
 import com.socks.jiandan.model.Commentator;
-import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4CommentList;
 import com.socks.jiandan.net.Request4FreshNewsCommentList;
-import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.net.RequestManager;
 import com.socks.jiandan.ui.PushCommentActivity;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.utils.String2TimeUtil;
-import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.floorview.FloorView;
 import com.socks.jiandan.view.floorview.SubComments;
 import com.socks.jiandan.view.floorview.SubFloorFactory;
@@ -47,6 +42,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
 
+/**
+ * This Adapter is for Comment List ,what you need notice is that the comments for fresh news is special
+ */
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     private ArrayList<Commentator> commentators;
@@ -143,16 +141,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 });
 
                 if (isFromFreshNews) {
-                    holder.ll_vote.setVisibility(View.VISIBLE);
                     Comment4FreshNews commentators4FreshNews = (Comment4FreshNews) commentator;
-                    holder.ll_support.setOnClickListener(new onVoteClickListener(commentators4FreshNews.getId() + "",
-                            Vote.OO, holder, commentators4FreshNews));
-                    holder.ll_un_support.setOnClickListener(new onVoteClickListener(commentators4FreshNews.getId() + "",
-                            Vote.XX, holder, commentators4FreshNews));
                     holder.tv_content.setText(commentators4FreshNews.getCommentContent());
                     ImageLoadProxy.displayHeadIcon(commentators4FreshNews.getAvatar_url(), holder.img_header);
                 } else {
-                    holder.ll_vote.setVisibility(View.GONE);
                     String timeString = commentator.getCreated_at().replace("T", " ");
                     timeString = timeString.substring(0, timeString.indexOf("+"));
                     holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(timeString));
@@ -182,87 +174,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     }
 
-    private class onVoteClickListener implements View.OnClickListener {
-
-        private String comment_ID;
-        private String style;
-        private CommentViewHolder holder;
-        private Comment4FreshNews commentator;
-
-        public onVoteClickListener(String comment_ID, String style, CommentViewHolder holder, Comment4FreshNews commentator) {
-            this.comment_ID = comment_ID;
-            this.style = style;
-            this.holder = holder;
-            this.commentator = commentator;
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (holder.isClickFinish) {
-                vote(comment_ID, style, holder, commentator);
-                holder.isClickFinish = false;
-            }
-        }
-    }
-
-    public void vote(String comment_ID, String style, final CommentViewHolder holder, final Comment4FreshNews commentator) {
-
-        String url;
-
-        if (style.equals(Vote.XX)) {
-            url = Vote.getXXUrl(comment_ID);
-        } else {
-            url = Vote.getOOUrl(comment_ID);
-        }
-
-        RequestManager.addRequest(new Request4Vote(url, new
-                Response.Listener<Vote>() {
-                    @Override
-                    public void onResponse(Vote response) {
-
-                        holder.isClickFinish = true;
-                        String result = response.getResult();
-
-                        if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-                            ShowToast.Short("顶的好舒服~");
-                            //变红+1
-                            int vote = commentator.getVote_positive();
-                            commentator.setVote_positive(vote + 1);
-                            holder.tv_like.setText(commentator.getVote_positive() + "");
-                            holder.tv_like.setTypeface(Typeface.DEFAULT_BOLD);
-                            holder.tv_like.setTextColor(mActivity.getResources().getColor
-                                    (android.R.color.holo_red_light));
-                            holder.tv_support_des.setTextColor(mActivity.getResources().getColor
-                                    (android.R.color.holo_red_light));
-
-                        } else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-                            ShowToast.Short("疼...轻点插");
-                            //变绿+1
-                            int vote = commentator.getVote_negative();
-                            commentator.setVote_negative(vote + 1);
-                            holder.tv_unlike.setText(commentator.getVote_negative() + "");
-                            holder.tv_unlike.setTypeface(Typeface.DEFAULT_BOLD);
-                            holder.tv_unlike.setTextColor(mActivity.getResources().getColor
-                                    (android.R.color.holo_green_light));
-                            holder.tv_un_support_des.setTextColor(mActivity.getResources().getColor
-                                    (android.R.color.holo_green_light));
-
-                        } else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-                            ShowToast.Short("投过票了");
-                        } else {
-                            ShowToast.Short("卧槽，发生了什么！");
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ShowToast.Short(ConstantString.VOTE_FAILED);
-                holder.isClickFinish = true;
-            }
-        }), mActivity);
-    }
-
     private List<Comment4FreshNews> addFloors4FreshNews(Comment4FreshNews commentator) {
         return commentator.getParentComments();
     }
@@ -285,7 +196,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public int getItemCount() {
-
         if (isFromFreshNews) {
             return commentators4FreshNews.size();
         } else {
@@ -307,8 +217,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 .Listener<ArrayList<Commentator>>() {
             @Override
             public void onResponse(ArrayList<Commentator> response) {
-
-                Logger.d("size = " + response.size());
 
                 if (response.size() == 0) {
                     mLoadResultCallBack.onSuccess(LoadResultCallBack.SUCCESS_NONE, null);
@@ -393,9 +301,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         for (Comment4FreshNews subComment : subComments) {
                             subComment.setTag(Comment4FreshNews.TAG_HOT);
                         }
-
                         commentators4FreshNews.addAll(subComments);
-
                     }
 
                     Comment4FreshNews comment4FreshNews = new Comment4FreshNews();
@@ -446,35 +352,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         @InjectView(R.id.tv_time)
         TextView tv_time;
         @Optional
-        @InjectView(R.id.ll_vote)
-        LinearLayout ll_vote;
-        @Optional
-        @InjectView(R.id.ll_support)
-        LinearLayout ll_support;
-        @Optional
-        @InjectView(R.id.ll_unsupport)
-        LinearLayout ll_un_support;
-        @Optional
         @InjectView(R.id.img_header)
         ImageView img_header;
         @Optional
         @InjectView(R.id.floors_parent)
         FloorView floors_parent;
-        @Optional
-        @InjectView(R.id.tv_like)
-        TextView tv_like;
-        @Optional
-        @InjectView(R.id.tv_support_des)
-        TextView tv_support_des;
-        @Optional
-        @InjectView(R.id.tv_unlike)
-        TextView tv_unlike;
-        @Optional
-        @InjectView(R.id.tv_unsupport_des)
-        TextView tv_un_support_des;
-
-        //用于处理多次点击造成的网络访问
-        private boolean isClickFinish;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
