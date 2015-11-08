@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.inject(this);
+        mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.title_activity_setting);
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);

@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -36,6 +37,7 @@ public class FreshNewsDetailActivity extends BaseActivity {
     @Override
     protected void initView() {
         ButterKnife.inject(this);
+        mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);
     }

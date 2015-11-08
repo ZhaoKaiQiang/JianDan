@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
 
         ButterKnife.inject(this);
+        mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -130,6 +132,7 @@ public class MainActivity extends BaseActivity {
                         .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .positiveColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .negativeColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                        .titleColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .negativeText("否")
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override

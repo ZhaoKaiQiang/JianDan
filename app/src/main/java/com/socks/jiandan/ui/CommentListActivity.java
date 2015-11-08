@@ -1,6 +1,7 @@
 package com.socks.jiandan.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +49,7 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
     public void initView() {
         ButterKnife.inject(this);
 
+        mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("评论");
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);

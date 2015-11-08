@@ -66,6 +66,7 @@ public class PushCommentActivity extends BaseActivity {
     @Override
     public void initView() {
         ButterKnife.inject(this);
+        mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("回复");
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);
@@ -106,8 +107,9 @@ public class PushCommentActivity extends BaseActivity {
                         .title("作为游客留言")
                         .backgroundColor(getResources().getColor(JDApplication.COLOR_OF_DIALOG))
                         .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
-                        .positiveColor(Color.WHITE)
-                        .negativeColor(Color.WHITE)
+                        .positiveColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                        .negativeColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                        .titleColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .customView(R.layout.dialog_commentotar_info, true)
                         .positiveText("确定")
                         .negativeText(android.R.string.cancel)

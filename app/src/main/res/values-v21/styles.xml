@@ -3,8 +3,16 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="actionBarStyle">@style/JDActionBarStyle</item>
+        <item name="drawerArrowStyle">@style/AppTheme.JDDrawerArrowStyle</item>
+
         <item name="android:navigationBarColor">@color/accent</item>
         <item name="android:colorControlNormal">@color/accent</item>
+        <item name="android:colorControlActivated">@color/accent</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 
 </resources>

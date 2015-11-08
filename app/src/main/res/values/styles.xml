@@ -11,19 +11,18 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <!--window background-->
         <item name="android:windowBackground">@color/comment_bg</item>
-        <!--actionbar text color-->
-        <item name="android:textColorPrimary">@color/actionbar_title</item>
-        <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
 
     <!-- Normal application theme. -->
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="actionBarStyle">@style/JDActionBarStyle</item>
         <item name="drawerArrowStyle">@style/AppTheme.JDDrawerArrowStyle</item>
+        <!--actionbar text color-->
+        <item name="android:textColorPrimary">@color/primary_text</item>
     </style>
 
     <!-- 设置标题栏样式 -->
-    <style name="JDActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
+    <style name="JDActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="titleTextStyle">@style/ActionBarTitleStyle</item>
     </style>
 
