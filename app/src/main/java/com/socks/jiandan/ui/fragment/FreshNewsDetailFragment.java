@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.android.volley.Response;
@@ -19,6 +20,7 @@ import com.socks.jiandan.net.Request4FreshNewsDetail;
 import com.socks.jiandan.ui.CommentListActivity;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.String2TimeUtil;
+import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,6 +29,8 @@ public class FreshNewsDetailFragment extends BaseFragment {
 
     @InjectView(R.id.webView)
     WebView webView;
+    @InjectView(R.id.loading)
+    RotateLoading loading;
 
     private FreshNews freshNews;
 
@@ -53,10 +57,17 @@ public class FreshNewsDetailFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         setHasOptionsMenu(true);
-
         freshNews = (FreshNews) getArguments().getSerializable(DATA_FRESH_NEWS);
-
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress > 90) {
+                    loading.stop();
+                }
+            }
+        });
         executeRequest(new Request4FreshNewsDetail(FreshNews.getUrlFreshNewsDetail(freshNews.getId()),
                 new Response.Listener<String>() {
                     @Override
@@ -70,7 +81,7 @@ public class FreshNewsDetailFragment extends BaseFragment {
 
                     }
                 }));
-
+        loading.start();
     }
 
     private static String getHtml(FreshNews freshNews, String content) {
@@ -138,7 +149,6 @@ public class FreshNewsDetailFragment extends BaseFragment {
         switch (item.getItemId()) {
             case R.id.action_comment:
                 Intent intent = new Intent(getActivity(), CommentListActivity.class);
-//                Intent intent = new Intent(getActivity(), CommentList4FreshNewsActivity.class);
                 intent.putExtra(DATA_THREAD_ID, freshNews.getId());
                 intent.putExtra(DATA_IS_FROM_FRESH_NEWS, true);
                 startActivity(intent);

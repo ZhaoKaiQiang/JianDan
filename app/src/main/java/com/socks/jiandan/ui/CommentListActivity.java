@@ -9,14 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.socks.jiandan.R;
 import com.socks.jiandan.adapter.CommentAdapter;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.utils.ShowToast;
-import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
+import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,10 +26,10 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
     SwipeRefreshLayout mSwipeRefreshLayout;
     @InjectView(R.id.recycler_view)
     RecyclerView mRecyclerView;
-    @InjectView(R.id.google_progress)
-    GoogleProgressBar google_progress;
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
+    @InjectView(R.id.loading)
+    RotateLoading loading;
 
     private String thread_key;
     private String thread_id;
@@ -75,7 +74,6 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
 
     @Override
     public void initData() {
-        google_progress.setVisibility(View.VISIBLE);
         thread_key = getIntent().getStringExtra(DATA_THREAD_KEY);
         thread_id = getIntent().getStringExtra(DATA_THREAD_ID);
         isFromFreshNews = getIntent().getBooleanExtra(DATA_IS_FROM_FRESH_NEWS, false);
@@ -99,6 +97,7 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
         } else {
             mAdapter.loadData();
         }
+        loading.start();
     }
 
     @Override
@@ -139,14 +138,14 @@ public class CommentListActivity extends BaseActivity implements LoadResultCallB
         if (result == LoadResultCallBack.SUCCESS_NONE) {
             ShowToast.Short(NO_COMMENTS);
         }
-        google_progress.setVisibility(View.GONE);
+        loading.stop();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onError(int code, String msg) {
         mSwipeRefreshLayout.setRefreshing(false);
-        google_progress.setVisibility(View.GONE);
+       loading.stop();
         ShowToast.Short(LOAD_FAILED);
     }
 }

@@ -18,7 +18,7 @@ import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
-import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
+import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,8 +29,8 @@ public class VideoFragment extends BaseFragment implements LoadResultCallBack {
     AutoLoadRecyclerView mRecyclerView;
     @InjectView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.google_progress)
-    GoogleProgressBar google_progress;
+    @InjectView(R.id.loading)
+    RotateLoading loading;
 
     private VideoAdapter mAdapter;
 
@@ -75,6 +75,7 @@ public class VideoFragment extends BaseFragment implements LoadResultCallBack {
         mAdapter = new VideoAdapter(getActivity(), this, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.loadFirst();
+        loading.start();
     }
 
     @Override
@@ -95,16 +96,16 @@ public class VideoFragment extends BaseFragment implements LoadResultCallBack {
 
     @Override
     public void onSuccess(int result, Object object) {
+        loading.stop();
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
-        google_progress.setVisibility(View.GONE);
     }
 
     @Override
     public void onError(int code, String msg) {
+        loading.stop();
         ShowToast.Short(ConstantString.LOAD_FAILED);
-        google_progress.setVisibility(View.GONE);
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }

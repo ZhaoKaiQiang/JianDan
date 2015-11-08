@@ -5,7 +5,7 @@
     android:background="@color/comment_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/comment_toolbar"></include>
+    <include layout="@layout/common_toolbar"></include>
 
     <fragment
         android:id="@+id/fragment_setting"

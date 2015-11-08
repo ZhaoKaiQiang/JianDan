@@ -7,29 +7,4 @@
         <item name="android:colorControlNormal">@color/accent</item>
     </style>
 
-    <!-- 设置标题栏样式 -->
-    <style name="JDActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="titleTextStyle">@style/ActionBarTitleStyle</item>
-    </style>
-
-    <!-- 标题栏文字样式 -->
-    <style name="ActionBarTitleStyle" parent="Base.TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <!--图片详情页 -->
-    <style name="ImageDetailActivityTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:colorBackground">@android:color/black</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <!-- 新鲜事详情页-->
-    <style name="FreshNewsDetailActivityTheme" parent="@style/AppTheme">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="windowActionBarOverlay">true</item>
-    </style>
-
 </resources>

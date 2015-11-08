@@ -128,6 +128,8 @@ public class MainActivity extends BaseActivity {
                         .positiveText("是")
                         .backgroundColor(getResources().getColor(JDApplication.COLOR_OF_DIALOG))
                         .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                        .positiveColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                        .negativeColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .negativeText("否")
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override

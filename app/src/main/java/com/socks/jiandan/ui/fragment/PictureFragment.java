@@ -23,8 +23,8 @@ import com.socks.jiandan.utils.JDMediaScannerConnectionClient;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
-import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.imageloader.ImageLoadProxy;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
 
@@ -38,8 +38,8 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack,
     AutoLoadRecyclerView mRecyclerView;
     @InjectView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.google_progress)
-    GoogleProgressBar google_progress;
+    @InjectView(R.id.loading)
+    RotateLoading loading;
 
     private PictureAdapter mAdapter;
     //用于记录是否是首次进入
@@ -102,6 +102,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack,
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setmSaveFileCallBack(this);
         mAdapter.loadFirst();
+        loading.start();
     }
 
     public void onEventMainThread(NetWorkEvent event) {
@@ -155,7 +156,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack,
 
     @Override
     public void onSuccess(int result, Object object) {
-        google_progress.setVisibility(View.GONE);
+        loading.stop();
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -163,7 +164,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack,
 
     @Override
     public void onError(int code, String msg) {
-        google_progress.setVisibility(View.GONE);
+        loading.stop();
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }

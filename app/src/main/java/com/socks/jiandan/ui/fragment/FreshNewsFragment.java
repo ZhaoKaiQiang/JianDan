@@ -20,7 +20,7 @@ import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
-import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
+import com.victor.loading.rotate.RotateLoading;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,8 +31,8 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
     AutoLoadRecyclerView mRecyclerView;
     @InjectView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.google_progress)
-    GoogleProgressBar google_progress;
+    @InjectView(R.id.loading)
+    RotateLoading loading;
 
     private FreshNewsAdapter mAdapter;
 
@@ -83,6 +83,7 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
         mAdapter = new FreshNewsAdapter(getActivity(), mRecyclerView, this, isLargeMode);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.loadFirst();
+        loading.start();
     }
 
     @Override
@@ -102,7 +103,7 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
 
     @Override
     public void onSuccess(int result, Object object) {
-        google_progress.setVisibility(View.GONE);
+        loading.stop();
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -110,8 +111,8 @@ public class FreshNewsFragment extends BaseFragment implements LoadResultCallBac
 
     @Override
     public void onError(int code, String msg) {
+        loading.stop();
         ShowToast.Short(ConstantString.LOAD_FAILED);
-        google_progress.setVisibility(View.GONE);
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }

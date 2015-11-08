@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/comment_toolbar"
+        layout="@layout/common_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"></include>

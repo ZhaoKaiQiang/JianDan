@@ -5,7 +5,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/comment_toolbar"></include>
+    <include layout="@layout/common_toolbar"></include>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
