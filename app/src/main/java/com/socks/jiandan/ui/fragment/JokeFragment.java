@@ -48,7 +48,7 @@ public class JokeFragment extends BaseFragment implements LoadResultCallBack {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_joke, container, false);
+        View view = inflater.inflate(R.layout.fragment_auto_load, container, false);
         ButterKnife.inject(this, view);
         return view;
     }

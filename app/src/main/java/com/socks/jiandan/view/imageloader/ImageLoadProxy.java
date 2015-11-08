@@ -25,17 +25,50 @@ public class ImageLoadProxy {
         imageLoader.displayImage(url, target, options);
     }
 
+    /**
+     * 头像专用
+     *
+     * @param url
+     * @param target
+     */
     public static void displayHeadIcon(String url, ImageView target) {
         imageLoader.displayImage(url, target, getOptions4Header());
 
     }
 
+    /**
+     * 图片详情页专用
+     *
+     * @param url
+     * @param target
+     * @param loadingListener
+     */
     public static void displayImage4Detail(String url, ImageView target, SimpleImageLoadingListener loadingListener) {
         imageLoader.displayImage(url, target, getOption4Detail(), loadingListener);
     }
 
+    /**
+     * 图片列表页专用
+     *
+     * @param url
+     * @param target
+     * @param loadingResource
+     * @param loadingListener
+     * @param progressListener
+     */
     public static void displayImageList(String url, ImageView target, int loadingResource, SimpleImageLoadingListener loadingListener, ImageLoadingProgressListener progressListener) {
         imageLoader.displayImage(url, target, getOptions4ResetView(loadingResource), loadingListener, progressListener);
+    }
+
+    /**
+     * 自定义加载中图片
+     *
+     * @param url
+     * @param target
+     * @param loadingResource
+     */
+    public static void displayImageWithLoadingPicture(String url, ImageView target, int loadingResource) {
+        imageLoader.displayImage(url, target, getOptions4ResetView(loadingResource));
     }
 
     public static void loadImage(String url, SimpleImageLoadingListener loadingListener) {
