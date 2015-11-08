@@ -58,9 +58,11 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     private LoadResultCallBack mLoadResultCallBack;
     private Activity mActivity;
     private boolean isWifiConnected;
+    private Picture.PictureType mType;
 
-    public PictureAdapter(Activity activity, LoadResultCallBack loadResultCallBack, LoadFinishCallBack loadFinisCallBack) {
+    public PictureAdapter(Activity activity, LoadResultCallBack loadResultCallBack, LoadFinishCallBack loadFinisCallBack, Picture.PictureType type) {
         mActivity = activity;
+        mType = type;
         mLoadFinisCallBack = loadFinisCallBack;
         mLoadResultCallBack = loadResultCallBack;
         pictures = new ArrayList<>();
@@ -235,7 +237,8 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     }
 
     private void loadData() {
-        RequestManager.addRequest(new Request4Picture(Picture.getRequestUrl(Picture.PictureType.Duanzi, page),
+
+        RequestManager.addRequest(new Request4Picture(Picture.getRequestUrl(mType, page),
                 new Response.Listener<ArrayList<Picture>>
                         () {
                     @Override

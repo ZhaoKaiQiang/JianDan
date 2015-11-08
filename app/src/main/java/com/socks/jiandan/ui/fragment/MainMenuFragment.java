@@ -37,7 +37,6 @@ public class MainMenuFragment extends BaseFragment {
     private LinearLayoutManager mLayoutManager;
     private MainActivity mainActivity;
     private MenuAdapter mAdapter;
-
     private MenuItem.FragmentType currentFragment = MenuItem.FragmentType.XINXIANSHI;
 
     @Override
@@ -49,7 +48,6 @@ public class MainMenuFragment extends BaseFragment {
         } else {
             throw new IllegalArgumentException("The activity must be a MainActivity !");
         }
-
     }
 
     @Override
@@ -75,11 +73,9 @@ public class MainMenuFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mAdapter = new MenuAdapter();
         addAllMenuItems(mAdapter);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     private class MenuAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -108,7 +104,6 @@ public class MainMenuFragment extends BaseFragment {
                 public void onClick(View v) {
 
                     try {
-
                         if (currentFragment != menuItem.getType()) {
                             Fragment fragment = (Fragment) Class.forName(menuItem.getFragment()
                                     .getName()).newInstance();
@@ -118,9 +113,7 @@ public class MainMenuFragment extends BaseFragment {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                     mainActivity.closeDrawer();
-
                 }
             });
         }

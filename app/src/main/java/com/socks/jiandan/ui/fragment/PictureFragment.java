@@ -16,6 +16,7 @@ import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.model.NetWorkEvent;
+import com.socks.jiandan.model.Picture;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
@@ -26,9 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
-/**
- * 无聊图
- */
 public class PictureFragment extends BaseFragment implements LoadResultCallBack {
 
     @InjectView(R.id.recycler_view)
@@ -44,6 +42,8 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
     //记录最后一次提示显示时间，防止多次提示
     private long lastShowTime;
 
+    protected Picture.PictureType mType;
+
     public PictureFragment() {
     }
 
@@ -52,6 +52,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         isFirstChange = true;
+        mType = Picture.PictureType.BoringPicture;
     }
 
     @Override
@@ -92,7 +93,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
         });
 
         mRecyclerView.setOnPauseListenerParams(false, true);
-        mAdapter = new PictureAdapter(getActivity(), this, mRecyclerView);
+        mAdapter = new PictureAdapter(getActivity(), this, mRecyclerView, mType);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.loadFirst();
     }
@@ -160,5 +161,9 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    public void setType(Picture.PictureType mType) {
+        this.mType = mType;
     }
 }
