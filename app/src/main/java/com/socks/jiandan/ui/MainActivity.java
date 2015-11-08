@@ -54,12 +54,10 @@ public class MainActivity extends BaseActivity {
     protected void initView() {
 
         ButterKnife.inject(this);
-
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle("");
-        mToolbar.setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.app_name,
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name,
                 R.string.app_name) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -71,7 +69,7 @@ public class MainActivity extends BaseActivity {
                 invalidateOptionsMenu();
             }
         };
-
+        mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
         replaceFragment(R.id.frame_container, new FreshNewsFragment());
