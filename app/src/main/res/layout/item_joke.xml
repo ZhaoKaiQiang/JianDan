@@ -110,7 +110,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_unsupport_des"
+                        android:id="@+id/tv_un_support_des"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
