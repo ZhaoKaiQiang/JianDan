@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Joke implements Serializable {
 
-    public static final String URL_DUANZI = "http://jandan.net/?oxwlxojflwblxbsapi=jandan" +
+    public static final String URL_JOKE = "http://jandan.net/?oxwlxojflwblxbsapi=jandan" +
             ".get_duan_comments&page=";
 
     private String comment_ID;
@@ -27,7 +27,7 @@ public class Joke implements Serializable {
     }
 
     public static String getRequestUrl(int page) {
-        return URL_DUANZI + page;
+        return URL_JOKE + page;
     }
 
     public String getComment_ID() {

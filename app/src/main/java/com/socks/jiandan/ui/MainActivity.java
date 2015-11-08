@@ -18,6 +18,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.ui.fragment.FreshNewsFragment;
 import com.socks.jiandan.ui.fragment.MainMenuFragment;
@@ -125,6 +126,8 @@ public class MainActivity extends BaseActivity {
                         .title("无网络连接")
                         .content("去开启网络?")
                         .positiveText("是")
+                        .backgroundColor(getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                        .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .negativeText("否")
                         .callback(new MaterialDialog.ButtonCallback() {
                             @Override

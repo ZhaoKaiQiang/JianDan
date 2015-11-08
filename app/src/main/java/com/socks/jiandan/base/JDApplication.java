@@ -2,6 +2,7 @@ package com.socks.jiandan.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -10,6 +11,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
 import com.socks.jiandan.BuildConfig;
+import com.socks.jiandan.R;
 import com.socks.jiandan.cache.BaseCache;
 
 public class JDApplication extends Application {
@@ -17,6 +19,8 @@ public class JDApplication extends Application {
     private static Context mContext;
     private static DaoMaster daoMaster;
     private static DaoSession daoSession;
+    public static int COLOR_OF_DIALOG = R.color.primary;
+    public static int COLOR_OF_DIALOG_CONTENT = Color.WHITE;
 
     @Override
     public void onCreate() {

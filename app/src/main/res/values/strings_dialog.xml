@@ -12,6 +12,12 @@
         <item>复制</item>
     </string-array>
 
+    <string-array name="video_more">
+        <item>分享</item>
+        <item>复制</item>
+        <item>打开</item>
+    </string-array>
+
     <string-array name="picture_dialog">
         <item>分享</item>
         <item>保存</item>

@@ -11,5 +11,7 @@
     <string name="title_activity_video_detail">VideoDetailActivity</string>
     <string name="title_activity_joke">段子</string>
     <string name="title_activity_setting">设置</string>
+    <string name="loading">加载中...</string>
+    <string name="action_more">更多</string>
 
 </resources>

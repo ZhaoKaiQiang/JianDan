@@ -12,11 +12,9 @@ public interface ConstantString {
     String COPY_SUCCESS = "复制成功";
     String SAVE_SUCCESS = "保存成功";
     String SAVE_SMALL_SUCCESS = "保存缩略图成功";
-    String SHARE_TAIL = "分享自煎蛋增强版";
     String VOTE_XX = "疼...轻点插";
     String VOTE_OO = "顶的好舒服~";
     String VOTE_REPEAT = "投过票了";
-    String WHAT_HAPPEN = "卧槽，发生了什么！";
     String LOAD_NO_NETWORK = "无网络，当前为缓存数据";
     String FORBID_COMMENTS = "禁止评论";
     String NO_COMMENTS = "暂无评论";
@@ -31,5 +29,8 @@ public interface ConstantString {
     String DATA_IMAGE_ID = "img_id";
     String DATA_IMAGE_AUTHOR = "img_author";
     String DATA_IS_NEED_WEBVIEW = "is_need_webview";
+
+    String DATA_IS_SIAMLL_PIC =  "isSmallPic";
+    String DATA_FILE_PATH =  "file_path";
 
 }

@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.cache.VideoCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
@@ -115,6 +116,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             public void onClick(View v) {
                 new MaterialDialog.Builder(mActivity)
                         .items(R.array.joke_dialog)
+                        .backgroundColor(mActivity.getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                        .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -123,8 +126,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                                     //分享
                                     case 0:
                                         ShareUtil.shareText(mActivity, video
-                                                .getTitle().trim() + " " + video.getUrl() +
-                                                ConstantString.SHARE_TAIL);
+                                                .getTitle().trim() + " " + video.getUrl());
                                         break;
                                     //复制
                                     case 1:

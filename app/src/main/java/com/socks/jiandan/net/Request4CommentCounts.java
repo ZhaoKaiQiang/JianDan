@@ -11,9 +11,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * 评论数量请求器
- */
 public class Request4CommentCounts extends Request<ArrayList<CommentNumber>> {
 
     private Response.Listener<ArrayList<CommentNumber>> listener;

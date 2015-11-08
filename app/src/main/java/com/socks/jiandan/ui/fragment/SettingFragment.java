@@ -10,6 +10,7 @@ import android.preference.PreferenceFragment;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.socks.jiandan.R;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.utils.AppInfoUtil;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -81,9 +82,12 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
             MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                     .title("煎蛋开源版")
-                    .content("凯子出品，必属精品 ^_^")
+                    .backgroundColor(getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                    .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
+                    .content("我是凯子哥，热爱分享，欢迎star ^_^")
                     .positiveText("GitHub")
                     .negativeText("WeiBo")
+                    .neutralText("CSDN")
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
@@ -101,14 +105,12 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
                         @Override
                         public void onNeutral(MaterialDialog dialog) {
                             super.onNeutral(dialog);
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://blog.csdn.net/zhaokaiqiang1992")));
                         }
                     })
                     .build();
-
             dialog.show();
-
         }
-
         return true;
     }
 

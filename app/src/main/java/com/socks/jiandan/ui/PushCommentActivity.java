@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.model.Commentator;
 import com.socks.jiandan.net.Request4PushComment;
 import com.socks.jiandan.net.Request4PushFreshComment;
@@ -103,8 +104,8 @@ public class PushCommentActivity extends BaseActivity {
 
                 dialog = new MaterialDialog.Builder(this)
                         .title("作为游客留言")
-                        .backgroundColor(getResources().getColor(R.color.primary))
-                        .contentColor(Color.WHITE)
+                        .backgroundColor(getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                        .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .positiveColor(Color.WHITE)
                         .negativeColor(Color.WHITE)
                         .customView(R.layout.dialog_commentotar_info, true)

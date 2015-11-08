@@ -1,5 +1,6 @@
 package com.socks.jiandan.ui.fragment;
 
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,21 +14,25 @@ import android.view.ViewGroup;
 import com.socks.jiandan.R;
 import com.socks.jiandan.adapter.PictureAdapter;
 import com.socks.jiandan.base.BaseFragment;
+import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.model.Picture;
+import com.socks.jiandan.utils.JDMediaScannerConnectionClient;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShowToast;
 import com.socks.jiandan.view.AutoLoadRecyclerView;
 import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import com.socks.jiandan.view.imageloader.ImageLoadProxy;
 
+import java.io.File;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
-public class PictureFragment extends BaseFragment implements LoadResultCallBack {
+public class PictureFragment extends BaseFragment implements LoadResultCallBack, LoadFinishCallBack {
 
     @InjectView(R.id.recycler_view)
     AutoLoadRecyclerView mRecyclerView;
@@ -41,7 +46,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
     private boolean isFirstChange;
     //记录最后一次提示显示时间，防止多次提示
     private long lastShowTime;
-
+    private MediaScannerConnection connection;
     protected Picture.PictureType mType;
 
     public PictureFragment() {
@@ -95,6 +100,7 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
         mRecyclerView.setOnPauseListenerParams(false, true);
         mAdapter = new PictureAdapter(getActivity(), this, mRecyclerView, mType);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setmSaveFileCallBack(this);
         mAdapter.loadFirst();
     }
 
@@ -165,5 +171,18 @@ public class PictureFragment extends BaseFragment implements LoadResultCallBack 
 
     public void setType(Picture.PictureType mType) {
         this.mType = mType;
+    }
+
+    @Override
+    public void loadFinish(Object obj) {
+        Bundle bundle = (Bundle) obj;
+        boolean isSmallPic = bundle.getBoolean(DATA_IS_SIAMLL_PIC);
+        String filePath = bundle.getString(DATA_FILE_PATH);
+        File newFile = new File(filePath);
+        JDMediaScannerConnectionClient connectionClient = new JDMediaScannerConnectionClient(isSmallPic,
+                newFile);
+        connection = new MediaScannerConnection(getActivity(), connectionClient);
+        connectionClient.setMediaScannerConnection(connection);
+        connection.connect();
     }
 }

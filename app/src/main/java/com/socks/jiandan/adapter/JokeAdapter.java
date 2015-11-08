@@ -2,7 +2,6 @@ package com.socks.jiandan.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.cache.JokeCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
@@ -85,26 +85,15 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
         holder.tv_time.setText(String2TimeUtil.dateString2GoodExperienceFormat(joke.getComment_date()));
         holder.tv_like.setText(joke.getVote_positive());
         holder.tv_comment_count.setText(joke.getComment_counts());
-
-        //用于恢复默认的文字
-        holder.tv_like.setTypeface(Typeface.DEFAULT);
-        holder.tv_like.setTextColor(mActivity.getResources().getColor(R.color
-                .secondary_text_default_material_light));
-        holder.tv_support_des.setTextColor(mActivity.getResources().getColor(R.color
-                .secondary_text_default_material_light));
-
         holder.tv_unlike.setText(joke.getVote_negative());
-        holder.tv_unlike.setTypeface(Typeface.DEFAULT);
-        holder.tv_unlike.setTextColor(mActivity.getResources().getColor(R.color
-                .secondary_text_default_material_light));
-        holder.tv_un_support_des.setTextColor(mActivity.getResources().getColor(R.color
-                .secondary_text_default_material_light));
 
         holder.img_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new MaterialDialog.Builder(mActivity)
                         .items(R.array.joke_dialog)
+                        .backgroundColor(mActivity.getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                        .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -112,8 +101,7 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
                                 switch (which) {
                                     //分享
                                     case 0:
-                                        ShareUtil.shareText(mActivity, joke
-                                                .getComment_content().trim() + ConstantString.SHARE_TAIL);
+                                        ShareUtil.shareText(mActivity, joke.getComment_content().trim());
                                         break;
                                     //复制
                                     case 1:
@@ -244,8 +232,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
         private TextView tv_like;
         private TextView tv_unlike;
         private TextView tv_comment_count;
-        private TextView tv_un_support_des;
-        private TextView tv_support_des;
 
         private ImageView img_share;
         private CardView card;
@@ -260,8 +246,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
             tv_like = (TextView) contentView.findViewById(R.id.tv_like);
             tv_unlike = (TextView) contentView.findViewById(R.id.tv_unlike);
             tv_comment_count = (TextView) contentView.findViewById(R.id.tv_comment_count);
-            tv_un_support_des = (TextView) contentView.findViewById(R.id.tv_un_support_des);
-            tv_support_des = (TextView) contentView.findViewById(R.id.tv_support_des);
 
             img_share = (ImageView) contentView.findViewById(R.id.img_share);
             card = (CardView) contentView.findViewById(R.id.card);

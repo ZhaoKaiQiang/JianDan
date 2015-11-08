@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.cache.PictureCache;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
@@ -59,6 +60,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
     private Activity mActivity;
     private boolean isWifiConnected;
     private Picture.PictureType mType;
+    private LoadFinishCallBack mSaveFileCallBack;
 
     public PictureAdapter(Activity activity, LoadResultCallBack loadResultCallBack, LoadFinishCallBack loadFinisCallBack, Picture.PictureType type) {
         mActivity = activity;
@@ -176,6 +178,8 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
             public void onClick(View v) {
                 new MaterialDialog.Builder(mActivity)
                         .items(R.array.picture_dialog)
+                        .backgroundColor(mActivity.getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                        .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                         .itemsCallback(new MaterialDialog.ListCallback() {
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -189,7 +193,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
                                     //保存
                                     case 1:
                                         FileUtil.savePicture(mActivity, picture
-                                                .getPics()[0]);
+                                                .getPics()[0],mSaveFileCallBack);
                                         break;
                                 }
                             }
@@ -310,6 +314,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.PictureV
 
     public void setIsWifi(boolean isWifiConnected) {
         this.isWifiConnected = isWifiConnected;
+    }
+
+    public void setmSaveFileCallBack(LoadFinishCallBack mSaveFileCallBack) {
+        this.mSaveFileCallBack = mSaveFileCallBack;
     }
 
     public static class PictureViewHolder extends RecyclerView.ViewHolder {

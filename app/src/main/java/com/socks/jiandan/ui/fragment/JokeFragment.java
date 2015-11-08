@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.socks.jiandan.adapter.JokeAdapter;
 import com.socks.jiandan.R;
+import com.socks.jiandan.adapter.JokeAdapter;
 import com.socks.jiandan.base.BaseFragment;
 import com.socks.jiandan.callback.LoadMoreListener;
 import com.socks.jiandan.callback.LoadResultCallBack;
@@ -22,9 +22,6 @@ import com.socks.jiandan.view.googleprogressbar.GoogleProgressBar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * 段子碎片
- */
 public class JokeFragment extends BaseFragment implements LoadResultCallBack {
 
     @InjectView(R.id.recycler_view)

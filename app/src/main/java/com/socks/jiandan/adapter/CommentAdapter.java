@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.callback.LoadResultCallBack;
 import com.socks.jiandan.model.Comment4FreshNews;
@@ -110,8 +110,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                         new MaterialDialog.Builder(mActivity)
                                 .title(comment.getName())
                                 .items(R.array.comment_dialog)
-                                .backgroundColor(mActivity.getResources().getColor(R.color.primary))
-                                .contentColor(Color.WHITE)
+                                .backgroundColor(mActivity.getResources().getColor(JDApplication.COLOR_OF_DIALOG))
+                                .contentColor(JDApplication.COLOR_OF_DIALOG_CONTENT)
                                 .itemsCallback(new MaterialDialog.ListCallback() {
                                     @Override
                                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {

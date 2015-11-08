@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/primary_material_dark">
+            android:background="@color/primary">
 
             <ImageButton
                 android:id="@+id/imgBtn_back"

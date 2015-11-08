@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -25,9 +26,11 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.base.ConstantString;
+import com.socks.jiandan.callback.LoadFinishCallBack;
 import com.socks.jiandan.model.Vote;
 import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.utils.FileUtil;
+import com.socks.jiandan.utils.JDMediaScannerConnectionClient;
 import com.socks.jiandan.utils.ScreenSizeUtil;
 import com.socks.jiandan.utils.ShareUtil;
 import com.socks.jiandan.utils.ShowToast;
@@ -40,7 +43,7 @@ import butterknife.InjectView;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ImageDetailActivity extends BaseActivity implements View.OnClickListener {
+public class ImageDetailActivity extends BaseActivity implements View.OnClickListener, LoadFinishCallBack {
 
     @InjectView(R.id.img_back)
     ImageButton img_back;
@@ -76,6 +79,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean isBarShow = true;
     private boolean isImgHaveLoad = false;
     private File imgCacheFile;
+    private MediaScannerConnection connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +124,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.img_download:
-                FileUtil.savePicture(this, img_urls[0]);
+                FileUtil.savePicture(this, img_urls[0], this);
                 break;
         }
     }
@@ -324,4 +328,25 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    @Override
+    public void loadFinish(Object obj) {
+        //下载完图片后，通知更新
+        Bundle bundle = (Bundle) obj;
+        boolean isSmallPic = bundle.getBoolean(DATA_IS_SIAMLL_PIC);
+        String filePath = bundle.getString(DATA_FILE_PATH);
+        File newFile = new File(filePath);
+        JDMediaScannerConnectionClient connectionClient = new JDMediaScannerConnectionClient(isSmallPic,
+                newFile);
+        connection = new MediaScannerConnection(this, connectionClient);
+        connectionClient.setMediaScannerConnection(connection);
+        connection.connect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (connection != null && connection.isConnected()) {
+            connection.disconnect();
+        }
+    }
 }
