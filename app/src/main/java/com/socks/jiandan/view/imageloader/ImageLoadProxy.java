@@ -1,13 +1,17 @@
 package com.socks.jiandan.view.imageloader;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 
 /**
@@ -21,6 +25,23 @@ public class ImageLoadProxy {
         return imageLoader;
     }
 
+    public static void initImageLoader(Context context) {
+        ImageLoaderConfiguration.Builder build = new ImageLoaderConfiguration.Builder(context);
+        build.tasksProcessingOrder(QueueProcessingType.LIFO);
+        build.diskCacheSize(1024 * 1024 * 30);
+        if (BuildConfig.DEBUG) {
+            build.writeDebugLogs();
+        }
+        getImageLoader().init(build.build());
+    }
+
+    /**
+     * 自定义Option
+     *
+     * @param url
+     * @param target
+     * @param options
+     */
     public static void displayImage(String url, ImageView target, DisplayImageOptions options) {
         imageLoader.displayImage(url, target, options);
     }
@@ -44,7 +65,7 @@ public class ImageLoadProxy {
      * @param loadingListener
      */
     public static void displayImage4Detail(String url, ImageView target, SimpleImageLoadingListener loadingListener) {
-        imageLoader.displayImage(url, target, getOption4Detail(), loadingListener);
+        imageLoader.displayImage(url, target, getOption4ExactlyType(), loadingListener);
     }
 
     /**
@@ -57,7 +78,7 @@ public class ImageLoadProxy {
      * @param progressListener
      */
     public static void displayImageList(String url, ImageView target, int loadingResource, SimpleImageLoadingListener loadingListener, ImageLoadingProgressListener progressListener) {
-        imageLoader.displayImage(url, target, getOptions4ResetView(loadingResource), loadingListener, progressListener);
+        imageLoader.displayImage(url, target, getOptions4PictureList(loadingResource), loadingListener, progressListener);
     }
 
     /**
@@ -68,14 +89,25 @@ public class ImageLoadProxy {
      * @param loadingResource
      */
     public static void displayImageWithLoadingPicture(String url, ImageView target, int loadingResource) {
-        imageLoader.displayImage(url, target, getOptions4ResetView(loadingResource));
+        imageLoader.displayImage(url, target, getOptions4PictureList(loadingResource));
     }
 
-    public static void loadImage(String url, SimpleImageLoadingListener loadingListener) {
-        imageLoader.loadImage(url, getOption4Detail(), loadingListener);
+    /**
+     * 当使用WebView加载大图的时候，使用本方法现下载到本地然后再加载
+     *
+     * @param url
+     * @param loadingListener
+     */
+    public static void loadImageFromLocalCache(String url, SimpleImageLoadingListener loadingListener) {
+        imageLoader.loadImage(url, getOption4ExactlyType(), loadingListener);
     }
 
-    public static DisplayImageOptions getOption4Detail() {
+    /**
+     * 设置图片放缩类型为模式EXACTLY，用于图片详情页的缩放
+     *
+     * @return
+     */
+    public static DisplayImageOptions getOption4ExactlyType() {
         return new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
@@ -86,7 +118,11 @@ public class ImageLoadProxy {
                 .build();
     }
 
-
+    /**
+     * 加载头像专用Options，默认加载中、失败和空url为 ic_loading_small
+     *
+     * @return
+     */
     public static DisplayImageOptions getOptions4Header() {
         return new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
@@ -98,7 +134,14 @@ public class ImageLoadProxy {
                 .build();
     }
 
-    public static DisplayImageOptions getOptions4ResetView(int loadingResource) {
+    /**
+     * 加载图片列表专用，加载前会重置View
+     * {@link com.nostra13.universalimageloader.core.DisplayImageOptions.Builder#resetViewBeforeLoading} = true
+     *
+     * @param loadingResource
+     * @return
+     */
+    public static DisplayImageOptions getOptions4PictureList(int loadingResource) {
         return new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)

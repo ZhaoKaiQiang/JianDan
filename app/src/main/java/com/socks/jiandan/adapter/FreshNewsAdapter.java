@@ -56,7 +56,7 @@ public class FreshNewsAdapter extends RecyclerView.Adapter<FreshNewsAdapter.View
         mFreshNews = new ArrayList<>();
 
         int loadingResource = isLargeMode ? R.drawable.ic_loading_large : R.drawable.ic_loading_small;
-        options = ImageLoadProxy.getOptions4ResetView(loadingResource);
+        options = ImageLoadProxy.getOptions4PictureList(loadingResource);
     }
 
     private void setAnimation(View viewToAnimate, int position) {

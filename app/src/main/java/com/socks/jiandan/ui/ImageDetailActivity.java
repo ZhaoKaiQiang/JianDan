@@ -75,7 +75,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
     private String id;
     private String threadKey;
     private String imgPath;
-    private boolean is_need_webview;
+    private boolean isNeedWebView;
     private boolean isBarShow = true;
     private boolean isImgHaveLoad = false;
     private File imgCacheFile;
@@ -136,9 +136,9 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
         img_urls = intent.getStringArrayExtra(DATA_IMAGE_URL);
         id = intent.getStringExtra(DATA_IMAGE_ID);
         threadKey = intent.getStringExtra(DATA_THREAD_KEY);
-        is_need_webview = intent.getBooleanExtra(DATA_IS_NEED_WEBVIEW, false);
+        isNeedWebView = intent.getBooleanExtra(DATA_IS_NEED_WEBVIEW, false);
 
-        if (is_need_webview) {
+        if (isNeedWebView) {
             webView.getSettings().setJavaScriptEnabled(true);
             webView.addJavascriptInterface(this, "external");
             webView.setWebViewClient(new WebViewClient() {
@@ -181,7 +181,7 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
                     });
 
         } else {
-            ImageLoadProxy.loadImage(img_urls[0], new
+            ImageLoadProxy.loadImageFromLocalCache(img_urls[0], new
                     SimpleImageLoadingListener() {
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

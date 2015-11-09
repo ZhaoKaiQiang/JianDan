@@ -5,14 +5,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
-import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 import com.socks.jiandan.cache.BaseCache;
+import com.socks.jiandan.utils.StrictModeUtil;
+import com.socks.jiandan.view.imageloader.ImageLoadProxy;
 
 public class JDApplication extends Application {
 
@@ -26,21 +24,13 @@ public class JDApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        initImageLoader();
+        ImageLoadProxy.initImageLoader(this);
+        StrictModeUtil.init();
     }
 
     @Nullable
     public static Context getContext() {
         return mContext;
-    }
-
-    private void initImageLoader() {
-        ImageLoaderConfiguration.Builder build = new ImageLoaderConfiguration.Builder(this);
-        build.tasksProcessingOrder(QueueProcessingType.LIFO);
-        if (BuildConfig.DEBUG) {
-//            build.writeDebugLogs();
-        }
-        ImageLoader.getInstance().init(build.build());
     }
 
     public static DaoMaster getDaoMaster(Context context) {
