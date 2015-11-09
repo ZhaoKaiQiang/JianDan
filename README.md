@@ -28,7 +28,8 @@
 - 对网络状态的时时检测
 - 对UIL的个性化设置、封装和基本使用
 
-
+##其他分支
+- [使用OkHttp替换Volley底层实现的版本](https://github.com/ZhaoKaiQiang/JianDan/tree/OkHttpWithVolley)
 
 ##优化的功能
 - 添加加载等待动画
