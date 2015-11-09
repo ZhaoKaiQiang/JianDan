@@ -5,7 +5,7 @@
 
 ##效果图
 
-![](http://i5.tietuku.com/253165ed19e6e9eb.gif)
+![http://i5.tietuku.com/253165ed19e6e9eb.gif](http://i5.tietuku.com/253165ed19e6e9eb.gif)
 
 ##优化的功能
 - 添加加载等待动画
