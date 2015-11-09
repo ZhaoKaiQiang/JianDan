@@ -7,9 +7,12 @@ import android.support.annotation.Nullable;
 
 import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
+import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 import com.socks.jiandan.cache.BaseCache;
 import com.socks.jiandan.utils.StrictModeUtil;
+import com.socks.jiandan.utils.logger.LogLevel;
+import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.imageloader.ImageLoadProxy;
 
 public class JDApplication extends Application {
@@ -26,6 +29,10 @@ public class JDApplication extends Application {
         mContext = this;
         ImageLoadProxy.initImageLoader(this);
         StrictModeUtil.init();
+
+        if (BuildConfig.DEBUG) {
+            Logger.init().hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.FULL);
+        }
     }
 
     @Nullable

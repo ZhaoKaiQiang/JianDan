@@ -19,6 +19,8 @@ import com.socks.jiandan.R;
  */
 public class ImageLoadProxy {
 
+    private static boolean isShowLog = false;
+
     private static ImageLoader imageLoader = ImageLoader.getInstance();
 
     public static ImageLoader getImageLoader() {
@@ -29,7 +31,7 @@ public class ImageLoadProxy {
         ImageLoaderConfiguration.Builder build = new ImageLoaderConfiguration.Builder(context);
         build.tasksProcessingOrder(QueueProcessingType.LIFO);
         build.diskCacheSize(1024 * 1024 * 30);
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && isShowLog) {
             build.writeDebugLogs();
         }
         getImageLoader().init(build.build());
