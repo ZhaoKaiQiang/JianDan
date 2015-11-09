@@ -47,7 +47,7 @@
 - 添加新鲜事大图模式切换功能
 
 ##关于我
-- Android开发工程师
+- [Android研发工程师](http://weibo.com/zhaokaiqiang1992)
 - [CSDN博客专家](http://blog.csdn.net/zhaokaiqiang1992)
 
 ##使用到的开源框架
