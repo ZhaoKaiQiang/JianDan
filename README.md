@@ -1,7 +1,24 @@
 # JianDan客户端高仿版
 ---
 ##项目介绍
-对煎蛋客户端进行优化
+
+对煎蛋客户端进行优化，API用的是煎蛋官方的。
+
+项目虽小，五脏俱全，学习这个项目，你将学到
+
+- Android Studio开发Android的基本配置
+- 对MD风格的Theme兼容
+- 对Volley网络请求库的封装，超时、重试次数的自定义
+- Application、Activity和Fragmet基类的基本设计
+- MVC架构的使用
+- 对超长图片加载的解决方案
+- WebView与JS通信，及加载本地缓存图片的实现
+- RecyclerView自动加载、加载完成回调，以及item进入动画
+- 多楼层回复自定义控件的实现
+- 严格模式(StrictMode)的设置及用法
+- 使用GreenDao对数据进行本地缓存
+- 对网络状态的时时检测
+- 对UIL的个性化设置、封装和基本使用
 
 ##效果图
 
