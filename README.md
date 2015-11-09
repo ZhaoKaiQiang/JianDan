@@ -3,6 +3,10 @@
 ##项目介绍
 对煎蛋客户端进行优化
 
+##效果图
+
+![](http://i5.tietuku.com/1991420f4b8ea891.gif)
+
 ##优化的功能
 - 添加加载等待动画
 - 添加加载失败提示
@@ -20,6 +24,10 @@
 - 由于小视频接口有问题，当加载成功的数据少于10条时，会自动加载下一页，直到大于10条为止
 - 添加新鲜事大图模式切换功能
 
+##关于我
+- Android开发工程师
+- [CSDN博客专家](http://blog.csdn.net/zhaokaiqiang1992)
+
 ##使用到的开源框架
 - [Volley](https://android.googlesource.com/platform/frameworks/volley)
 - [Universal Image Load](https://github.com/nostra13/Android-Universal-Image-Loader)
@@ -28,9 +36,4 @@
 - [material-dialogs](https://github.com/afollestad/material-dialogs)
 - [gson](https://code.google.com/p/google-gson/)
 - [GreenDao](http://greendao-orm.com/)
-
-##关于我
-- Android开发工程师
-- [CSDN博客专家](http://blog.csdn.net/zhaokaiqiang1992)
-
-##效果图
+- [Loading](https://github.com/yankai-victor/Loading)
