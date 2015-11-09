@@ -26,9 +26,9 @@ public class JDApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        StrictModeUtil.init();
         mContext = this;
         ImageLoadProxy.initImageLoader(this);
-        StrictModeUtil.init();
 
         if (BuildConfig.DEBUG) {
             Logger.init().hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.FULL);

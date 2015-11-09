@@ -21,9 +21,16 @@ public class ImageLoadProxy {
 
     private static boolean isShowLog = false;
 
-    private static ImageLoader imageLoader = ImageLoader.getInstance();
+    private static ImageLoader imageLoader;
 
     public static ImageLoader getImageLoader() {
+
+        if (imageLoader == null) {
+            synchronized (ImageLoadProxy.class) {
+                imageLoader = ImageLoader.getInstance();
+            }
+        }
+
         return imageLoader;
     }
 
