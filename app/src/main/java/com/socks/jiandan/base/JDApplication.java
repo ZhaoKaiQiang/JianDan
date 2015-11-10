@@ -3,7 +3,6 @@ package com.socks.jiandan.base;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 
 import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
@@ -14,19 +13,25 @@ import com.socks.jiandan.utils.StrictModeUtil;
 import com.socks.jiandan.utils.logger.LogLevel;
 import com.socks.jiandan.utils.logger.Logger;
 import com.socks.jiandan.view.imageloader.ImageLoadProxy;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 public class JDApplication extends Application {
+
+    public static int COLOR_OF_DIALOG = R.color.primary;
+    public static int COLOR_OF_DIALOG_CONTENT = Color.WHITE;
 
     private static Context mContext;
     private static DaoMaster daoMaster;
     private static DaoSession daoSession;
-    public static int COLOR_OF_DIALOG = R.color.primary;
-    public static int COLOR_OF_DIALOG_CONTENT = Color.WHITE;
+
+    private RefWatcher refWatcher;
 
     @Override
     public void onCreate() {
-        super.onCreate();
         StrictModeUtil.init();
+        super.onCreate();
+        refWatcher = LeakCanary.install(this);
         mContext = this;
         ImageLoadProxy.initImageLoader(this);
 
@@ -35,10 +40,15 @@ public class JDApplication extends Application {
         }
     }
 
-    @Nullable
     public static Context getContext() {
         return mContext;
     }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        JDApplication application = (JDApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
 
     public static DaoMaster getDaoMaster(Context context) {
         if (daoMaster == null) {

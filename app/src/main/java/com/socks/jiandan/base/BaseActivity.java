@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.socks.jiandan.BuildConfig;
 import com.socks.jiandan.R;
 import com.socks.jiandan.net.RequestManager;
-import com.socks.jiandan.utils.ActivityManager;
 import com.socks.jiandan.utils.logger.LogLevel;
 import com.socks.jiandan.utils.logger.Logger;
 
@@ -28,8 +27,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        JDApplication.getRefWatcher(this).watch(this);
         mContext = this;
-        ActivityManager.getAppManager().addActivity(this);
 
         if (BuildConfig.DEBUG) {
             Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.FULL).hideThreadInfo();
@@ -47,7 +46,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityManager.getAppManager().finishActivity(this);
         RequestManager.cancelAll(this);
     }
 

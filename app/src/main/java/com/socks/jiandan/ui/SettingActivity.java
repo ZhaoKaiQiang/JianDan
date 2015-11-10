@@ -8,11 +8,6 @@ import android.view.MenuItem;
 import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -35,26 +30,6 @@ public class SettingActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(R.string.title_activity_setting);
         mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);
-
-        testNetwork();
-
-    }
-
-    private void testNetwork() {
-        try {
-            URL url = new URL("http://www.baidu.com");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.connect();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    conn.getInputStream()));
-            String lines;
-            StringBuffer sb = new StringBuffer();
-            while ((lines = reader.readLine()) != null) {
-                sb.append(lines);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

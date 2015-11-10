@@ -23,7 +23,6 @@ import com.socks.jiandan.base.JDApplication;
 import com.socks.jiandan.model.NetWorkEvent;
 import com.socks.jiandan.ui.fragment.FreshNewsFragment;
 import com.socks.jiandan.ui.fragment.MainMenuFragment;
-import com.socks.jiandan.utils.ActivityManager;
 import com.socks.jiandan.utils.NetWorkUtil;
 import com.socks.jiandan.utils.ShowToast;
 
@@ -98,7 +97,6 @@ public class MainActivity extends BaseActivity {
 
         registerReceiver(netStateReceiver, new IntentFilter(
                 ConnectivityManager.CONNECTIVITY_ACTION));
-
     }
 
     @Override
@@ -111,12 +109,6 @@ public class MainActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(netStateReceiver);
     }
 
     public void onEvent(NetWorkEvent event) {
@@ -157,6 +149,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(netStateReceiver);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -164,7 +162,7 @@ public class MainActivity extends BaseActivity {
                 ShowToast.Short("再按一次退出程序");
                 exitTime = System.currentTimeMillis();
             } else {
-                ActivityManager.getAppManager().finishAllActivityAndExit();
+                finish();
             }
             return true;
         }
