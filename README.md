@@ -30,7 +30,7 @@
 - 使用LeakCanary检测内存泄露
 
 ##其他分支
-- [使用OkHttp替换Volley作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan/tree/OkHttpWithVolley)
+- [使用OkHttp替换Volley作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_OkHttpWithVolley)
 - [使用Android-Async-Http作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_AsyncHttpClient)
 ##优化的功能
 - 添加加载等待动画
