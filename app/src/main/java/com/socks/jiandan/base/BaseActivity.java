@@ -27,13 +27,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        JDApplication.getRefWatcher(this).watch(this);
         mContext = this;
 
         if (BuildConfig.DEBUG) {
             Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.FULL).hideThreadInfo();
         } else {
-            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.NONE);
+            Logger.init(getClass().getSimpleName()).setLogLevel(LogLevel.NONE).hideThreadInfo();
         }
     }
 
@@ -46,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Constant
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        JDApplication.getRefWatcher(this).watch(this);
         RequestManager.cancelAll(this);
     }
 

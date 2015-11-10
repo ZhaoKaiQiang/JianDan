@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.view.View;
@@ -12,14 +11,10 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
@@ -27,8 +22,6 @@ import com.socks.jiandan.R;
 import com.socks.jiandan.base.BaseActivity;
 import com.socks.jiandan.base.ConstantString;
 import com.socks.jiandan.callback.LoadFinishCallBack;
-import com.socks.jiandan.model.Vote;
-import com.socks.jiandan.net.Request4Vote;
 import com.socks.jiandan.utils.FileUtil;
 import com.socks.jiandan.utils.JDMediaScannerConnectionClient;
 import com.socks.jiandan.utils.ScreenSizeUtil;
@@ -40,30 +33,18 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ImageDetailActivity extends BaseActivity implements View.OnClickListener, LoadFinishCallBack {
 
-    @InjectView(R.id.img_back)
-    ImageButton img_back;
-    @InjectView(R.id.img_share)
-    ImageButton img_share;
     @InjectView(R.id.web_gif)
     WebView webView;
     @InjectView(R.id.img)
     PhotoView img;
     @InjectView(R.id.progress)
     ProgressBar progress;
-
-    @InjectView(R.id.tv_like)
-    TextView tv_like;
-    @InjectView(R.id.tv_unlike)
-    TextView tv_unlike;
-    @InjectView(R.id.img_comment)
-    ImageButton img_comment;
-    @InjectView(R.id.img_download)
-    ImageButton img_download;
     @InjectView(R.id.ll_bottom_bar)
     LinearLayout ll_bottom_bar;
     @InjectView(R.id.rl_top_bar)
@@ -72,7 +53,6 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
     public static final int ANIMATION_DURATION = 400;
 
     private String[] img_urls;
-    private String id;
     private String threadKey;
     private String imgPath;
     private boolean isNeedWebView;
@@ -91,17 +71,10 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void initView() {
-
         ButterKnife.inject(this);
-        img_back.setOnClickListener(this);
-        img_share.setOnClickListener(this);
-        tv_like.setOnClickListener(this);
-        tv_unlike.setOnClickListener(this);
-        img_comment.setOnClickListener(this);
-        img_download.setOnClickListener(this);
-
     }
 
+    @OnClick({R.id.img_back, R.id.img_share, R.id.tv_unlike, R.id.tv_like, R.id.img_comment, R.id.img_download})
     @Override
     public void onClick(View v) {
 
@@ -113,10 +86,10 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
                 ShareUtil.sharePicture(this, img_urls[0]);
                 break;
             case R.id.tv_like:
-                vote(id, Vote.OO);
+                ShowToast.Short("别点了，这玩意不能用");
                 break;
             case R.id.tv_unlike:
-                vote(id, Vote.XX);
+                ShowToast.Short("别点了，这玩意不能用");
                 break;
             case R.id.img_comment:
                 Intent intent = new Intent(this, CommentListActivity.class);
@@ -134,7 +107,6 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
 
         Intent intent = getIntent();
         img_urls = intent.getStringArrayExtra(DATA_IMAGE_URL);
-        id = intent.getStringExtra(DATA_IMAGE_ID);
         threadKey = intent.getStringExtra(DATA_THREAD_KEY);
         isNeedWebView = intent.getBooleanExtra(DATA_IS_NEED_WEBVIEW, false);
 
@@ -260,45 +232,6 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void vote(String comment_ID, String tyle) {
-
-        String url;
-
-        if (tyle.equals(Vote.XX)) {
-            url = Vote.getXXUrl(comment_ID);
-        } else {
-            url = Vote.getOOUrl(comment_ID);
-        }
-
-        executeRequest(new Request4Vote(url, new
-                Response.Listener<Vote>() {
-                    @Override
-                    public void onResponse(Vote response) {
-                        String result = response.getResult();
-                        if (result.equals(Vote.RESULT_OO_SUCCESS)) {
-                            ShowToast.Short(ConstantString.VOTE_OO);
-                            tv_like.setTypeface(Typeface.DEFAULT_BOLD);
-                            tv_like.setTextColor(getResources().getColor
-                                    (android.R.color.holo_red_light));
-                        } else if (result.equals(Vote.RESULT_XX_SUCCESS)) {
-                            ShowToast.Short(ConstantString.VOTE_XX);
-                            tv_unlike.setTypeface(Typeface.DEFAULT_BOLD);
-                            tv_unlike.setTextColor(getResources().getColor
-                                    (android.R.color.holo_green_light));
-                        } else if (result.equals(Vote.RESULT_HAVE_VOTED)) {
-                            ShowToast.Short(ConstantString.VOTE_REPEAT);
-                        } else {
-                            ShowToast.Short("卧槽，发生了什么！");
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ShowToast.Short(ConstantString.VOTE_FAILED);
-            }
-        }));
-    }
-
     @JavascriptInterface
     public void img_has_loaded() {
         runOnUiThread(new Runnable() {
@@ -347,6 +280,10 @@ public class ImageDetailActivity extends BaseActivity implements View.OnClickLis
         super.onDestroy();
         if (connection != null && connection.isConnected()) {
             connection.disconnect();
+        }
+
+        if (img.getVisibility() == View.VISIBLE) {
+            ImageLoadProxy.getImageLoader().cancelDisplayTask(img);
         }
     }
 }

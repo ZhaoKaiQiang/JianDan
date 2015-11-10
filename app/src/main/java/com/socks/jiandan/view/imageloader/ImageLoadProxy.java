@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,6 +19,9 @@ import com.socks.jiandan.R;
  * Created by zhaokaiqiang on 15/11/7.
  */
 public class ImageLoadProxy {
+
+    private static final int MAX_DISK_CACHE = 1024 * 1024 * 50;
+    private static final int MAX_MEMORY_CACHE = 1024 * 1024 * 10;
 
     private static boolean isShowLog = false;
 
@@ -37,7 +41,10 @@ public class ImageLoadProxy {
     public static void initImageLoader(Context context) {
         ImageLoaderConfiguration.Builder build = new ImageLoaderConfiguration.Builder(context);
         build.tasksProcessingOrder(QueueProcessingType.LIFO);
-        build.diskCacheSize(1024 * 1024 * 30);
+        build.diskCacheSize(MAX_DISK_CACHE);
+        build.memoryCacheSize(MAX_MEMORY_CACHE);
+        build.memoryCache(new LruMemoryCache(MAX_MEMORY_CACHE));
+
         if (BuildConfig.DEBUG && isShowLog) {
             build.writeDebugLogs();
         }
