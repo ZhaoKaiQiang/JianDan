@@ -16,8 +16,8 @@
 
 - Android Studio开发Android的基本配置
 - 对MD风格的Theme兼容
-- 对Volley网络请求库的封装，超时、重试次数的自定义
-- Application、Activity和Fragmet基类的基本设计
+- 对Volley网络请求库的封装和自定义
+- Application、Activity和Fragment基类的基本设计
 - MVC架构的使用
 - 对超长图片加载的解决方案
 - WebView与JS通信，及加载本地缓存图片的实现
@@ -25,8 +25,9 @@
 - 多楼层回复自定义控件的实现
 - 严格模式(StrictMode)的设置及用法
 - 使用GreenDao对数据进行本地缓存
-- 对网络状态的时时检测
+- 对网络状态的实时检测
 - 对UIL的个性化设置、封装和基本使用
+- 使用LeakCanary检测内存泄露
 
 ##其他分支
 - [使用OkHttp替换Volley底层实现的版本](https://github.com/ZhaoKaiQiang/JianDan/tree/OkHttpWithVolley)
