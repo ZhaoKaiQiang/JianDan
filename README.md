@@ -60,3 +60,4 @@
 - [gson](https://code.google.com/p/google-gson/)
 - [GreenDao](http://greendao-orm.com/)
 - [Loading](https://github.com/yankai-victor/Loading)
+- [LeakCanary](https://github.com/square/leakcanary)
