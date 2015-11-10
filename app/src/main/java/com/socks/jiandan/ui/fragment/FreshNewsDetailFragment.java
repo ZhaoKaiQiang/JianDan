@@ -63,7 +63,7 @@ public class FreshNewsDetailFragment extends BaseFragment {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
-                if (newProgress > 90) {
+                if (newProgress > 80) {
                     loading.stop();
                 }
             }
@@ -82,6 +82,16 @@ public class FreshNewsDetailFragment extends BaseFragment {
                     }
                 }));
         loading.start();
+
+        loading.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (loading.isShown()) {
+                    loading.stop();
+                }
+            }
+        }, 10 * 1000);
+
     }
 
     private static String getHtml(FreshNews freshNews, String content) {
