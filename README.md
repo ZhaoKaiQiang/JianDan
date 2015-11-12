@@ -30,9 +30,12 @@
 - 使用LeakCanary检测内存泄露
 
 ##其他分支
+
 - [使用OkHttp替换Volley作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_OkHttpWithVolley)
 - [使用Android-Async-Http作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_AsyncHttpClient)
+
 ##优化的功能
+
 - 添加加载等待动画
 - 添加加载失败提示
 - 添加评论楼层过多隐藏
@@ -48,10 +51,12 @@
 - 添加新鲜事大图模式切换功能
 
 ##关于我
+
 - [Android研发工程师](http://weibo.com/zhaokaiqiang1992)
 - [CSDN博客专家](http://blog.csdn.net/zhaokaiqiang1992)
 
 ##使用到的开源框架
+
 - [Volley](https://android.googlesource.com/platform/frameworks/volley)
 - [Universal Image Load](https://github.com/nostra13/Android-Universal-Image-Loader)
 - [butter knife](https://github.com/JakeWharton/butterknife)
