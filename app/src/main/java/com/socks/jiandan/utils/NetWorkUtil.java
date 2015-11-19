@@ -20,7 +20,7 @@ public class NetWorkUtil {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
-		result = netInfo != null && netInfo.isConnected() {
+		result = netInfo != null && netInfo.isConnected();
 		return result;
 	}
 

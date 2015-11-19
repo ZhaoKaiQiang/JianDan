@@ -32,6 +32,8 @@ public class FreshNewsDetailFragment extends BaseFragment {
     @InjectView(R.id.loading)
     RotateLoading loading;
 
+
+
     private FreshNews freshNews;
 
     public FreshNewsDetailFragment() {

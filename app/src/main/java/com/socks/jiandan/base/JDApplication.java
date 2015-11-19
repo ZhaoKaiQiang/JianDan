@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 
+import com.facebook.stetho.Stetho;
 import com.socks.greendao.DaoMaster;
 import com.socks.greendao.DaoSession;
 import com.socks.jiandan.BuildConfig;
@@ -38,6 +39,13 @@ public class JDApplication extends Application {
         if (BuildConfig.DEBUG) {
             Logger.init().hideThreadInfo().setMethodCount(1).setLogLevel(LogLevel.FULL);
         }
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                        .build());
+
     }
 
     public static Context getContext() {
