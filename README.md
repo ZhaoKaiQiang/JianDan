@@ -31,8 +31,9 @@
 
 ##其他分支
 
-- [使用OkHttp替换Volley作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_OkHttpWithVolley)
+- [使用OkHttp替换Volley底层实现作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_OkHttpWithVolley)
 - [使用Android-Async-Http作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_AsyncHttpClient)
+- [纯粹使用OkHttp作为网络框架的版本](https://github.com/ZhaoKaiQiang/JianDan_OkHttp)
 
 ##优化的功能
 
